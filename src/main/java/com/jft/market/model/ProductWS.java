@@ -1,5 +1,6 @@
 package com.jft.market.model;
 
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -16,8 +17,9 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ProductWS {
 
-	//	@NotEmpty
+	@NotNull
 	private String name;
+	@NotNull
 	private Integer price;
 	private String description;
 	private String features;

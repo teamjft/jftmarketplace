@@ -6,6 +6,7 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.hibernate.Session;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -64,5 +65,11 @@ public class DBConfiguration {
 	@Bean("transactionTemplate")
 	public TransactionTemplate transactionTemplate() throws PropertyVetoException {
 		return new TransactionTemplate(transactionManager());
+	}
+
+	@Bean("session")
+	@DependsOn("sessionFactory")
+	public Session getSession() {
+		return sessionFactory().getObject().openSession();
 	}
 }

@@ -1,4 +1,4 @@
-package com.jft.market.controller;
+package com.jft.market.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +24,7 @@ public class LoginController {
 		// it will return view
 		model.addAttribute("error", true);
 		return "login/login";
+
 	}
 
 	/*@RequestMapping(value = "logout", method = RequestMethod.GET)

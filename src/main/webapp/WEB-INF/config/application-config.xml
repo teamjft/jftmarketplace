@@ -17,5 +17,6 @@
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
     </bean>
 
+    <import resource="security-config.xml"/>
 </beans>
 
