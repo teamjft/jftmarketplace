@@ -1,10 +1,16 @@
 package com.jft.market.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -26,11 +32,11 @@ public class User {
 	private String password;
 	private Boolean enabled;
 
-/*	@ManyToMany
+	@ManyToMany
 	@JoinTable(
 			name = "user_roles",
 			joinColumns = {@JoinColumn(name = "user_id")},
-			inverseJoinColumns = {@JoinColumn(name = "role_id")}
+			inverseJoinColumns = {@JoinColumn(name = "role")}
 	)
-	List<Role> roleList = new ArrayList<Role>();*/
+	List<Role> roleList = new ArrayList<Role>();
 }

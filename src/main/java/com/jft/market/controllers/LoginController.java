@@ -14,14 +14,12 @@ public class LoginController {
 	@RequestMapping(value = {"login"}, method = RequestMethod.GET)
 	public String login() {
 		log.info("***Into Login method****");
-		// it will return view
 		return "login/login";
 	}
 
 	@RequestMapping(value = {"loginFailed"}, method = RequestMethod.GET)
 	public String loginFailed(ModelMap model) {
 		log.info("***Into loginFailed method****");
-		// it will return view
 		model.addAttribute("error", true);
 		return "login/login";
 

@@ -1,27 +1,25 @@
-package com.jft.market.model;
+package com.jft.market.api.ws;
 
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @XmlRootElement(name = "product")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ProductWS {
+public class ErrorWS {
 
-	@NotNull
-	private String name;
-	@NotNull
-	private Integer price;
-	private String description;
-	private String features;
+	private HttpStatus status;
+	private String message;
 
+	public ErrorWS(String message, HttpStatus status) {
+		this.status = status;
+		this.message = message;
+	}
 }

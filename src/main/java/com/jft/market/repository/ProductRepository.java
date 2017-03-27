@@ -1,16 +1,8 @@
 package com.jft.market.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import com.jft.market.model.Product;
 
-
-public interface ProductRepository {
-	public void createProduct(Product product);
-
-	public void updateProduct(Integer productId);
-
-	public void deleteProductById(Integer productId);
-
-	public void findAllProducts();
-
-	public void findProductById(Integer productId);
+public interface ProductRepository extends JpaRepository<Product, Integer> {
 }

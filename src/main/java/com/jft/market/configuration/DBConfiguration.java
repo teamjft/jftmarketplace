@@ -1,27 +1,27 @@
 package com.jft.market.configuration;
 
-import java.beans.PropertyVetoException;
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.hibernate.Session;
+import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.orm.hibernate4.HibernateTemplate;
-import org.springframework.orm.hibernate4.HibernateTransactionManager;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
-import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
+@EnableJpaRepositories("com.jft.market")
 public class DBConfiguration {
 
 	private Properties getHibernateProperties() {
 		Properties properties = new Properties();
 		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-		properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+		properties.setProperty("hibernate.hbm2ddl.auto", "update");
 		properties.setProperty("hibernate.show_sql", "true");
 		properties.setProperty("hibernate.format_sql", "true");
 		return properties;
@@ -37,39 +37,28 @@ public class DBConfiguration {
 		return dataSource;
 	}
 
-	@Bean("sessionFactory")
-	public LocalSessionFactoryBean sessionFactory() {
-		LocalSessionFactoryBean bean = new LocalSessionFactoryBean();
-		bean.setDataSource(dataSource());
-		bean.setHibernateProperties(getHibernateProperties());
-		bean.setPackagesToScan("com.jft.market.model");
-		return bean;
+	@Bean
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+		LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean
+				= new LocalContainerEntityManagerFactoryBean();
+		localContainerEntityManagerFactoryBean.setDataSource(dataSource());
+		localContainerEntityManagerFactoryBean.setPackagesToScan("com.jft.market.model");
+		localContainerEntityManagerFactoryBean.setJpaProperties(getHibernateProperties());
+		localContainerEntityManagerFactoryBean.setPersistenceProvider(new HibernatePersistenceProvider());
+		localContainerEntityManagerFactoryBean.afterPropertiesSet();
+		return localContainerEntityManagerFactoryBean;
 	}
 
-	@Bean(name = "hibernateTemplate")
-	@DependsOn("sessionFactory")
-	public HibernateTemplate getHibernateTemplate() {
-		HibernateTemplate hibernateTemplate = new HibernateTemplate();
-		hibernateTemplate.setSessionFactory(sessionFactory().getObject());
-		return hibernateTemplate;
+	@Bean
+	public PlatformTransactionManager transactionManager() {
+		JpaTransactionManager tm = new JpaTransactionManager();
+		tm.setEntityManagerFactory(this.entityManagerFactory().getObject());
+		return tm;
 	}
 
-	@Bean(name = "transactionManager")
-	@DependsOn("sessionFactory")
-	public HibernateTransactionManager transactionManager() {
-		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-		transactionManager.setSessionFactory(sessionFactory().getObject());
-		return transactionManager;
-	}
+	@Bean
+	public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
+		return new PersistenceExceptionTranslationPostProcessor();
 
-	@Bean("transactionTemplate")
-	public TransactionTemplate transactionTemplate() throws PropertyVetoException {
-		return new TransactionTemplate(transactionManager());
-	}
-
-	@Bean("session")
-	@DependsOn("sessionFactory")
-	public Session getSession() {
-		return sessionFactory().getObject().openSession();
 	}
 }
