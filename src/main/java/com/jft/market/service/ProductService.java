@@ -16,16 +16,16 @@ import com.jft.market.repository.ProductRepository;
 public class ProductService {
 
 	@Autowired
-	private ProductRepository simpleJpaRepository;
+	private ProductRepository productRepository;
 
 	public ProductBean readProduct(Integer productId) throws EntityNotFoundException {
-		Product product = simpleJpaRepository.findOne(productId);
+		Product product = productRepository.findOne(productId);
 		ProductBean productBean = createProductBean(product);
 		return productBean;
 	}
 
 	public List<ProductBean> readProducts() {
-		List<Product> productList = simpleJpaRepository.findAll();
+		List<Product> productList = productRepository.findAll();
 		List<ProductBean> productBeanList = new ArrayList<ProductBean>();
 		productList.forEach(product -> {
 			ProductBean productBean = createProductBean(product);
@@ -35,12 +35,12 @@ public class ProductService {
 	}
 
 	public void createProduct(Product product) {
-		simpleJpaRepository.save(product);
+		productRepository.save(product);
 	}
 
 	public void deleteProduct(ProductBean productBean) {
 		Product product = convertBeanToEntity(productBean);
-		simpleJpaRepository.delete(product);
+		productRepository.delete(product);
 	}
 
 	public Product convertWStoEntity(ProductWS productWS) {

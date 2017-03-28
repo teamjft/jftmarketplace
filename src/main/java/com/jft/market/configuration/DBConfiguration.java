@@ -1,5 +1,6 @@
 package com.jft.market.configuration;
 
+import java.beans.PropertyVetoException;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -13,17 +14,24 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 @EnableJpaRepositories("com.jft.market")
+@EnableTransactionManagement
 public class DBConfiguration {
 
 	private Properties getHibernateProperties() {
 		Properties properties = new Properties();
 		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-		properties.setProperty("hibernate.hbm2ddl.auto", "update");
+		properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
 		properties.setProperty("hibernate.show_sql", "true");
 		properties.setProperty("hibernate.format_sql", "true");
+		properties.setProperty("hibernate.hbm2ddl.import_files", "startup.sql");
 		return properties;
 	}
 
@@ -60,5 +68,20 @@ public class DBConfiguration {
 	public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
 		return new PersistenceExceptionTranslationPostProcessor();
 
+	}
+
+	@Bean("transactionTemplate")
+	public TransactionTemplate transactionTemplate() throws PropertyVetoException {
+		return new TransactionTemplate(transactionManager());
+	}
+
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurerAdapter() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/*").allowedOrigins("*");
+			}
+		};
 	}
 }

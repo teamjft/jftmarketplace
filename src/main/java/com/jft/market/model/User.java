@@ -1,7 +1,7 @@
 package com.jft.market.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +17,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 @Entity
 @Table(name = "users")
 @Setter
@@ -26,17 +29,22 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "user_id")
 	private Integer Id;
+	@Column(unique = true)
 	private String username;
 	private String password;
+	@Column(name = "is_enabled")
 	private Boolean enabled;
+	@Column(unique = true)
+	private String email;
+	private String gender;
 
 	@ManyToMany
+	@Cascade(CascadeType.SAVE_UPDATE)
 	@JoinTable(
 			name = "user_roles",
 			joinColumns = {@JoinColumn(name = "user_id")},
-			inverseJoinColumns = {@JoinColumn(name = "role")}
+			inverseJoinColumns = {@JoinColumn(name = "role_id")}
 	)
-	List<Role> roleList = new ArrayList<Role>();
+	Set<Role> roles = new HashSet<>();
 }

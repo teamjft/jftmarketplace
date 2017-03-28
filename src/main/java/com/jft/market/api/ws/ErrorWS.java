@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
-@XmlRootElement(name = "product")
+@XmlRootElement(name = "error")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ErrorWS {
 

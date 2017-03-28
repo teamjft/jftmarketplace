@@ -7,6 +7,9 @@
     <security:http auto-config="true">
 
         <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/createUser" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/products" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/create" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/logout" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/loginFailed" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/**" access="ROLE_USER"/>
@@ -19,14 +22,15 @@
         <security:authentication-provider>
             <security:jdbc-user-service data-source-ref="dataSource"
                                         users-by-username-query=
-                                                "SELECT username,password, enabled
+                                                "SELECT username,password, is_enabled
                                                  FROM users
                                                  WHERE username=?"
                                         authorities-by-username-query=
-                                                "select u.username, r.role
-                                                 FROM users u, roles r
-                                                 WHERE u.user_id=r.role_id
-                                                 AND u.username=?;"/>
+                                                "SELECT u.username, r.name
+                                                 FROM user_roles ur
+                                                 INNER JOIN users u on ur.user_id=u.id
+                                                 INNER JOIN roles r on ur.role_id=r.id
+                                                 WHERE u.username=?;"/>
         </security:authentication-provider>
     </security:authentication-manager>
 

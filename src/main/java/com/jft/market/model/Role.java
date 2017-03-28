@@ -3,12 +3,9 @@ package com.jft.market.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -23,14 +20,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Role {
 
-	@Id
+	@javax.persistence.Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "role_id")
 	private Integer Id;
-	@Column(name = "role")
-	private String roles;
+	private String name;
 
-	@ManyToMany
-	@JoinColumn(name = "student_id")
-	Set<User> studentSet = new HashSet<User>();
+	@ManyToMany(mappedBy = "roles")
+	Set<User> users = new HashSet<User>();
 }
