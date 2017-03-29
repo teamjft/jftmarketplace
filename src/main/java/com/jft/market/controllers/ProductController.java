@@ -1,5 +1,6 @@
 package com.jft.market.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.jft.market.api.ProductApi;
 import com.jft.market.api.ProductBean;
+import com.jft.market.api.ProductBeanAttribute;
+import com.jft.market.api.ws.EmberResponse;
 import com.jft.market.api.ws.ProductWS;
 import com.jft.market.exceptions.EntityNotFoundException;
 import com.jft.market.exceptions.InvalidRequestException;
@@ -32,6 +35,7 @@ public class ProductController implements ProductApi {
 
 	@Override
 	public ResponseEntity createProduct(@Valid @RequestBody ProductWS productWS, BindingResult bindingResult) {
+
 		log.info("Validating paylaod");
 		if (bindingResult.hasErrors()) {
 			throw new InvalidRequestException(bindingResult);
@@ -59,10 +63,12 @@ public class ProductController implements ProductApi {
 	public ResponseEntity readProducts() {
 		log.info("Reading products");
 		List<ProductBean> productBeanList = productService.readProducts();
+		List<ProductBeanAttribute> productBeanAttributes = new ArrayList<>();
+		productBeanList.forEach(p -> productBeanAttributes.add(new ProductBeanAttribute(p.getId(), p)));
 		if (productBeanList.isEmpty()) {
 			throw new EntityNotFoundException("No product found");
 		} else {
-			return new ResponseEntity(productBeanList, HttpStatus.OK);
+			return new ResponseEntity(new EmberResponse(productBeanAttributes), HttpStatus.OK);
 		}
 	}
 

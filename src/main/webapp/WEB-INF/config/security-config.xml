@@ -7,10 +7,8 @@
     <security:http auto-config="true">
 
         <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/createUser" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/products" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/create" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/logout" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/user/v1/create" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/loginFailed" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/**" access="ROLE_USER"/>
 
@@ -20,6 +18,7 @@
 
     <security:authentication-manager>
         <security:authentication-provider>
+            <security:password-encoder ref="passwordEncoder"></security:password-encoder>
             <security:jdbc-user-service data-source-ref="dataSource"
                                         users-by-username-query=
                                                 "SELECT username,password, is_enabled
@@ -34,4 +33,8 @@
         </security:authentication-provider>
     </security:authentication-manager>
 
+    <!-- Password Hashing Bean -->
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+        <constructor-arg name="strength" value="12"/>
+    </bean>
 </beans>

@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jft.market.api.ws.UserWS;
 
+@RequestMapping(value = UserApiConstants.BASE_PATH)
 public interface UserApi {
 
-	@RequestMapping(value = {"createUser"},
+	@RequestMapping(value = {"create"},
 			method = RequestMethod.POST,
 			produces = {MediaType.APPLICATION_JSON_VALUE},
 			consumes = {MediaType.APPLICATION_JSON_VALUE})
@@ -24,21 +25,21 @@ public interface UserApi {
 	@ResponseBody
 	ResponseEntity createUser(@Valid @RequestBody UserWS productWS, BindingResult bindingResult);
 
-	@RequestMapping(value = {"user/{userId}"},
+	@RequestMapping(value = {"{userId}"},
 			method = RequestMethod.GET,
 			produces = {MediaType.APPLICATION_JSON_VALUE})
 	public
 	@ResponseBody
 	ResponseEntity readUser(@PathVariable("userId") Integer userId);
 
-	@RequestMapping(value = {"users"},
+	@RequestMapping(value = {UserApiConstants.USERS},
 			method = RequestMethod.GET,
 			produces = {MediaType.APPLICATION_JSON_VALUE})
 	public
 	@ResponseBody
 	ResponseEntity readUsers();
 
-	@RequestMapping(value = {"/user/delete/{userId}"},
+	@RequestMapping(value = {"delete/{userId}"},
 			method = RequestMethod.POST,
 			produces = {MediaType.APPLICATION_JSON_VALUE})
 	public

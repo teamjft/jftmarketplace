@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jft.market.api.ws.ProductWS;
 
+@RequestMapping(value = ProductApiConstants.BASE_PATH)
 public interface ProductApi {
 
 	@RequestMapping(value = {"create"},
@@ -24,14 +25,14 @@ public interface ProductApi {
 	@ResponseBody
 	ResponseEntity createProduct(@Valid @RequestBody ProductWS productWS, BindingResult bindingResult);
 
-	@RequestMapping(value = {"product/{productId}"},
+	@RequestMapping(value = {"{productId}"},
 			method = RequestMethod.GET,
 			produces = {MediaType.APPLICATION_JSON_VALUE})
 	public
 	@ResponseBody
 	ResponseEntity readProduct(@PathVariable("productId") Integer productId);
 
-	@RequestMapping(value = {"products"},
+	@RequestMapping(value = {ProductApiConstants.PRODUCTS},
 			method = RequestMethod.GET,
 			produces = {MediaType.APPLICATION_JSON_VALUE})
 	public

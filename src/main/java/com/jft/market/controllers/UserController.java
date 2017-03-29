@@ -38,7 +38,7 @@ public class UserController implements UserApi {
 		}
 		log.info("Converting WS to Entity");
 		User user = userService.convertWStoEntity(userWS);
-		System.out.println("user = " + user.getEmail());
+
 		userService.addAndSaveRole(user, Roles.ROLE_USER.getName());
 		return new ResponseEntity(userWS, HttpStatus.OK);
 	}

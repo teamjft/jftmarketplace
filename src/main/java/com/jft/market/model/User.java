@@ -38,9 +38,11 @@ public class User {
 	@Column(unique = true)
 	private String email;
 	private String gender;
+	@Column(unique = true)
+	private String uuid;
 
 	@ManyToMany
-	@Cascade(CascadeType.SAVE_UPDATE)
+	@Cascade(CascadeType.ALL)
 	@JoinTable(
 			name = "user_roles",
 			joinColumns = {@JoinColumn(name = "user_id")},
