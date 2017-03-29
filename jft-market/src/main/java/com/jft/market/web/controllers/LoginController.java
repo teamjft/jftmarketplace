@@ -1,4 +1,4 @@
-package com.jft.market.controllers;
+package com.jft.market.web.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,17 +11,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class LoginController {
 
+	private static final String LOGIN = "login/";
+
 	@RequestMapping(value = {"login"}, method = RequestMethod.GET)
 	public String login() {
 		log.info("***Into Login method****");
-		return "login/login";
+		return LOGIN + "login";
 	}
 
 	@RequestMapping(value = {"loginFailed"}, method = RequestMethod.GET)
 	public String loginFailed(ModelMap model) {
 		log.info("***Into loginFailed method****");
 		model.addAttribute("error", true);
-		return "login/login";
+		return LOGIN + "login";
 
 	}
 }
