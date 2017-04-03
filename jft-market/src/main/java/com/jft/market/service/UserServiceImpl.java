@@ -9,15 +9,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jft.market.api.UserBean;
+import com.jft.market.api.ws.RoleWS;
+import com.jft.market.api.ws.Roles;
 import com.jft.market.api.ws.UserWS;
 import com.jft.market.model.Role;
 import com.jft.market.model.User;
 import com.jft.market.repository.RoleRepository;
 import com.jft.market.repository.UserRepository;
+import com.jft.market.util.Preconditions;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -29,41 +31,37 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
+
 	@Override
-	@Transactional(readOnly = true)
+	@Transactional
+	public void convertWsToEnityAndSave(UserWS userWS) {
+		User user = convertWStoEntity(userWS);
+		saveUser(user);
+	}
+
+	@Override
 	public User convertWStoEntity(UserWS userWS) {
 		// USER and ROLE entity is populating
+		Preconditions.check(userWS == null, "User not found");
 		User user = new User();
-		if (userWS != null) {
-			user.setUsername(userWS.getUsername());
-			user.setPassword(passwordEncoder.encode(userWS.getPassword()));
-			user.setEmail(userWS.getEmail());
-			user.setEnabled(Boolean.TRUE);
-			user.setGender(userWS.getGender());
-
-			return user;
-		}
-		return null;
+		user.setId(userWS.getId());
+		user.setUsername(userWS.getUsername());
+		user.setPassword(passwordEncoder.encode(userWS.getPassword()));
+		user.setEmail(userWS.getEmail());
+		user.setEnabled(Boolean.TRUE);
+		user.setGender(userWS.getGender());
+		user.setPhone(userWS.getPhone());
+		Role role = roleRepository.findByName(Roles.ROLE_USER.getName());
+		user.getRoles().add(role);
+		role.getUsers().add(user);
+		return user;
 	}
+
 
 	@Override
 	public Role findRole(String roleName) {
 		Role role = roleRepository.findByName(roleName);
 		return role;
-	}
-
-	@Override
-	public void addAndSaveRole(User user, Role role) {
-		user.getRoles().add(role);
-		role.getUsers().add(user);
-		saveUser(user);
-	}
-
-	@Override
-	@Transactional
-	public void addAndSaveRole(User user, String roleName) {
-		Role role = findRole(roleName);
-		addAndSaveRole(user, role);
 	}
 
 	@Override
@@ -92,6 +90,7 @@ public class UserServiceImpl implements UserService {
 			userBean.setGender(user.getGender());
 			userBean.setId(user.getId());
 			userBean.setEnabled(user.getEnabled());
+			userBean.setUuid(user.getUuid());
 
 			return userBean;
 		}
@@ -104,6 +103,7 @@ public class UserServiceImpl implements UserService {
 		if (userBean != null) {
 			userWS.setUsername(userBean.getUsername());
 			userWS.setPassword(userBean.getPassword());
+			userWS.setUuid(userBean.getUuid());
 			userWS.setEmail(userBean.getEmail());
 			userWS.setEnabled(userBean.getEnabled());
 			userWS.setGender(userBean.getGender());
@@ -116,23 +116,29 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<UserWS> convertUsersToUsersWS(List<User> users) {
 		List<UserWS> userWSList = new ArrayList<UserWS>();
-
+		Preconditions.check(users.isEmpty(), "No user found.");
 		users.forEach(user -> {
 			UserWS userWS = new UserWS();
 			userWS.setUsername(user.getUsername());
 			userWS.setPassword(user.getPassword());
 			userWS.setEmail(user.getEmail());
 			userWS.setGender(user.getGender());
-			userWS.setEnabled(userWS.getEnabled());
+			userWS.setEnabled(user.getEnabled());
+			userWS.setPhone(user.getPhone());
+			user.getRoles().forEach(role -> {
+				RoleWS roleWS = new RoleWS();
+				roleWS.setName(role.getName());
+				userWS.getRoles().add(roleWS);
+			});
+			userWS.setUuid(user.getUuid());
 
 			userWSList.add(userWS);
 		});
-
 		return userWSList;
 	}
 
 	@Override
-	public UserBean readUser(Integer userId) {
+	public UserBean readUser(Long userId) {
 		User user = userRepository.findOne(userId);
 		UserBean userBean = createUserBean(user);
 		return userBean;
@@ -145,7 +151,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.MANDATORY)
+	@Transactional
+	public List<UserWS> readAllUsers() {
+		List<User> users = readUsers();
+		return convertUsersToUsersWS(users);
+	}
+
+	@Override
 	public void saveUser(User user) {
 		if (StringUtils.isEmpty(user.getUuid())) {
 			user.setUuid(UUID.randomUUID().toString());
@@ -153,9 +165,71 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user);
 	}
 
-	@Override
+	/*@Override
 	public void deleteUser(UserBean userBean) {
 		User user = convertBeanToEntity(userBean);
 		userRepository.delete(user);
+	}*/
+
+	@Override
+	public User convertWstoEntity(UserWS userWS) {
+		if (userWS != null) {
+			User user = new User();
+			user.setUsername(userWS.getUsername());
+			user.setPassword(userWS.getPassword());
+			user.setEmail(userWS.getEmail());
+			user.setEnabled(Boolean.TRUE);
+			user.setUuid(userWS.getUuid());
+			user.setGender(userWS.getGender());
+
+			return user;
+		}
+
+		return null;
+	}
+
+	@Override
+	@Transactional
+	public UserWS readUserByUuid(String useruuid) {
+		User user = userRepository.findByUuid(useruuid);
+		UserWS userWS = convertEntityToWS(user);
+		return userWS;
+	}
+
+	@Override
+	public UserWS convertEntityToWS(User user) {
+		Preconditions.check(user == null, "User not found");
+		UserWS userWS = new UserWS();
+		userWS.setUsername(user.getUsername());
+		userWS.setUuid(user.getUuid());
+		userWS.setEnabled(user.getEnabled());
+		userWS.setGender(user.getGender());
+		userWS.setEmail(user.getEmail());
+		userWS.setPhone(user.getPhone());
+		user.getRoles().forEach(role -> {
+			RoleWS roleWS = new RoleWS();
+			roleWS.setName(role.getName());
+			userWS.getRoles().add(roleWS);
+		});
+		return userWS;
+	}
+
+	@Override
+	@Transactional
+	public void deleteUser(String userUuid) {
+		User user = userRepository.findByUuid(userUuid);
+		Preconditions.check(user == null, "User not found");
+		userRepository.delete(user);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+

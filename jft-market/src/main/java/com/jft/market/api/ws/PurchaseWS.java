@@ -1,5 +1,6 @@
 package com.jft.market.api.ws;
 
+
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -9,19 +10,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
-@XmlRootElement(name = "product")
+@XmlRootElement(name = "purchase")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ProductWS {
+public class PurchaseWS {
 
 	@NotNull
-	private String name;
+	private String customerUuid;
 	@NotNull
-	private Integer price;
-	private String description;
-	private String features;
-	private String uuid;
+	private String customerEmail;
+	@NotNull
+	private String productUuid;
+	@NotNull
+	private String productName;
+
 }

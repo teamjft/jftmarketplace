@@ -10,10 +10,10 @@ import lombok.Setter;
 public class ProductBeanAttribute {
 
 	private String type = "products";
-	private Integer id;
+	private Long id;
 	private ProductBean attributes;
 
-	public ProductBeanAttribute(Integer id, ProductBean productBean) {
+	public ProductBeanAttribute(Long id, ProductBean productBean) {
 		this.id = id;
 		this.attributes = productBean;
 	}

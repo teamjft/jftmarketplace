@@ -1,5 +1,4 @@
-package com.jft.market.api;
-
+package com.jft.market.api.controllers;
 
 import javax.validation.Valid;
 
@@ -12,10 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.jft.market.api.ws.ProductWS;
+import com.jft.market.api.ws.PaymentInstrumentWS;
 
-@RequestMapping(value = ProductApiConstants.BASE_PATH)
-public interface ProductApi {
+@RequestMapping(BaseApi.BASE_PATH + PaymentInstrumentApi.PAYMENT_INSTRUMENT)
+public interface PaymentInstrumentApi {
+
+	String PAYMENT_INSTRUMENT = "/v1/paymentInstrument";
+
 
 	@RequestMapping(value = {"create"},
 			method = RequestMethod.POST,
@@ -23,26 +25,20 @@ public interface ProductApi {
 			consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public
 	@ResponseBody
-	ResponseEntity createProduct(@Valid @RequestBody ProductWS productWS, BindingResult bindingResult);
+	ResponseEntity createPaymentInstrument(@Valid @RequestBody PaymentInstrumentWS paymentInstrumentWS, BindingResult bindingResult);
 
-	@RequestMapping(value = {"{productId}"},
+	@RequestMapping(value = {"read/{customerUuid}"},
 			method = RequestMethod.GET,
 			produces = {MediaType.APPLICATION_JSON_VALUE})
 	public
 	@ResponseBody
-	ResponseEntity readProduct(@PathVariable("productId") Integer productId);
+	ResponseEntity readPaymentInstrument(@PathVariable("customerUuid") String customerUuid);
 
-	@RequestMapping(value = {ProductApiConstants.PRODUCTS},
-			method = RequestMethod.GET,
-			produces = {MediaType.APPLICATION_JSON_VALUE})
-	public
-	@ResponseBody
-	ResponseEntity readProducts();
-
-	@RequestMapping(value = {"delete/{productId}"},
+	@RequestMapping(value = {"delete/{paymentInstrumentUuid}"},
 			method = RequestMethod.POST,
 			produces = {MediaType.APPLICATION_JSON_VALUE})
 	public
 	@ResponseBody
-	ResponseEntity deleteProduct(@PathVariable("productId") Integer productId);
+	ResponseEntity deletPaymnetInstrument(@PathVariable("paymentInstrumentUuid") String paymentInstrumentUuid);
+
 }

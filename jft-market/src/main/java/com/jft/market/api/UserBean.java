@@ -8,11 +8,12 @@ import lombok.Setter;
 @Getter
 public class UserBean {
 
-	private Integer Id;
+	private Long Id;
 	private String username;
 	private String password;
 	private Boolean enabled;
 	private String email;
 	private String gender;
+	private String uuid;
 
 }

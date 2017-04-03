@@ -1,32 +1,28 @@
 package com.jft.market.model;
 
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
 @Entity
-@Table(name = "roles")
-public class Role {
+@Table(name = "productEntitlement")
+@Setter
+@Getter
+@NoArgsConstructor
+public class ProductEntitlement {
 
 	@javax.persistence.Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer Id;
-	@Column(unique = true)
-	private String name;
+	private Long Id;
+	private String uuid;
 
-	@ManyToMany(mappedBy = "roles")
-	Set<User> users = new HashSet<User>();
+	private Long userId;
+	private Long productId;
+	private String activePaymentinstrument;
 }
