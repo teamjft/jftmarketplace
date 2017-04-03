@@ -1,7 +1,5 @@
 package com.jft.market.api.ws;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -15,14 +13,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Setter
 @Getter
-@XmlRootElement(name = "user")
+@XmlRootElement(name = "customer")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class UserWS {
+public class CustomerWS {
 
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private Long id;
 	@NotNull
-	private String username;
+	private String customerName;
 	@NotNull
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
@@ -33,12 +29,8 @@ public class UserWS {
 	private String uuid;
 	@NotNull
 	private Long phone;
-
-	@NotNull
-	private List<RoleWS> roles = new ArrayList<RoleWS>();
-
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private CustomerWS customerWS;
+	private UserWS userWS;
 
 	private Boolean enabled = Boolean.FALSE;
 }

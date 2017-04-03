@@ -3,6 +3,7 @@ package com.jft.market.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,14 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 @Entity
 @Table(name = "users")
@@ -29,7 +28,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer Id;
+	private Long Id;
 	@Column(unique = true)
 	private String username;
 	private String password;
@@ -40,13 +39,16 @@ public class User {
 	private String gender;
 	@Column(unique = true)
 	private String uuid;
+	private Long phone;
 
-	@ManyToMany
-	@Cascade(CascadeType.ALL)
+	@ManyToMany(cascade = {CascadeType.PERSIST})
 	@JoinTable(
 			name = "user_roles",
 			joinColumns = {@JoinColumn(name = "user_id")},
 			inverseJoinColumns = {@JoinColumn(name = "role_id")}
 	)
 	Set<Role> roles = new HashSet<>();
+
+	@OneToOne(mappedBy = "user")
+	private Customer customer;
 }

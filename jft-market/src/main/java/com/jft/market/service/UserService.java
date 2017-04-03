@@ -9,27 +9,37 @@ import com.jft.market.model.User;
 
 public interface UserService {
 
-	User convertWStoEntity(UserWS userWS);
+	public User convertWStoEntity(UserWS userWS);
 
-	Role findRole(String roleName);
+	public void convertWsToEnityAndSave(UserWS userWS);
 
-	void addAndSaveRole(User user, Role role);
+	public Role findRole(String roleName);
 
-	void addAndSaveRole(User user, String roleName);
+	public User convertBeanToEntity(UserBean userBean);
 
-	User convertBeanToEntity(UserBean userBean);
+	public UserBean createUserBean(User user);
 
-	UserBean createUserBean(User user);
+	public UserWS convertBeanToWS(UserBean userBean);
 
-	UserWS convertBeanToWS(UserBean userBean);
+	public List<UserWS> convertUsersToUsersWS(List<User> users);
 
-	List<UserWS> convertUsersToUsersWS(List<User> users);
+	public UserBean readUser(Long userId);
 
-	UserBean readUser(Integer userId);
+	public List<User> readUsers();
 
-	List<User> readUsers();
+	public List<UserWS> readAllUsers();
 
-	void saveUser(User user);
+	public void saveUser(User user);
 
-	void deleteUser(UserBean userBean);
+	/*public void deleteUser(UserBean userBean);*/
+
+	public User convertWstoEntity(UserWS userWS);
+
+	public UserWS readUserByUuid(String useruuid);
+
+	public UserWS convertEntityToWS(User user);
+
+	public void deleteUser(String userUuid);
+
+
 }

@@ -2,15 +2,18 @@ package com.jft.market.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jft.market.api.ProductBean;
 import com.jft.market.api.ws.ProductWS;
-import com.jft.market.exceptions.EntityNotFoundException;
 import com.jft.market.model.Product;
 import com.jft.market.repository.ProductRepository;
+import com.jft.market.util.Preconditions;
 
 @Service("productService")
 public class ProductServiceImpl implements ProductService {
@@ -19,10 +22,9 @@ public class ProductServiceImpl implements ProductService {
 	private ProductRepository productRepository;
 
 	@Override
-	public ProductBean readProduct(Integer productId) throws EntityNotFoundException {
-		Product product = productRepository.findOne(productId);
-		ProductBean productBean = createProductBean(product);
-		return productBean;
+	public ProductWS readProduct(String productUuid) {
+		Product product = productRepository.findByUuid(productUuid);
+		return convertEntityToWS(product);
 	}
 
 	@Override
@@ -38,12 +40,17 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public void createProduct(Product product) {
+		if (StringUtils.isEmpty(product.getUuid())) {
+			product.setUuid(UUID.randomUUID().toString());
+		}
 		productRepository.save(product);
 	}
 
 	@Override
-	public void deleteProduct(ProductBean productBean) {
-		Product product = convertBeanToEntity(productBean);
+	@Transactional
+	public void deleteProduct(String productUuid) {
+		Product product = productRepository.findByUuid(productUuid);
+		Preconditions.check(product == null, "Product not found. Please provide valid product Id to delete.");
 		productRepository.delete(product);
 	}
 
@@ -74,15 +81,25 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ProductBean createProductBean(Product product) {
+		Preconditions.check(product == null, "No product found.");
 		ProductBean productBean = new ProductBean();
-		if (product != null) {
-			productBean.setId(product.getId());
-			productBean.setName(product.getName());
-			productBean.setPrice(product.getPrice());
-			productBean.setDescription(product.getDescription());
-			productBean.setFeatures(product.getFeatures());
-			return productBean;
-		}
-		return null;
+		productBean.setId(product.getId());
+		productBean.setName(product.getName());
+		productBean.setPrice(product.getPrice());
+		productBean.setDescription(product.getDescription());
+		productBean.setFeatures(product.getFeatures());
+		return productBean;
+	}
+
+	@Override
+	public ProductWS convertEntityToWS(Product product) {
+		Preconditions.check(product == null, "No product found.");
+		ProductWS productWS = new ProductWS();
+		productWS.setName(product.getName());
+		productWS.setUuid(product.getUuid());
+		productWS.setDescription(product.getDescription());
+		productWS.setFeatures(product.getFeatures());
+		productWS.setPrice(product.getPrice());
+		return productWS;
 	}
 }

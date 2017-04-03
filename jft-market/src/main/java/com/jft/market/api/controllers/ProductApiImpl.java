@@ -1,4 +1,4 @@
-package com.jft.market.controllers;
+package com.jft.market.api.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.jft.market.api.ProductApi;
 import com.jft.market.api.ProductBean;
 import com.jft.market.api.ProductBeanAttribute;
 import com.jft.market.api.ws.EmberResponse;
@@ -27,8 +26,8 @@ import com.jft.market.model.Product;
 import com.jft.market.service.ProductService;
 
 @Slf4j
-@Controller
-public class ProductController implements ProductApi {
+@RestController
+public class ProductApiImpl implements ProductApi {
 
 	@Autowired
 	private ProductService productService;
@@ -43,18 +42,14 @@ public class ProductController implements ProductApi {
 		log.info("Populating data");
 		Product product = productService.convertWStoEntity(productWS);
 		productService.createProduct(product);
-		return new ResponseEntity(productWS, HttpStatus.OK);
+		return new ResponseEntity(HttpStatus.OK);
 	}
 
 	@Override
-	public ResponseEntity readProduct(@PathVariable Integer productId) {
+	public ResponseEntity readProduct(@PathVariable("productUuid") String productUuid) {
 		log.info("Reading product from database");
-		ProductBean productBean = productService.readProduct(productId);
-		if (productBean == null) {
-			throw new EntityNotFoundException("Entity not found with id : " + productId);
-		} else {
-			return new ResponseEntity(productBean, HttpStatus.OK);
-		}
+		ProductWS productWS = productService.readProduct(productUuid);
+		return new ResponseEntity(productWS, HttpStatus.OK);
 	}
 
 
@@ -73,14 +68,8 @@ public class ProductController implements ProductApi {
 	}
 
 	@Override
-	public ResponseEntity deleteProduct(@PathVariable("productId") Integer productId) {
-		log.info("Reading product from database");
-		ProductBean productBean = productService.readProduct(productId);
-		if (productBean == null) {
-			throw new EntityNotFoundException("Entity not found. Please provide valid entity to delete");
-		}
-		log.info("Deleting product");
-		productService.deleteProduct(productBean);
+	public ResponseEntity deleteProduct(@PathVariable("productUuid") String productUuid) {
+		productService.deleteProduct(productUuid);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 }

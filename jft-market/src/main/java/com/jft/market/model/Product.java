@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -19,11 +20,15 @@ public class Product {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	private Long id;
 	private String name;
 	private Integer price;
 	private String description;
 	private String features;
+	private String uuid;
+
+	@ManyToOne
+	private Customer customer;
 
 	public Product(String name, Integer price, String description, String features) {
 		this.name = name;

@@ -8,7 +8,13 @@
 
         <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/logout" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/user/v1/create" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/api/v1/user/create" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/api/v1/product/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/api/v1/customer/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/api/v1/user/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/api/v1/purchase/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/api/v1/paymentInstrument/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/api/v1/paymentInstrument/read/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/loginFailed" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/**" access="ROLE_USER"/>
 

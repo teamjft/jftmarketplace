@@ -12,6 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @XmlRootElement(name = "name")
 @XmlAccessorType(XmlAccessType.FIELD)
 @NoArgsConstructor
@@ -19,11 +21,12 @@ import lombok.Setter;
 @Getter
 public class RoleWS {
 
-	private String role;
+	private String name;
 
-	Set<UserWS> studentSet = new HashSet<UserWS>();
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	Set<UserWS> users = new HashSet<UserWS>();
 
 	public RoleWS(String role) {
-		this.role = role;
+		this.name = role;
 	}
 }

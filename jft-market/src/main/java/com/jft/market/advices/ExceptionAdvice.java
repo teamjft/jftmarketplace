@@ -3,8 +3,6 @@ package com.jft.market.advices;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,20 +10,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.jft.market.api.ws.ErrorWS;
 import com.jft.market.bindings.ErrorResource;
 import com.jft.market.bindings.FieldErrorResource;
+import com.jft.market.exceptions.EntityAlreadyExist;
 import com.jft.market.exceptions.EntityNotFoundException;
+import com.jft.market.exceptions.InternalApiException;
 import com.jft.market.exceptions.InvalidRequestException;
 
+@RestControllerAdvice
 @ControllerAdvice
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
-	@Autowired
-	private MessageSource messageSource;
+
+	private HttpHeaders creatHeaders() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		return headers;
+	}
 
 	@ExceptionHandler({InvalidRequestException.class})
 	protected ResponseEntity<Object> handleInvalidRequest(RuntimeException e, WebRequest request) {
@@ -41,16 +47,23 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 			fieldErrorResources.add(fieldErrorResource);
 			errorResource.setFieldErrors(fieldErrorResources);
 		});
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpHeaders headers = creatHeaders();
 		return handleExceptionInternal(e, errorResource, headers, HttpStatus.UNPROCESSABLE_ENTITY, request);
 	}
 
 	@ExceptionHandler({EntityNotFoundException.class})
-	protected ResponseEntity<Object> entityNotFound(RuntimeException e, WebRequest request) {
+	protected ResponseEntity<Object> entityNotFound(RuntimeException e) {
 		EntityNotFoundException entityNotFoundException = (EntityNotFoundException) e;
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
 		return new ResponseEntity(new ErrorWS(entityNotFoundException.getMessage(), HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler({EntityAlreadyExist.class})
+	protected ResponseEntity<Object> entityAlreadyExist(RuntimeException e) {
+		return new ResponseEntity(new ErrorWS(e.getMessage(), HttpStatus.CONFLICT), HttpStatus.CONFLICT);
+	}
+
+	@ExceptionHandler({InternalApiException.class})
+	protected ResponseEntity<Object> handleInternalApiException(RuntimeException e) {
+		return new ResponseEntity(new ErrorWS(e.getMessage(), HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
 	}
 }

@@ -1,4 +1,4 @@
-package com.jft.market.api;
+package com.jft.market.api.controllers;
 
 
 import javax.validation.Valid;
@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.jft.market.api.ws.UserWS;
+import com.jft.market.api.ws.CustomerWS;
 
-@RequestMapping(value = UserApiConstants.BASE_PATH)
-public interface UserApi {
+@RequestMapping(value = BaseApi.BASE_PATH + CustomerApi.CUSTOMER)
+public interface CustomerApi {
+
+	String CUSTOMER = "v1/customer";
+	String CUSTOMERS = "customers";
 
 	@RequestMapping(value = {"create"},
 			method = RequestMethod.POST,
@@ -23,26 +26,26 @@ public interface UserApi {
 			consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public
 	@ResponseBody
-	ResponseEntity createUser(@Valid @RequestBody UserWS productWS, BindingResult bindingResult);
+	ResponseEntity createCustomer(@Valid @RequestBody CustomerWS customerWS, BindingResult bindingResult);
 
-	@RequestMapping(value = {"{userId}"},
+	@RequestMapping(value = {"{customerUuid}"},
 			method = RequestMethod.GET,
 			produces = {MediaType.APPLICATION_JSON_VALUE})
 	public
 	@ResponseBody
-	ResponseEntity readUser(@PathVariable("userId") Integer userId);
+	ResponseEntity readCustomer(@PathVariable("customerUuid") String customerUuid);
 
-	@RequestMapping(value = {UserApiConstants.USERS},
+	@RequestMapping(value = {CUSTOMERS},
 			method = RequestMethod.GET,
 			produces = {MediaType.APPLICATION_JSON_VALUE})
 	public
 	@ResponseBody
-	ResponseEntity readUsers();
+	ResponseEntity readCustomers();
 
-	@RequestMapping(value = {"delete/{userId}"},
+	@RequestMapping(value = {"delete/{customerUuid}"},
 			method = RequestMethod.POST,
 			produces = {MediaType.APPLICATION_JSON_VALUE})
 	public
 	@ResponseBody
-	ResponseEntity deleteUser(@PathVariable("userId") Integer userId);
+	ResponseEntity deleteCustomer(@PathVariable("customerUuid") String customerUuid);
 }

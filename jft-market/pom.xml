@@ -156,6 +156,21 @@
             <version>3.5</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>17.0</version>
+        </dependency>
+
+        <!-- PAYPAL INTEGRATION-->
+        <!-- https://mvnrepository.com/artifact/com.paypal.sdk/rest-api-sdk -->
+        <dependency>
+            <groupId>com.paypal.sdk</groupId>
+            <artifactId>rest-api-sdk</artifactId>
+            <version>0.6.0</version>
+        </dependency>
+
+
     </dependencies>
 
 

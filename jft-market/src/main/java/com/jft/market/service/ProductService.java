@@ -4,24 +4,23 @@ import java.util.List;
 
 import com.jft.market.api.ProductBean;
 import com.jft.market.api.ws.ProductWS;
-import com.jft.market.exceptions.EntityNotFoundException;
 import com.jft.market.model.Product;
 
-/**
- * Created by gagan on 29/3/17.
- */
 public interface ProductService {
-	ProductBean readProduct(Integer productId) throws EntityNotFoundException;
 
-	List<ProductBean> readProducts();
+	public ProductWS readProduct(String productUuid);
 
-	void createProduct(Product product);
+	public List<ProductBean> readProducts();
 
-	void deleteProduct(ProductBean productBean);
+	public void createProduct(Product product);
 
-	Product convertWStoEntity(ProductWS productWS);
+	public void deleteProduct(String productUuid);
 
-	Product convertBeanToEntity(ProductBean productBean);
+	public Product convertWStoEntity(ProductWS productWS);
 
-	ProductBean createProductBean(Product product);
+	public Product convertBeanToEntity(ProductBean productBean);
+
+	public ProductBean createProductBean(Product product);
+
+	public ProductWS convertEntityToWS(Product product);
 }
