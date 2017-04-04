@@ -1,32 +1,31 @@
 package com.jft.market.service;
 
 
+import java.util.List;
+
+import com.jft.market.api.ws.PaymentResponseWS;
 import com.jft.market.model.Customer;
+import com.jft.market.model.Order;
+import com.jft.market.model.PaymentInstrument;
 import com.jft.market.model.Product;
+import com.litle.sdk.generate.SaleResponse;
 
 public interface PurchaseService {
 
-	public void purchaseProduct(String customerUuid, String productUuid);
+	public PaymentResponseWS purchaseProduct(String customerUuid, String productUuid);
 
 	public Customer getCustomer(String customerUuid);
 
 	public Product getProduct(String productUuid);
 
-	public void associateCustomerWithProduct(Product product, Customer customer);
+	public void associateCustomerWithOrder(Product product, Customer customer);
 
-	//public void linkProductWithCustomer(Product product);
+	public PaymentInstrument getPaymentInstrument(String customerUuid);
 
-	/*public Long getProductId(ProductWS productWS);
+	public PaymentResponseWS buildPaymentResponse(SaleResponse saleResponse);
 
-	public Long getUserId(UserWS userWS);
+	public List<Order> getOrdersByProductId(Product product);
 
-	public UserWS createUserWS(PurchaseWS purchaseWS);
+	public void createOrder(Customer customer, Product product);
 
-	public ProductWS createProductWS(PurchaseWS purchaseWS);
-
-	public void makePurchase(Long userid, Long productid);
-
-	public Long getCustomerId(UserWS userWS);
-
-	public Customer getCustomer(UserWS userWS);*/
 }

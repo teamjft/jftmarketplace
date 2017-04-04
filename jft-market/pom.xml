@@ -7,6 +7,13 @@
     <version>1.0-SNAPSHOT</version>
     <name>jft-market</name>
     <url>http://jellyfishtechnologies.com</url>
+    <repositories>
+        <repository>
+            <id>jfrog</id>
+            <url>https://dl.bintray.com/litlesdk/maven</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -163,14 +170,27 @@
         </dependency>
 
         <!-- PAYPAL INTEGRATION-->
+        <!--     https://mvnrepository.com/artifact/com.paypal.sdk/rest-api-sdk-->
+        <!-- https://mvnrepository.com/artifact/com.paypal.sdk/paypal-core -->
+        <!--<dependency>
+            <groupId>com.paypal.sdk</groupId>
+            <artifactId>paypal-core</artifactId>
+            <version>1.7.2</version>
+        </dependency>-->
+
         <!-- https://mvnrepository.com/artifact/com.paypal.sdk/rest-api-sdk -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.paypal.sdk</groupId>
             <artifactId>rest-api-sdk</artifactId>
-            <version>0.6.0</version>
+            <version>0.7.1</version>
         </dependency>
+-->
 
-
+        <dependency>
+            <groupId>com.litle</groupId>
+            <artifactId>litle-sdk-for-java</artifactId>
+            <version>9.3.3</version>
+        </dependency>
     </dependencies>
 
 

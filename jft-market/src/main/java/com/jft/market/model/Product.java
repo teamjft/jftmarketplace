@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -22,18 +21,19 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	private String name;
-	private Integer price;
+	private Long price;
 	private String description;
 	private String features;
 	private String uuid;
 
-	@ManyToOne
-	private Customer customer;
-
-	public Product(String name, Integer price, String description, String features) {
+	public Product(String name, Long price, String description, String features) {
 		this.name = name;
 		this.price = price;
 		this.description = description;
 		this.features = features;
 	}
+
+/*	@ManyToMany(mappedBy = "products")
+	private Set<Customer> customers = new HashSet<>();*/
+
 }
