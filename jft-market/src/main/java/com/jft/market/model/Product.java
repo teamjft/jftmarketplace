@@ -1,9 +1,14 @@
 package com.jft.market.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -33,7 +38,6 @@ public class Product {
 		this.features = features;
 	}
 
-/*	@ManyToMany(mappedBy = "products")
-	private Set<Customer> customers = new HashSet<>();*/
-
+	@OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+	private Set<Order> orders = new HashSet<>();
 }

@@ -89,7 +89,7 @@ public class PurchaseServiceimpl implements PurchaseService {
 		List<Order> orders = getOrdersByProductId(product);
 		if (!orders.isEmpty()) {
 			orders.forEach(order -> {
-				Preconditions.check(order.getProductId() == product.getId() &&
+				Preconditions.check(order.getProduct().getId() == product.getId() &&
 								order.getOrderStatus().equals(OrderStatus.ACTIVE) &&
 								order.getCustomer().getId() == customer.getId(),
 						"You already purchased this product.");
@@ -121,7 +121,7 @@ public class PurchaseServiceimpl implements PurchaseService {
 	public List<Order> getOrdersByProductId(Product product) {
 		Session session = entityManager.unwrap(Session.class);
 		Criteria criteria = session.createCriteria(Order.class);
-		criteria.add(Restrictions.eq("productId", product.getId()));
+		criteria.add(Restrictions.eq("product", product));
 		return criteria.list();
 	}
 
@@ -130,7 +130,8 @@ public class PurchaseServiceimpl implements PurchaseService {
 	public void createOrder(Customer customer, Product product) {
 		Order order = new Order();
 		order.setOrderStatus(OrderStatus.ACTIVE);
-		order.setProductId(product.getId());
+		//order.setProductId(product.getId());
+		order.setProduct(product);
 		customer.getOrders().add(order);
 		order.setCustomer(customer);
 		if (StringUtils.isEmpty(order.getUuid())) {

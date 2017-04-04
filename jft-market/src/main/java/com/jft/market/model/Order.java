@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -22,12 +23,16 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "order_id")
 	private Long Id;
-	@Column(name = "product_id")
-	private Long productId;
+	/*@Column(name = "product_id")
+	private Long productId;*/
 	@Column(name = "order_status")
 	private String orderStatus;
 	private String uuid;
 
 	@ManyToOne
-	Customer customer;
+	private Customer customer;
+
+	@ManyToOne
+	@JoinColumn(name = "product_id")
+	private Product product;
 }
