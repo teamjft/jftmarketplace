@@ -1,0 +1,53 @@
+<h1 class="text-center text-info">
+    || Admin Home Page ||
+</h1>
+<div class="container">
+    <h4 class="w3-wide w3-opacity text-center">
+        <span class="glyphicon glyphicon-thumbs-up"> </span> 
+        An JFT-Sale-Admin can do ....
+        <span class="glyphicon glyphicon-thumbs-up"> </span> 
+    </h4><br/>
+    <div class="col-md-12">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <ul class="list-group">
+                {{#link-to "products"}}
+                <li class=" catDiv list-group-item list-group-item-success">Products List <span class="badge">12</span></li>{{/link-to}} {{#link-to "addcategory"}}
+                <li class="catDiv list-group-item list-group-item-info">Category List <span class="badge">3</span></li>{{/link-to}} {{#link-to "products"}}
+                <li class="catDiv list-group-item list-group-item-warning">User List <span class="badge">0</span></li>{{/link-to}}
+            </ul>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <ul class="list-group">
+                
+                <li class="list-group-item list-group-item-success"><span class="catDiv badge"> {{#link-to "addproduct"}}  Create Product {{/link-to}}</span> To add a new product
+                    for sale</li>
+                <li class="list-group-item list-group-item-info"> <span class="catDiv badge">{{#link-to "addcategory"}}Create Category {{/link-to}} </span> To add a new category
+                    to filter products</li>
+                <li class="list-group-item list-group-item-warning"><span class="catDiv badge"> {{#link-to "addcategory"}} Mange Role {{/link-to}} </span> To manage role of user
+                    in system</li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-12"> <br/>
+        <div class="w3-row w3-padding-32">
+            <div class="w3-third text-center">
+                <p>User 1</p>
+                <img src="{{Constant.CONTEXT_PATH}}assets/images/admin-icon.png" class="catDiv w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
+            </div>
+            <div class="w3-third text-center">
+                <p>User 2</p>
+                <img src="{{Constant.CONTEXT_PATH}}assets/images/admin-icon4.jpg" class="catDiv w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
+            </div>
+            <div class="w3-third text-center">
+                <p>User 3</p>
+                <img src="{{Constant.CONTEXT_PATH}}assets/images/admin-icon3.ico" class=" catDiv w3-round" alt="Random Name" style="width:60%">
+            </div>
+        </div>
+    </div>
+</div>
+{{outlet}}
