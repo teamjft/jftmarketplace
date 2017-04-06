@@ -133,7 +133,9 @@ public class UserServiceImpl implements UserService {
 	public void deleteUser(String userUuid) {
 		User user = userRepository.findByUuid(userUuid);
 		Preconditions.check(user == null, ExceptionConstants.USER_NOT_FOUND);
-		userRepository.delete(user);
+		user.setDeleted(Boolean.TRUE);
+		user.setEnabled(Boolean.FALSE);
+		userRepository.save(user);
 	}
 }
 

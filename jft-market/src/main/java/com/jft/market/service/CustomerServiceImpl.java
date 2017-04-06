@@ -54,6 +54,9 @@ public class CustomerServiceImpl implements CustomerService {
 			User user = userService.convertWStoEntity(userWS);
 			customer.setUser(user);
 			user.setCustomer(customer);
+			if (StringUtils.isEmpty(user.getUuid())) {
+				user.setUuid(UUID.randomUUID().toString());
+			}
 			return customer;
 		}
 		return null;

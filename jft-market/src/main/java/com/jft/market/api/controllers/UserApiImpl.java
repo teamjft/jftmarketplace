@@ -52,7 +52,6 @@ public class UserApiImpl implements UserApi {
 
 	@Override
 	public ResponseEntity deleteUser(@PathVariable("userUuid") String userUuid) {
-		log.info("Reading user from database");
 		userService.deleteUser(userUuid);
 		return new ResponseEntity(HttpStatus.OK);
 	}
