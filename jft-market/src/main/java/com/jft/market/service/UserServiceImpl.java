@@ -92,7 +92,13 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public List<UserWS> readAllUsers() {
 		List<User> users = readUsers();
-		return convertUsersToUsersWS(users);
+		List<User> enabledUsers = new ArrayList<>();
+		users.forEach(user -> {
+			if(isValidUser(user)){
+				enabledUsers.add(user);
+			}
+		});
+		return convertUsersToUsersWS(enabledUsers);
 	}
 
 	@Override
@@ -106,6 +112,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public UserWS readUserByUuid(String useruuid) {
 		User user = userRepository.findByUuid(useruuid);
+		Preconditions.check(!isValidUser(user), ExceptionConstants.USER_NOT_ENABLED);
 		UserWS userWS = convertEntityToWS(user);
 		return userWS;
 	}
@@ -136,6 +143,15 @@ public class UserServiceImpl implements UserService {
 		user.setDeleted(Boolean.TRUE);
 		user.setEnabled(Boolean.FALSE);
 		userRepository.save(user);
+	}
+
+	@Override
+	public Boolean isValidUser(User user) {
+		if (user.getEnabled().equals(Boolean.TRUE) && user.getDeleted().equals(Boolean.FALSE)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
 

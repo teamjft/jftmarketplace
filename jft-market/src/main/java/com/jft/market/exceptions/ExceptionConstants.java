@@ -4,6 +4,7 @@ package com.jft.market.exceptions;
 public class ExceptionConstants {
 
 	public static final String USER_NOT_FOUND = "User not found";
+	public static final String USER_NOT_ENABLED = "User is not enabled or is deleted.";
 
 	public static final String CUSTOMER_NOT_FOUND = "Customer not found";
 	public static final String CUSTOMER_ALREADY_EXISTS = "Customer already exists";

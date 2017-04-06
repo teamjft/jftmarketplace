@@ -24,4 +24,6 @@ public interface UserService {
 	public UserWS convertEntityToWS(User user);
 
 	public void deleteUser(String userUuid);
+
+	public Boolean isValidUser(User user);
 }
