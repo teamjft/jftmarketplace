@@ -34,8 +34,11 @@ public class UserWS {
 	@NotNull
 	private Long phone;
 
-	@NotNull
+	/*@NotNull
 	private List<RoleWS> roles = new ArrayList<RoleWS>();
+*/
+	@NotNull
+	private List<String> roles = new ArrayList<>();
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private CustomerWS customerWS;

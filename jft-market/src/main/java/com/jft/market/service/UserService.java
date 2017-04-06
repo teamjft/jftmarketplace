@@ -35,4 +35,6 @@ public interface UserService {
 	public void updateUserRoles(String userUuid);
 
 	public Role getAdminRole();
+
+	public UserWS readUser(String userUuid);
 }

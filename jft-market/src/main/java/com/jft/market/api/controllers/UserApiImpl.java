@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jft.market.api.ws.ResponseStatus;
 import com.jft.market.api.ws.RoleWS;
 import com.jft.market.api.ws.UserWS;
 import com.jft.market.exceptions.ExceptionConstants;
@@ -38,14 +39,13 @@ public class UserApiImpl implements UserApi {
 		}
 		log.info("Converting WS to Entity");
 		userService.convertWsToEnityAndSave(userWS);
-		return new ResponseEntity(HttpStatus.OK);
+		return ResponseStatus.SUCCESS.getResponse();
 	}
 
 	@Override
 	public ResponseEntity readUser(@PathVariable("userUuid") String userUuid) {
 		log.info("Reading user from database");
-		User user = userService.readUserByUuid(userUuid);
-		UserWS userWS = userService.convertEntityToWS(user);
+		UserWS userWS = userService.readUser(userUuid);
 		return new ResponseEntity(userWS, HttpStatus.OK);
 	}
 
@@ -59,7 +59,7 @@ public class UserApiImpl implements UserApi {
 	@Override
 	public ResponseEntity deleteUser(@PathVariable("userUuid") String userUuid) {
 		userService.deleteUser(userUuid);
-		return new ResponseEntity(HttpStatus.OK);
+		return ResponseStatus.SUCCESS.getResponse();
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class UserApiImpl implements UserApi {
 		userService.validateUserWS(userWS);
 		User user = userService.readUserByUuid(userUuid);
 		userService.updateUser(user, userWS);
-		return null;
+		return ResponseStatus.SUCCESS.getResponse();
 	}
 
 	@Override
@@ -75,6 +75,6 @@ public class UserApiImpl implements UserApi {
 		List<String> roles = Arrays.asList(roleWS.getRoles());
 		Preconditions.check(roles.isEmpty(), ExceptionConstants.NO_ROLE_TO_SAVE);
 		userService.updateUserRoles(userUuid);
-		return null;
+		return ResponseStatus.SUCCESS.getResponse();
 	}
 }
