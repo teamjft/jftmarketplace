@@ -110,11 +110,11 @@ public class UserServiceImpl implements UserService {
 	}
 	@Override
 	@Transactional
-	public UserWS readUserByUuid(String useruuid) {
+	public User readUserByUuid(String useruuid) {
 		User user = userRepository.findByUuid(useruuid);
+		Preconditions.check(user == null, ExceptionConstants.USER_NOT_FOUND);
 		Preconditions.check(!isValidUser(user), ExceptionConstants.USER_NOT_ENABLED);
-		UserWS userWS = convertEntityToWS(user);
-		return userWS;
+		return user;
 	}
 
 	@Override
@@ -152,6 +152,22 @@ public class UserServiceImpl implements UserService {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public void validateUserWS(UserWS userWS) {
+		Preconditions.check(StringUtils.isEmpty(userWS.getUsername()), ExceptionConstants.USER_NAME_CANNOT_BE_EMPTY);
+		Preconditions.check(StringUtils.isEmpty(userWS.getEmail()), ExceptionConstants.EMAIL_CANNOT_BE_EMPTY);
+		Preconditions.check(StringUtils.isEmpty(String.valueOf(userWS.getPhone())), ExceptionConstants.PHONE_NUMBER_CANNOT_BE_EMPTY);
+	}
+
+	@Override
+	@Transactional
+	public void updateUser(User user, UserWS userWS) {
+		user.setUsername(userWS.getUsername());
+		user.setPhone(userWS.getPhone());
+		user.setEmail(userWS.getEmail());
+		userRepository.save(user);
 	}
 }
 

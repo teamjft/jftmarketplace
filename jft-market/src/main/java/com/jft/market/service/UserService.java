@@ -19,11 +19,15 @@ public interface UserService {
 
 	public void saveUser(User user);
 
-	public UserWS readUserByUuid(String useruuid);
+	public User readUserByUuid(String useruuid);
 
 	public UserWS convertEntityToWS(User user);
 
 	public void deleteUser(String userUuid);
 
 	public Boolean isValidUser(User user);
+
+	public void validateUserWS(UserWS userWS);
+
+	public void updateUser(User user, UserWS userWS);
 }

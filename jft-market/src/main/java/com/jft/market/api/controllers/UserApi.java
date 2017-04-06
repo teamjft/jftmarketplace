@@ -48,4 +48,13 @@ public interface UserApi extends BaseApi {
 	public
 	@ResponseBody
 	ResponseEntity deleteUser(@PathVariable("userUuid") String userUuid);
+
+	@RequestMapping(value = {"update/{userUuid}"},
+			method = RequestMethod.PUT,
+			produces = {MediaType.APPLICATION_JSON_VALUE},
+			consumes = {MediaType.APPLICATION_JSON_VALUE})
+	public
+	@ResponseBody
+	ResponseEntity updateCustomer(@RequestBody UserWS userWS,
+								  @PathVariable("userUuid") String userUuid);
 }

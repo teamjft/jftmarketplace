@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jft.market.api.ws.UserWS;
 import com.jft.market.exceptions.InvalidRequestException;
+import com.jft.market.model.User;
 import com.jft.market.service.UserService;
 
 @Slf4j
@@ -39,7 +40,8 @@ public class UserApiImpl implements UserApi {
 	@Override
 	public ResponseEntity readUser(@PathVariable("userUuid") String userUuid) {
 		log.info("Reading user from database");
-		UserWS userWS = userService.readUserByUuid(userUuid);
+		User user = userService.readUserByUuid(userUuid);
+		UserWS userWS = userService.convertEntityToWS(user);
 		return new ResponseEntity(userWS, HttpStatus.OK);
 	}
 
@@ -54,5 +56,13 @@ public class UserApiImpl implements UserApi {
 	public ResponseEntity deleteUser(@PathVariable("userUuid") String userUuid) {
 		userService.deleteUser(userUuid);
 		return new ResponseEntity(HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity updateCustomer(@RequestBody UserWS userWS, @PathVariable("userUuid") String userUuid) {
+		userService.validateUserWS(userWS);
+		User user = userService.readUserByUuid(userUuid);
+		userService.updateUser(user, userWS);
+		return null;
 	}
 }

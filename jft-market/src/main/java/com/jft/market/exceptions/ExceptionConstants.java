@@ -23,6 +23,7 @@ public class ExceptionConstants {
 	public static final String INVALID_REQUEST = "Invalid request";
 
 	public static final String CUSTOMER_NAME_CANNOT_BE_EMPTY = "Customer name cannot be empty";
+	public static final String USER_NAME_CANNOT_BE_EMPTY = "User name cannot be empty";
 	public static final String PHONE_NUMBER_CANNOT_BE_EMPTY = "Phone number cannot be empty";
 	public static final String EMAIL_CANNOT_BE_EMPTY = "Email cannot be empty";
 
