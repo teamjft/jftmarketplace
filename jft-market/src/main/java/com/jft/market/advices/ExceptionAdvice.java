@@ -20,6 +20,7 @@ import com.jft.market.bindings.ErrorResource;
 import com.jft.market.bindings.FieldErrorResource;
 import com.jft.market.exceptions.EntityAlreadyExist;
 import com.jft.market.exceptions.EntityNotFoundException;
+import com.jft.market.exceptions.ExceptionConstants;
 import com.jft.market.exceptions.InternalApiException;
 import com.jft.market.exceptions.InvalidRequestException;
 import com.jft.market.exceptions.VantivPaymnetException;
@@ -39,7 +40,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleInvalidRequest(RuntimeException e, WebRequest request) {
 		InvalidRequestException invalidRequestException = (InvalidRequestException) e;
 		List<FieldErrorResource> fieldErrorResources = new ArrayList<>();
-		ErrorResource errorResource = new ErrorResource("Invalid Request");
+		ErrorResource errorResource = new ErrorResource(ExceptionConstants.INVALID_REQUEST);
 		List<FieldError> fieldErrors = invalidRequestException.getErrors().getFieldErrors();
 		fieldErrors.forEach(fieldError -> {
 			FieldErrorResource fieldErrorResource = new FieldErrorResource();

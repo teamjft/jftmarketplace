@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jft.market.api.OrderStatus;
 import com.jft.market.api.ws.PaymentResponseWS;
+import com.jft.market.exceptions.ExceptionConstants;
 import com.jft.market.model.Customer;
 import com.jft.market.model.PaymentInstrument;
 import com.jft.market.model.Product;
@@ -59,11 +60,11 @@ public class PurchaseServiceimpl implements PurchaseService {
 	public PaymentResponseWS purchaseProduct(String customerUuid, String productUuid) {
 		Customer customer = getCustomer(customerUuid);
 		Product product = getProduct(productUuid);
-		Preconditions.check(product == null, "Product Not found");
+		Preconditions.check(product == null, ExceptionConstants.PRODUCT_NOT_FOUND);
 		PaymentInstrument paymentInstrument = getPaymentInstrument(customerUuid);
 		log.info("Payment initiated for product " + product.getName() + " with uuid " + productUuid);
 		SaleResponse saleResponse = vantivService.createSale(paymentInstrument, product);
-		Preconditions.checkPaymentResponse(!saleResponse.getResponse().equals(successResponse), "Payment not succeeded. Please try after sometime");
+		Preconditions.checkPaymentResponse(!saleResponse.getResponse().equals(successResponse), ExceptionConstants.PATMENT_ERROR);
 		associateCustomerWithOrder(product, customer);
 		return buildPaymentResponse(saleResponse);
 	}
@@ -72,14 +73,14 @@ public class PurchaseServiceimpl implements PurchaseService {
 	@Transactional
 	public Customer getCustomer(String customerUuid) {
 		Customer customer = customerRepository.findByUuid(customerUuid);
-		Preconditions.check(customer == null, "Customer not found");
+		Preconditions.check(customer == null, ExceptionConstants.CUSTOMER_NOT_FOUND);
 		return customer;
 	}
 
 	@Override
 	public Product getProduct(String productUuid) {
 		Product product = productRepository.findByUuid(productUuid);
-		Preconditions.check(product == null, "Product not exist");
+		Preconditions.check(product == null, ExceptionConstants.PRODUCT_NOT_FOUND);
 		return product;
 	}
 
@@ -92,7 +93,7 @@ public class PurchaseServiceimpl implements PurchaseService {
 				Preconditions.check(order.getProduct().getId() == product.getId() &&
 								order.getOrderStatus().equals(OrderStatus.ACTIVE) &&
 								order.getCustomer().getId() == customer.getId(),
-						"You already purchased this product.");
+						ExceptionConstants.PRODUCT_ALREADY_PURCHASED);
 			});
 			createOrder(customer, product);
 		} else {
@@ -109,7 +110,7 @@ public class PurchaseServiceimpl implements PurchaseService {
 
 	@Override
 	public PaymentResponseWS buildPaymentResponse(SaleResponse saleResponse) {
-		Preconditions.check(saleResponse == null, "No response from payment gateway");
+		Preconditions.check(saleResponse == null, ExceptionConstants.PATMENT_GATEWAY_ERROR);
 		PaymentResponseWS paymentResponseWS = new PaymentResponseWS();
 		paymentResponseWS.setStatus(HttpStatus.OK);
 		paymentResponseWS.setMessage(saleResponse.getMessage());

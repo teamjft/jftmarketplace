@@ -2,7 +2,6 @@ package com.jft.market.service;
 
 import java.util.List;
 
-import com.jft.market.api.UserBean;
 import com.jft.market.api.ws.UserWS;
 import com.jft.market.model.User;
 
@@ -11,8 +10,6 @@ public interface UserService {
 	public User convertWStoEntity(UserWS userWS);
 
 	public void convertWsToEnityAndSave(UserWS userWS);
-
-	public UserBean createUserBean(User user);
 
 	public List<UserWS> convertUsersToUsersWS(List<User> users);
 
@@ -27,7 +24,4 @@ public interface UserService {
 	public UserWS convertEntityToWS(User user);
 
 	public void deleteUser(String userUuid);
-
-	public User readUserByEmail(String email);
-
 }

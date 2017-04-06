@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jft.market.api.ws.CustomerWS;
 import com.jft.market.api.ws.RoleWS;
 import com.jft.market.api.ws.Roles;
-import com.jft.market.api.ws.UpdateCustomerWS;
 import com.jft.market.api.ws.UserWS;
+import com.jft.market.exceptions.ExceptionConstants;
 import com.jft.market.model.Customer;
 import com.jft.market.model.User;
 import com.jft.market.repository.CustomerRepository;
@@ -98,7 +98,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Transactional
 	public Customer readCustomerByUuid(String customerUuid) {
 		Customer customer = customerRepository.findByUuid(customerUuid);
-		Preconditions.check(!isValidCustomer(customer), "Customer is not enabled or is deleted.");
+		Preconditions.check(!isValidCustomer(customer), ExceptionConstants.CUSTOMER_NOT_ENABLED);
 		return customer;
 	}
 
@@ -171,17 +171,23 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	@Transactional
-	public void updateCustomer(Customer customer, UpdateCustomerWS customerWS) {
+	public void updateCustomer(Customer customer, CustomerWS customerWS) {
 		Customer updatedCustomer = checkAndUpdateCustomer(customer, customerWS);
 		customerRepository.save(updatedCustomer);
 	}
 
 	@Override
-	public Customer checkAndUpdateCustomer(Customer customer, UpdateCustomerWS customerWS) {
-		customer.setName(customerWS.getUsername());
+	public Customer checkAndUpdateCustomer(Customer customer, CustomerWS customerWS) {
+		customer.setName(customerWS.getCustomerName());
 		customer.setPhone(customerWS.getPhone());
 		customer.setEmail(customerWS.getEmail());
 		return customer;
 	}
 
+	@Override
+	public void validateCustomerWS(CustomerWS customerWS) {
+		Preconditions.check(StringUtils.isEmpty(customerWS.getCustomerName()), ExceptionConstants.CUSTOMER_NAME_CANNOT_BE_EMPTY);
+		Preconditions.check(StringUtils.isEmpty(customerWS.getEmail()), ExceptionConstants.EMAIL_CANNOT_BE_EMPTY);
+		Preconditions.check(StringUtils.isEmpty(String.valueOf(customerWS.getPhone())), ExceptionConstants.PHONE_NUMBER_CANNOT_BE_EMPTY);
+	}
 }

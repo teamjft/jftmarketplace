@@ -4,7 +4,6 @@ package com.jft.market.service;
 import java.util.List;
 
 import com.jft.market.api.ws.CustomerWS;
-import com.jft.market.api.ws.UpdateCustomerWS;
 import com.jft.market.api.ws.UserWS;
 import com.jft.market.model.Customer;
 
@@ -32,7 +31,9 @@ public interface CustomerService {
 
 	public Boolean isValidCustomer(Customer customer);
 
-	public void updateCustomer(Customer customer, UpdateCustomerWS customerWS);
+	public void updateCustomer(Customer customer, CustomerWS customerWS);
 
-	public Customer checkAndUpdateCustomer(Customer customer, UpdateCustomerWS customerWS);
+	public Customer checkAndUpdateCustomer(Customer customer, CustomerWS customerWS);
+
+	public void validateCustomerWS(CustomerWS customerWS);
 }

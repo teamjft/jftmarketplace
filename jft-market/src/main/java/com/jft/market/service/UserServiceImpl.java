@@ -11,10 +11,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jft.market.api.UserBean;
 import com.jft.market.api.ws.RoleWS;
 import com.jft.market.api.ws.Roles;
 import com.jft.market.api.ws.UserWS;
+import com.jft.market.exceptions.ExceptionConstants;
 import com.jft.market.model.Role;
 import com.jft.market.model.User;
 import com.jft.market.repository.RoleRepository;
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User convertWStoEntity(UserWS userWS) {
 		// USER and ROLE entity is populating
-		Preconditions.check(userWS == null, "User not found");
+		Preconditions.check(userWS == null, ExceptionConstants.USER_NOT_FOUND);
 		User user = new User();
 		user.setId(userWS.getId());
 		user.setUsername(userWS.getUsername());
@@ -58,27 +58,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserBean createUserBean(User user) {
-		UserBean userBean = new UserBean();
-		if (user != null) {
-			userBean.setUsername(user.getUsername());
-			userBean.setPassword(user.getPassword());
-			userBean.setEmail(user.getEmail());
-			userBean.setGender(user.getGender());
-			userBean.setId(user.getId());
-			userBean.setEnabled(user.getEnabled());
-			userBean.setUuid(user.getUuid());
-
-			return userBean;
-		}
-		return null;
-	}
-
-
-	@Override
 	public List<UserWS> convertUsersToUsersWS(List<User> users) {
 		List<UserWS> userWSList = new ArrayList<UserWS>();
-		Preconditions.check(users.isEmpty(), "No user found.");
+		Preconditions.check(users.isEmpty(), ExceptionConstants.USER_NOT_FOUND);
 		users.forEach(user -> {
 			UserWS userWS = new UserWS();
 			userWS.setUsername(user.getUsername());
@@ -130,7 +112,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserWS convertEntityToWS(User user) {
-		Preconditions.check(user == null, "User not found");
+		Preconditions.check(user == null, ExceptionConstants.USER_NOT_FOUND);
 		UserWS userWS = new UserWS();
 		userWS.setUsername(user.getUsername());
 		userWS.setUuid(user.getUuid());
@@ -150,14 +132,8 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public void deleteUser(String userUuid) {
 		User user = userRepository.findByUuid(userUuid);
-		Preconditions.check(user == null, "User not found");
+		Preconditions.check(user == null, ExceptionConstants.USER_NOT_FOUND);
 		userRepository.delete(user);
-	}
-
-	@Override
-	@Transactional
-	public User readUserByEmail(String email) {
-		return userRepository.findByemail(email);
 	}
 }
 

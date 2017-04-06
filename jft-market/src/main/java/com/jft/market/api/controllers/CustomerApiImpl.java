@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jft.market.api.ws.CustomerWS;
-import com.jft.market.api.ws.UpdateCustomerWS;
 import com.jft.market.exceptions.EntityAlreadyExist;
 import com.jft.market.exceptions.EntityNotFoundException;
+import com.jft.market.exceptions.ExceptionConstants;
 import com.jft.market.exceptions.InvalidRequestException;
 import com.jft.market.model.Customer;
 import com.jft.market.service.CustomerService;
@@ -43,7 +43,7 @@ public class CustomerApiImpl implements CustomerApi {
 		}
 		Customer customer = customerService.readCustomerByEmailId(customerWS);
 		if (customer != null) {
-			throw new EntityAlreadyExist("Customer already exist.");
+			throw new EntityAlreadyExist(ExceptionConstants.CUSTOMER_ALREADY_EXISTS);
 		}
 		customerService.convertWStoEntityAndSave(customerWS);
 		return null;
@@ -54,7 +54,7 @@ public class CustomerApiImpl implements CustomerApi {
 		log.info("Reading customer");
 		Customer customer = customerService.readCustomerByUuid(customerUuid);
 		if (customer == null) {
-			throw new EntityNotFoundException("Customer not found.");
+			throw new EntityNotFoundException(ExceptionConstants.CUSTOMER_NOT_FOUND);
 		}
 		CustomerWS customerWS = customerService.convertEntityToWS(customer);
 		return new ResponseEntity(customerWS, HttpStatus.OK);
@@ -64,7 +64,7 @@ public class CustomerApiImpl implements CustomerApi {
 	public ResponseEntity readCustomers() {
 		List<CustomerWS> customers = customerService.getAllCustomers();
 		if (customers == null) {
-			throw new EntityNotFoundException("No Customer found");
+			throw new EntityNotFoundException(ExceptionConstants.CUSTOMER_NOT_FOUND);
 		}
 		return new ResponseEntity(customers, HttpStatus.OK);
 	}
@@ -73,25 +73,20 @@ public class CustomerApiImpl implements CustomerApi {
 	public ResponseEntity deleteCustomer(@PathVariable("customerUuid") String customerUuid) {
 		Customer customer = customerService.readCustomerByUuid(customerUuid);
 		if (customer == null) {
-			throw new EntityNotFoundException("Customer not found.");
+			throw new EntityNotFoundException(ExceptionConstants.CUSTOMER_NOT_FOUND);
 		}
 		customerService.deleteCustomer(customer);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
 	@Override
-	public ResponseEntity updateCustomer(@Valid @RequestBody UpdateCustomerWS customerWS, BindingResult bindingResult) {
-		log.info("Validating customer payload");
-		if (bindingResult.hasErrors()) {
-			throw new InvalidRequestException(bindingResult);
-		}
-		Customer customer = customerService.readCustomerByUuid(customerWS.getCustomerUuid());
+	public ResponseEntity updateCustomer(@RequestBody CustomerWS customerWS, @PathVariable("customerUuid") String cutomerUuid) {
+		customerService.validateCustomerWS(customerWS);
+		Customer customer = customerService.readCustomerByUuid(cutomerUuid);
 		if (customer == null) {
-			throw new EntityNotFoundException("Customer not found.");
+			throw new EntityNotFoundException(ExceptionConstants.CUSTOMER_NOT_FOUND);
 		}
 		customerService.updateCustomer(customer, customerWS);
-		return null;
+		return new ResponseEntity(HttpStatus.OK);
 	}
-
-
 }
