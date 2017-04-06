@@ -20,6 +20,7 @@ import com.jft.market.api.ProductBean;
 import com.jft.market.api.ProductBeanAttribute;
 import com.jft.market.api.ws.EmberResponse;
 import com.jft.market.api.ws.ProductWS;
+import com.jft.market.api.ws.ResponseStatus;
 import com.jft.market.exceptions.EntityNotFoundException;
 import com.jft.market.exceptions.InvalidRequestException;
 import com.jft.market.model.Product;
@@ -42,7 +43,7 @@ public class ProductApiImpl implements ProductApi {
 		log.info("Populating data");
 		Product product = productService.convertWStoEntity(productWS);
 		productService.createProduct(product);
-		return new ResponseEntity(HttpStatus.OK);
+		return ResponseStatus.SUCCESS.getResponse();
 	}
 
 	@Override
@@ -70,6 +71,6 @@ public class ProductApiImpl implements ProductApi {
 	@Override
 	public ResponseEntity deleteProduct(@PathVariable("productUuid") String productUuid) {
 		productService.deleteProduct(productUuid);
-		return new ResponseEntity(HttpStatus.OK);
+		return ResponseStatus.SUCCESS.getResponse();
 	}
 }

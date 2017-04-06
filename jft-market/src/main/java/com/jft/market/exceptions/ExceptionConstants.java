@@ -27,5 +27,5 @@ public class ExceptionConstants {
 	public static final String PHONE_NUMBER_CANNOT_BE_EMPTY = "Phone number cannot be empty";
 	public static final String EMAIL_CANNOT_BE_EMPTY = "Email cannot be empty";
 
-
+	public static final String NO_ROLE_TO_SAVE = "No role to save";
 }

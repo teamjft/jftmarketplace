@@ -3,6 +3,7 @@ package com.jft.market.service;
 import java.util.List;
 
 import com.jft.market.api.ws.UserWS;
+import com.jft.market.model.Role;
 import com.jft.market.model.User;
 
 public interface UserService {
@@ -30,4 +31,10 @@ public interface UserService {
 	public void validateUserWS(UserWS userWS);
 
 	public void updateUser(User user, UserWS userWS);
+
+	public void updateUserRoles(String userUuid);
+
+	public Role getAdminRole();
+
+	public UserWS readUser(String userUuid);
 }

@@ -12,6 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @XmlRootElement(name = "name")
@@ -20,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Setter
 @Getter
 public class RoleWS {
-
 	private String name;
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -29,4 +30,8 @@ public class RoleWS {
 	public RoleWS(String role) {
 		this.name = role;
 	}
+
+	@NotEmpty
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String[] roles;
 }

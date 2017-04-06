@@ -11,7 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jft.market.api.ws.RoleWS;
 import com.jft.market.api.ws.Roles;
 import com.jft.market.api.ws.UserWS;
 import com.jft.market.exceptions.ExceptionConstants;
@@ -70,12 +69,9 @@ public class UserServiceImpl implements UserService {
 			userWS.setEnabled(user.getEnabled());
 			userWS.setPhone(user.getPhone());
 			user.getRoles().forEach(role -> {
-				RoleWS roleWS = new RoleWS();
-				roleWS.setName(role.getName());
-				userWS.getRoles().add(roleWS);
+				userWS.getRoles().add(role.getName());
 			});
 			userWS.setUuid(user.getUuid());
-
 			userWSList.add(userWS);
 		});
 		return userWSList;
@@ -128,9 +124,7 @@ public class UserServiceImpl implements UserService {
 		userWS.setEmail(user.getEmail());
 		userWS.setPhone(user.getPhone());
 		user.getRoles().forEach(role -> {
-			RoleWS roleWS = new RoleWS();
-			roleWS.setName(role.getName());
-			userWS.getRoles().add(roleWS);
+			userWS.getRoles().add(role.getName());
 		});
 		return userWS;
 	}
@@ -168,6 +162,29 @@ public class UserServiceImpl implements UserService {
 		user.setPhone(userWS.getPhone());
 		user.setEmail(userWS.getEmail());
 		userRepository.save(user);
+	}
+
+	@Override
+	@Transactional
+	public void updateUserRoles(String userUuid) {
+		User user = readUserByUuid(userUuid);
+		Role adminRole = getAdminRole();
+		user.getRoles().add(adminRole);
+		saveUser(user);
+	}
+
+	@Override
+	@Transactional
+	public Role getAdminRole() {
+		return roleRepository.findByName(Roles.ROLE_ADMIN.getName());
+
+	}
+
+	@Override
+	@Transactional
+	public UserWS readUser(String userUuid) {
+		User user = readUserByUuid(userUuid);
+		return convertEntityToWS(user);
 	}
 }
 
