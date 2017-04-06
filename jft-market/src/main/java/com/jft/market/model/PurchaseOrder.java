@@ -17,14 +17,12 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class Order {
+public class PurchaseOrder extends TimestampedFieldObject {
 
 	@javax.persistence.Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "order_id")
 	private Long Id;
-	/*@Column(name = "product_id")
-	private Long productId;*/
 	@Column(name = "order_status")
 	private String orderStatus;
 	private String uuid;

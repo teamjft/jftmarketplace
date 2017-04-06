@@ -15,7 +15,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class ProductEntitlement {
+public class ProductEntitlement extends TimestampedFieldObject {
 
 	@javax.persistence.Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

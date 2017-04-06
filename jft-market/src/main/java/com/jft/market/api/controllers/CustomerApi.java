@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jft.market.api.ws.CustomerWS;
+import com.jft.market.api.ws.UpdateCustomerWS;
 
 @RequestMapping(value = BaseApi.BASE_PATH + CustomerApi.CUSTOMER)
 public interface CustomerApi {
@@ -48,4 +49,13 @@ public interface CustomerApi {
 	public
 	@ResponseBody
 	ResponseEntity deleteCustomer(@PathVariable("customerUuid") String customerUuid);
+
+
+	@RequestMapping(value = {"update"},
+			method = RequestMethod.PUT,
+			produces = {MediaType.APPLICATION_JSON_VALUE},
+			consumes = {MediaType.APPLICATION_JSON_VALUE})
+	public
+	@ResponseBody
+	ResponseEntity updateCustomer(@Valid @RequestBody UpdateCustomerWS customerWS, BindingResult bindingResult);
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jft.market.api.ws.CustomerWS;
+import com.jft.market.api.ws.UpdateCustomerWS;
 import com.jft.market.exceptions.EntityAlreadyExist;
 import com.jft.market.exceptions.EntityNotFoundException;
 import com.jft.market.exceptions.InvalidRequestException;
@@ -40,7 +41,6 @@ public class CustomerApiImpl implements CustomerApi {
 		if (bindingResult.hasErrors()) {
 			throw new InvalidRequestException(bindingResult);
 		}
-		// Read customer. If eist, throw error
 		Customer customer = customerService.readCustomerByEmailId(customerWS);
 		if (customer != null) {
 			throw new EntityAlreadyExist("Customer already exist.");
@@ -77,6 +77,20 @@ public class CustomerApiImpl implements CustomerApi {
 		}
 		customerService.deleteCustomer(customer);
 		return new ResponseEntity(HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity updateCustomer(@Valid @RequestBody UpdateCustomerWS customerWS, BindingResult bindingResult) {
+		log.info("Validating customer payload");
+		if (bindingResult.hasErrors()) {
+			throw new InvalidRequestException(bindingResult);
+		}
+		Customer customer = customerService.readCustomerByUuid(customerWS.getCustomerUuid());
+		if (customer == null) {
+			throw new EntityNotFoundException("Customer not found.");
+		}
+		customerService.updateCustomer(customer, customerWS);
+		return null;
 	}
 
 

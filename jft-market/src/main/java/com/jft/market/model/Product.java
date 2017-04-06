@@ -20,7 +20,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Product {
+public class Product extends TimestampedFieldObject {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,5 +39,5 @@ public class Product {
 	}
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
-	private Set<Order> orders = new HashSet<>();
+	private Set<PurchaseOrder> purchaseOrders = new HashSet<>();
 }

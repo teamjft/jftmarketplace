@@ -22,7 +22,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "customers")
-public class Customer {
+public class Customer extends TimestampedFieldObject {
 
 	@javax.persistence.Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,7 +47,7 @@ public class Customer {
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
 	Set<PaymentInstrument> paymentInstrumentList = new HashSet<PaymentInstrument>();
 
-	@OneToMany(mappedBy = "customer", cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE})
-	private Set<Order> orders = new HashSet<>();
+	@OneToMany(mappedBy = "customer")
+	private Set<PurchaseOrder> purchaseOrders = new HashSet<>();
 
 }

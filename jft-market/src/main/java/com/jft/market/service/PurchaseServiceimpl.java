@@ -19,9 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jft.market.api.OrderStatus;
 import com.jft.market.api.ws.PaymentResponseWS;
 import com.jft.market.model.Customer;
-import com.jft.market.model.Order;
 import com.jft.market.model.PaymentInstrument;
 import com.jft.market.model.Product;
+import com.jft.market.model.PurchaseOrder;
 import com.jft.market.repository.CustomerRepository;
 import com.jft.market.repository.OrderRepository;
 import com.jft.market.repository.PaymentInstrumentRepository;
@@ -86,9 +86,9 @@ public class PurchaseServiceimpl implements PurchaseService {
 	@Override
 	@Transactional
 	public void associateCustomerWithOrder(Product product, Customer customer) {
-		List<Order> orders = getOrdersByProductId(product);
-		if (!orders.isEmpty()) {
-			orders.forEach(order -> {
+		List<PurchaseOrder> purchaseOrders = getOrdersByProductId(product);
+		if (!purchaseOrders.isEmpty()) {
+			purchaseOrders.forEach(order -> {
 				Preconditions.check(order.getProduct().getId() == product.getId() &&
 								order.getOrderStatus().equals(OrderStatus.ACTIVE) &&
 								order.getCustomer().getId() == customer.getId(),
@@ -118,9 +118,9 @@ public class PurchaseServiceimpl implements PurchaseService {
 
 	@Override
 	@Transactional
-	public List<Order> getOrdersByProductId(Product product) {
+	public List<PurchaseOrder> getOrdersByProductId(Product product) {
 		Session session = entityManager.unwrap(Session.class);
-		Criteria criteria = session.createCriteria(Order.class);
+		Criteria criteria = session.createCriteria(PurchaseOrder.class);
 		criteria.add(Restrictions.eq("product", product));
 		return criteria.list();
 	}
@@ -128,14 +128,14 @@ public class PurchaseServiceimpl implements PurchaseService {
 	@Override
 	@Transactional
 	public void createOrder(Customer customer, Product product) {
-		Order order = new Order();
-		order.setOrderStatus(OrderStatus.ACTIVE);
+		PurchaseOrder purchaseOrder = new PurchaseOrder();
+		purchaseOrder.setOrderStatus(OrderStatus.ACTIVE);
 		//order.setProductId(product.getId());
-		order.setProduct(product);
-		customer.getOrders().add(order);
-		order.setCustomer(customer);
-		if (StringUtils.isEmpty(order.getUuid())) {
-			order.setUuid(UUID.randomUUID().toString());
+		purchaseOrder.setProduct(product);
+		customer.getPurchaseOrders().add(purchaseOrder);
+		purchaseOrder.setCustomer(customer);
+		if (StringUtils.isEmpty(purchaseOrder.getUuid())) {
+			purchaseOrder.setUuid(UUID.randomUUID().toString());
 		}
 		customerRepository.save(customer);
 	}

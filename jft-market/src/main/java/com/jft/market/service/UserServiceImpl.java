@@ -57,29 +57,6 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
-
-	@Override
-	public Role findRole(String roleName) {
-		Role role = roleRepository.findByName(roleName);
-		return role;
-	}
-
-	@Override
-	public User convertBeanToEntity(UserBean userBean) {
-		User user = new User();
-		if (userBean != null) {
-			user.setUsername(userBean.getUsername());
-			user.setPassword(userBean.getPassword());
-			user.setEmail(userBean.getEmail());
-			user.setId(userBean.getId());
-			user.setEnabled(userBean.getEnabled());
-			user.setGender(userBean.getGender());
-
-			return user;
-		}
-		return null;
-	}
-
 	@Override
 	public UserBean createUserBean(User user) {
 		UserBean userBean = new UserBean();
@@ -97,21 +74,6 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 
-	@Override
-	public UserWS convertBeanToWS(UserBean userBean) {
-		UserWS userWS = new UserWS();
-		if (userBean != null) {
-			userWS.setUsername(userBean.getUsername());
-			userWS.setPassword(userBean.getPassword());
-			userWS.setUuid(userBean.getUuid());
-			userWS.setEmail(userBean.getEmail());
-			userWS.setEnabled(userBean.getEnabled());
-			userWS.setGender(userBean.getGender());
-
-			return userWS;
-		}
-		return null;
-	}
 
 	@Override
 	public List<UserWS> convertUsersToUsersWS(List<User> users) {
@@ -137,12 +99,6 @@ public class UserServiceImpl implements UserService {
 		return userWSList;
 	}
 
-	@Override
-	public UserBean readUser(Long userId) {
-		User user = userRepository.findOne(userId);
-		UserBean userBean = createUserBean(user);
-		return userBean;
-	}
 
 	@Override
 	public List<User> readUsers() {
@@ -164,30 +120,6 @@ public class UserServiceImpl implements UserService {
 		}
 		userRepository.save(user);
 	}
-
-	/*@Override
-	public void deleteUser(UserBean userBean) {
-		User user = convertBeanToEntity(userBean);
-		userRepository.delete(user);
-	}*/
-
-	@Override
-	public User convertWstoEntity(UserWS userWS) {
-		if (userWS != null) {
-			User user = new User();
-			user.setUsername(userWS.getUsername());
-			user.setPassword(userWS.getPassword());
-			user.setEmail(userWS.getEmail());
-			user.setEnabled(Boolean.TRUE);
-			user.setUuid(userWS.getUuid());
-			user.setGender(userWS.getGender());
-
-			return user;
-		}
-
-		return null;
-	}
-
 	@Override
 	@Transactional
 	public UserWS readUserByUuid(String useruuid) {
@@ -220,6 +152,12 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findByUuid(userUuid);
 		Preconditions.check(user == null, "User not found");
 		userRepository.delete(user);
+	}
+
+	@Override
+	@Transactional
+	public User readUserByEmail(String email) {
+		return userRepository.findByemail(email);
 	}
 }
 

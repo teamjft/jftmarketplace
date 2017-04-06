@@ -14,10 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jft.market.api.ws.CustomerWS;
 import com.jft.market.api.ws.RoleWS;
 import com.jft.market.api.ws.Roles;
+import com.jft.market.api.ws.UpdateCustomerWS;
 import com.jft.market.api.ws.UserWS;
 import com.jft.market.model.Customer;
 import com.jft.market.model.User;
 import com.jft.market.repository.CustomerRepository;
+import com.jft.market.util.Preconditions;
 
 @Service("customerService")
 public class CustomerServiceImpl implements CustomerService {
@@ -96,6 +98,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Transactional
 	public Customer readCustomerByUuid(String customerUuid) {
 		Customer customer = customerRepository.findByUuid(customerUuid);
+		Preconditions.check(!isValidCustomer(customer), "Customer is not enabled or is deleted.");
 		return customer;
 	}
 
@@ -118,7 +121,13 @@ public class CustomerServiceImpl implements CustomerService {
 	@Transactional
 	public List<CustomerWS> getAllCustomers() {
 		List<Customer> customers = customerRepository.findAll();
-		return convertEntityListToWSList(customers);
+		List<Customer> enabledCustomers = new ArrayList<>();
+		customers.forEach(customer -> {
+			if (isValidCustomer(customer)) {
+				enabledCustomers.add(customer);
+			}
+		});
+		return convertEntityListToWSList(enabledCustomers);
 
 	}
 
@@ -146,7 +155,33 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public void deleteCustomer(Customer customer) {
-		customerRepository.delete(customer);
+		customer.setDeleted(Boolean.TRUE);
+		customer.setEnabled(Boolean.FALSE);
+		customerRepository.save(customer);
+	}
+
+	@Override
+	public Boolean isValidCustomer(Customer customer) {
+		if (customer.getEnabled().equals(Boolean.TRUE) && customer.getDeleted().equals(Boolean.FALSE)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	@Transactional
+	public void updateCustomer(Customer customer, UpdateCustomerWS customerWS) {
+		Customer updatedCustomer = checkAndUpdateCustomer(customer, customerWS);
+		customerRepository.save(updatedCustomer);
+	}
+
+	@Override
+	public Customer checkAndUpdateCustomer(Customer customer, UpdateCustomerWS customerWS) {
+		customer.setName(customerWS.getUsername());
+		customer.setPhone(customerWS.getPhone());
+		customer.setEmail(customerWS.getEmail());
+		return customer;
 	}
 
 }

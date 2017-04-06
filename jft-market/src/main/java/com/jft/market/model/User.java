@@ -24,7 +24,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class User {
+public class User extends TimestampedFieldObject {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
