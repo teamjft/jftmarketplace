@@ -1,5 +1,4 @@
 import Ember from 'ember';
-//import Register from 'jft-sale/models/registration';
 import ResetScrollPositionMixin from 'jft-sale/mixins/reset-scroll-position';
 
 export default Ember.Route.extend(ResetScrollPositionMixin, {
@@ -10,7 +9,8 @@ export default Ember.Route.extend(ResetScrollPositionMixin, {
             email: "",
             gender: "",
             password: "",
-            confirmPassword: ""
+            confirmPassword: "",
+            isRegister: true
         };
         return register;
     },
@@ -47,14 +47,15 @@ export default Ember.Route.extend(ResetScrollPositionMixin, {
 
                 Ember.set(model, 'msg', msg);
                 this.transitionTo('registration');  
-            }
-            console.log(model);
-            // let jsondata = {
-            //     "name":"APPLE", 
-            //     "price":10000,
-            //     "description":"Iphone 7",
-            //     "features":"64Gb"
-            // };
+            }else{
+                console.log(model);
+            let jsondata = {
+                "customername": model.email, 
+                "email": model.email,
+                "password":model.password,
+                "phone": 4566,
+                "gender":"m"
+            };
 
             // // Em.$.ajax({
             // //     headers: { 
@@ -69,13 +70,20 @@ export default Ember.Route.extend(ResetScrollPositionMixin, {
             // //     //Ember.run(null, resolve, data);
             // //     console.log(data);  
             // // });
-            // this.get('store').createRecord('product', jsondata).save().then(function(res){
-            //     console.log('fffff',res);
-            // });
+            console.log(model.isRegister,'dddddddddddddddddd', jsondata);
+             this.get('store').createRecord('registration', jsondata).save().then(function(res){
+                 console.log('fffff',res);
+             }).catch(function(err){
+                 Ember.set(model, 'isRegister', false);
+                 this.transitionTo('registration');
+                 console.log('Eorr in response', err);
+             });
+            }
+            
 
             //post.save();
             //TODO: Register USer Functionality.
-            this.transitionTo('registration');
+            //this.transitionTo('registration');
         }
     }
 });

@@ -1,14 +1,9 @@
 import Ember from 'ember';
 import Constant from 'jft-sale/constant';
+import sweetAlert from 'ember-sweetalert';
 
 export default Ember.Controller.extend({
-
-  // isAdmin: Ember.computed('currentRouteName', function () {
-  //   if (this.get('currentRouteName') === 'admin') {
-  //     return false;
-  //   }
-  //   return false;
-  // }),
+  
   isAdmin: false,
 
   isUser: true,
@@ -21,10 +16,13 @@ export default Ember.Controller.extend({
 
   actions: {
     signOutAction(param) {
-      console.info(param, 'ppll');
+
+      //console.info(localStorage, 'ppll');
+      //localStorage.setItem("ddd", "ddddddddd")
       this.set('isLogin', false);
       this.set('isAdmin', false);
       this.set('isUser', true);
+      sweetAlert("You have log-out successfully", "", "success");
       this.transitionToRoute('home');
     }
   }

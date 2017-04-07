@@ -1,5 +1,6 @@
 <h3> This is Registration Page </h3>
 <div class="container">
+    {{#if model.isRegister}}
     <form {{action "registerUser" model on="submit" }}><br/>
         <h2 class="w3-wide w3-opacity text-center">User Registration Form</h2>
         <div class="text-danger">
@@ -51,5 +52,15 @@
             </div>
         </div>
     </form>
+    {{else}}
+    <br/> <br/>
+        {{sweet-alert title="Registered Succesfully" type="success"}}
+        <h3  class="text-center text-success">
+            || You have Registered on JFT-Portal Succesfully. ||
+        </h3>
+         <h4 class="w3-wide w3-opacity text-center">
+             Please Click on <span class="badge"> {{#link-to "login"}} Login {{/link-to}}</span>
+         </h4> 
+    {{/if}}
 </div>
 {{outlet}}

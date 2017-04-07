@@ -1,40 +1,72 @@
 <h1>This is Summary Page </h1>
-<div class="container">
-    <h2 class="w3-wide w3-opacity text-center"> Oder Summary</h2>
-    
-    <h4 class="w3-wide w3-opacity text-center"> Oder:</h4>
-    <div class="col-md-12">
-{{#each model.orderProd as |orderProd|}}
-    <div class="col-md-4">
-        <div class="jumbotron">
-            <h5>{{orderProd.name}} </h5>
-            <hr/>
-            <div>&#8377; {{orderProd.price}}, </div>
-            <div>{{orderProd.category}}</div>
-            <div class="text-warning">{{orderProd.description}}</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4"> </div>
+        <div class="col-md-4">
+            <h2 class="w3-wide w3-opacity text-center"> Order Summary</h2>    
         </div>
+        <div class="col-md-4"> </div>
     </div>
- {{/each}}
+    <div class="row">
+        <div class="col-md-4"> </div>
+        <div class="col-md-4">
+            <h4 class="w3-wide w3-opacity"> Order:</h4>    
+        </div>
+        <div class="col-md-4"> </div>
     </div>
-    <div class="col-md-12">
-        <h4 class="w3-wide w3-opacity text-center"> Address:</h4>
+    
+    <div class="row">
+        <div class="">
+        {{#each model.orderProd as |orderProd|}}
+        <div class="col-md-4 col-md-offset-4">
+            <div class="jumbotron">
+                <h5>
+                    <strong>{{orderProd.name}}</strong>
+                    <i><small>(No. of Piecs - {{orderProd.itemQantity}}) </small> </i>
+                    <span class="catDiv pull-right glyphicon glyphicon-remove"></span>
+                </h5>
+                <hr/>
+                <div>&#8377; {{orderProd.price}}, </div>
+                <div>{{orderProd.category}}</div>
+                <div class="text-warning">{{orderProd.description}}</div>
+                
+            </div>
+        </div>
+        {{/each}}
     </div>
-
-    <div class="col-md-12">
+    </div>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <h4 class="w3-wide w3-opacity"> Address:</h4>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    <div class="row">
+        {{#if model.shipAddr}}
         <div class="col-md-4"></div>
         <div class="col-md-4 jumbotron">
-            <h5>{{model.shipAddr.name}} </h5>
+            <h5>
+                {{model.shipAddr.name}}  
+                <span class="catDiv pull-right glyphicon glyphicon-plus"></span>
+            </h5>
             <hr/>
             <div>{{model.shipAddr.houseNo}}, {{model.shipAddr.street}} </div>
             <div>{{model.shipAddr.city}}, {{model.shipAddr.state}}</div>
             <div>{{model.shipAddr.pincode}}</div>
+            
         </div>
         <div class="col-md-4"></div>
+        {{/if}}
     </div>
 
-    <div class="col-md-12 form-group text-center">
-        <button class="btn btn-primary" type="button">Back</button>
-        <button class="btn btn-info" type="submit">Proceed to Pay</button>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-center">
+            <button class="btn btn-primary" type="button">Back</button>
+            <button class="btn btn-info" type="submit">Proceed to Pay</button>
+        </div>
+        <div class="col-md-4"></div>
     </div>
 </div>
 {{outlet}}

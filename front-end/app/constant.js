@@ -1,4 +1,4 @@
 export default {
-  CONTEXT_PATH: '',
+  CONTEXT_PATH: '/',
   Constant2: 'cupcakes'
 }
