@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.hibernate.annotations.Type;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,6 +25,7 @@ public abstract class TimestampedFieldObject implements ITimestampedObject {
 	@Column(name = "last_modified")
 	private Date lastModified;
 	@Column(name = "is_deleted")
+	@Type(type = "yes_no")
 	private Boolean deleted;
 
 	public TimestampedFieldObject(ITimestampedObject timestampedObject) {

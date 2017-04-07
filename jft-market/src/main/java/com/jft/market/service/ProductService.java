@@ -2,23 +2,29 @@ package com.jft.market.service;
 
 import java.util.List;
 
-import com.jft.market.api.ProductBean;
 import com.jft.market.api.ws.ProductWS;
+import com.jft.market.model.Category;
 import com.jft.market.model.Product;
 
 public interface ProductService {
 
 	public ProductWS readProduct(String productUuid);
 
-	public List<ProductBean> readProducts();
+	public List<ProductWS> readProducts();
 
-	public void createProduct(Product product);
+	public void saveProduct(Product product, Category category);
 
 	public void deleteProduct(String productUuid);
 
 	public Product convertWStoEntity(ProductWS productWS);
 
-	public ProductBean createProductBean(Product product);
-
 	public ProductWS convertEntityToWS(Product product);
+
+	public void createProduct(ProductWS productWS);
+
+	public void checkIfProductExist(Product product);
+
+	public List<ProductWS> readProductsByCategoryName(String name);
+
+	public List<ProductWS> convertProductsListToWSList(List<Product> products);
 }

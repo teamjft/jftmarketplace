@@ -13,6 +13,7 @@
         <security:intercept-url pattern="/api/v1/customer/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/api/v1/user/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/api/v1/purchase/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/api/v1/category/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/api/v1/paymentInstrument/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/api/v1/paymentInstrument/read/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/loginFailed" access="IS_AUTHENTICATED_ANONYMOUSLY"/>

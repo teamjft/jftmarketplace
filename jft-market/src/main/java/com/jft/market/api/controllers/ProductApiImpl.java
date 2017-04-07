@@ -1,6 +1,5 @@
 package com.jft.market.api.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -16,17 +15,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jft.market.api.ProductBean;
-import com.jft.market.api.ProductBeanAttribute;
-import com.jft.market.api.ws.EmberResponse;
 import com.jft.market.api.ws.ProductWS;
 import com.jft.market.api.ws.ResponseStatus;
-import com.jft.market.exceptions.EntityNotFoundException;
 import com.jft.market.exceptions.InvalidRequestException;
-import com.jft.market.model.Product;
 import com.jft.market.service.ProductService;
 
 @Slf4j
+@CrossOrigin
 @RestController
 public class ProductApiImpl implements ProductApi {
 
@@ -35,14 +30,11 @@ public class ProductApiImpl implements ProductApi {
 
 	@Override
 	public ResponseEntity createProduct(@Valid @RequestBody ProductWS productWS, BindingResult bindingResult) {
-
 		log.info("Validating paylaod");
 		if (bindingResult.hasErrors()) {
 			throw new InvalidRequestException(bindingResult);
 		}
-		log.info("Populating data");
-		Product product = productService.convertWStoEntity(productWS);
-		productService.createProduct(product);
+		productService.createProduct(productWS);
 		return ResponseStatus.SUCCESS.getResponse();
 	}
 
@@ -58,19 +50,28 @@ public class ProductApiImpl implements ProductApi {
 	@CrossOrigin(origins = "*")
 	public ResponseEntity readProducts() {
 		log.info("Reading products");
-		List<ProductBean> productBeanList = productService.readProducts();
-		List<ProductBeanAttribute> productBeanAttributes = new ArrayList<>();
+		List<ProductWS> products = productService.readProducts();
+	/*	List<ProductBeanAttribute> productBeanAttributes = new ArrayList<>();
+		System.out.println("nnnnnnnnnnnnnnnnnnnnnnnnn");
 		productBeanList.forEach(p -> productBeanAttributes.add(new ProductBeanAttribute(p.getId(), p)));
 		if (productBeanList.isEmpty()) {
 			throw new EntityNotFoundException("No product found");
 		} else {
-			return new ResponseEntity(new EmberResponse(productBeanAttributes), HttpStatus.OK);
-		}
+
+			//return new ResponseEntity(new EmberResponse(productBeanAttributes), HttpStatus.OK);
+		}*/
+		return new ResponseEntity(products, HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity deleteProduct(@PathVariable("productUuid") String productUuid) {
 		productService.deleteProduct(productUuid);
 		return ResponseStatus.SUCCESS.getResponse();
+	}
+
+	@Override
+	public ResponseEntity readProductByCategory(@PathVariable("categoryName") String categoryName) {
+		List<ProductWS> products = productService.readProductsByCategoryName(categoryName);
+		return new ResponseEntity(products, HttpStatus.OK);
 	}
 }
