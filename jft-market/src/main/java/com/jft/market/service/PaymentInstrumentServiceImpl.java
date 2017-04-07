@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jft.market.api.ws.CustomerWS;
 import com.jft.market.api.ws.PaymentInstrumentWS;
 import com.jft.market.api.ws.UserWS;
+import com.jft.market.exceptions.ExceptionConstants;
 import com.jft.market.model.Customer;
 import com.jft.market.model.PaymentInstrument;
 import com.jft.market.model.User;
@@ -34,7 +35,7 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
 
 	@Override
 	public CustomerWS createCustomerWSfromPaymentInstrumentWS(PaymentInstrumentWS paymentInstrumentWS) {
-		Preconditions.check(paymentInstrumentWS == null, "Payment Instrumnet cannot be null");
+		Preconditions.check(paymentInstrumentWS == null, ExceptionConstants.PAYMENT_INSTRUMENT_NOT_FOUND);
 		CustomerWS customerWS = new CustomerWS();
 		customerWS.setCustomerName(paymentInstrumentWS.getCustomerName());
 		customerWS.setUuid(paymentInstrumentWS.getCustomerUuid());
@@ -52,7 +53,7 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
 	public void createAndSavePaymentInstrument(PaymentInstrumentWS paymentInstrumentWS) {
 		CustomerWS customerWS = createCustomerWSfromPaymentInstrumentWS(paymentInstrumentWS);
 		Customer customer = customerRepository.findByUuid(customerWS.getUuid());
-		Preconditions.check(customer == null, "Customer not found.");
+		Preconditions.check(customer == null, ExceptionConstants.CUSTOMER_NOT_FOUND);
 		PaymentInstrument paymentInstrument = convertAndLinkCustomerWithPaymentInstrument(paymentInstrumentWS, customer);
 		if (StringUtils.isEmpty(paymentInstrument.getUuid())) {
 			paymentInstrument.setUuid(UUID.randomUUID().toString());
@@ -93,7 +94,7 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
 	@Transactional
 	public List<PaymentInstrumentWS> readPaymentInstruments(String customerUuid) {
 		Customer customer = customerRepository.findByUuid(customerUuid);
-		Preconditions.check(customer == null, "Customer not found");
+		Preconditions.check(customer == null, ExceptionConstants.CUSTOMER_NOT_FOUND);
 		List<PaymentInstrument> paymentInstrumentList = paymentInstrumentRepository.findByCustomerUuid(customerUuid);
 		return convertPaymentInstrumentListToWSList(paymentInstrumentList);
 
@@ -103,13 +104,13 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
 	@Transactional
 	public void readAndDeletePaymentInstrument(String paymentinstrumentUuid) {
 		PaymentInstrument paymentInstrument = paymentInstrumentRepository.findByUuid(paymentinstrumentUuid);
-		Preconditions.check(paymentInstrument == null, "No payment Instrument found with this Id.");
+		Preconditions.check(paymentInstrument == null, ExceptionConstants.PAYMENT_INSTRUMENT_NOT_FOUND);
 		paymentInstrumentRepository.delete(paymentInstrument);
 	}
 
 	@Override
 	public List<PaymentInstrumentWS> convertPaymentInstrumentListToWSList(List<PaymentInstrument> paymentInstruments) {
-		Preconditions.check(paymentInstruments.isEmpty(), "No payment instrument for this customer.");
+		Preconditions.check(paymentInstruments.isEmpty(), ExceptionConstants.PAYMENT_INSTRUMENT_NOT_FOUND);
 		List<PaymentInstrumentWS> paymentInstrumentWsList = new ArrayList<>();
 		paymentInstruments.forEach(paymentInstrument -> {
 			PaymentInstrumentWS paymentInstrumentWS = new PaymentInstrumentWS();

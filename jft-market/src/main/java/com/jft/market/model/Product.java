@@ -1,10 +1,14 @@
 package com.jft.market.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -16,24 +20,24 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Product {
+public class Product extends TimestampedFieldObject {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	private String name;
-	private Integer price;
+	private Long price;
 	private String description;
 	private String features;
 	private String uuid;
 
-	@ManyToOne
-	private Customer customer;
-
-	public Product(String name, Integer price, String description, String features) {
+	public Product(String name, Long price, String description, String features) {
 		this.name = name;
 		this.price = price;
 		this.description = description;
 		this.features = features;
 	}
+
+	@OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+	private Set<PurchaseOrder> purchaseOrders = new HashSet<>();
 }

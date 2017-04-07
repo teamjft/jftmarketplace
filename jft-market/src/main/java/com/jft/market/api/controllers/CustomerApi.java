@@ -48,4 +48,14 @@ public interface CustomerApi {
 	public
 	@ResponseBody
 	ResponseEntity deleteCustomer(@PathVariable("customerUuid") String customerUuid);
+
+
+	@RequestMapping(value = {"update/{customerUuid}"},
+			method = RequestMethod.PUT,
+			produces = {MediaType.APPLICATION_JSON_VALUE},
+			consumes = {MediaType.APPLICATION_JSON_VALUE})
+	public
+	@ResponseBody
+	ResponseEntity updateCustomer(@RequestBody CustomerWS customerWS,
+								  @PathVariable("customerUuid") String cutomerUuid);
 }

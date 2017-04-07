@@ -2,7 +2,6 @@ package com.jft.market.service;
 
 import java.util.List;
 
-import com.jft.market.api.UserBean;
 import com.jft.market.api.ws.UserWS;
 import com.jft.market.model.Role;
 import com.jft.market.model.User;
@@ -13,17 +12,7 @@ public interface UserService {
 
 	public void convertWsToEnityAndSave(UserWS userWS);
 
-	public Role findRole(String roleName);
-
-	public User convertBeanToEntity(UserBean userBean);
-
-	public UserBean createUserBean(User user);
-
-	public UserWS convertBeanToWS(UserBean userBean);
-
 	public List<UserWS> convertUsersToUsersWS(List<User> users);
-
-	public UserBean readUser(Long userId);
 
 	public List<User> readUsers();
 
@@ -31,15 +20,21 @@ public interface UserService {
 
 	public void saveUser(User user);
 
-	/*public void deleteUser(UserBean userBean);*/
-
-	public User convertWstoEntity(UserWS userWS);
-
-	public UserWS readUserByUuid(String useruuid);
+	public User readUserByUuid(String useruuid);
 
 	public UserWS convertEntityToWS(User user);
 
 	public void deleteUser(String userUuid);
 
+	public Boolean isValidUser(User user);
 
+	public void validateUserWS(UserWS userWS);
+
+	public void updateUser(User user, UserWS userWS);
+
+	public void updateUserRoles(String userUuid);
+
+	public Role getAdminRole();
+
+	public UserWS readUser(String userUuid);
 }

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jft.market.api.ProductBean;
 import com.jft.market.api.ws.ProductWS;
+import com.jft.market.exceptions.ExceptionConstants;
 import com.jft.market.model.Product;
 import com.jft.market.repository.ProductRepository;
 import com.jft.market.util.Preconditions;
@@ -50,7 +51,7 @@ public class ProductServiceImpl implements ProductService {
 	@Transactional
 	public void deleteProduct(String productUuid) {
 		Product product = productRepository.findByUuid(productUuid);
-		Preconditions.check(product == null, "Product not found. Please provide valid product Id to delete.");
+		Preconditions.check(product == null, ExceptionConstants.PRODUCT_NOT_FOUND_TO_DELETE);
 		productRepository.delete(product);
 	}
 
@@ -65,23 +66,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Product convertBeanToEntity(ProductBean productBean) {
-		Product product = new Product();
-		if (productBean != null) {
-			product.setId(productBean.getId());
-			product.setName(productBean.getName());
-			product.setPrice(productBean.getPrice());
-			product.setDescription(productBean.getDescription());
-			product.setFeatures(productBean.getFeatures());
-
-			return product;
-		}
-		return null;
-	}
-
-	@Override
 	public ProductBean createProductBean(Product product) {
-		Preconditions.check(product == null, "No product found.");
+		Preconditions.check(product == null, ExceptionConstants.PRODUCT_NOT_FOUND);
 		ProductBean productBean = new ProductBean();
 		productBean.setId(product.getId());
 		productBean.setName(product.getName());
@@ -93,7 +79,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ProductWS convertEntityToWS(Product product) {
-		Preconditions.check(product == null, "No product found.");
+		Preconditions.check(product == null, ExceptionConstants.PRODUCT_NOT_FOUND);
 		ProductWS productWS = new ProductWS();
 		productWS.setName(product.getName());
 		productWS.setUuid(product.getUuid());

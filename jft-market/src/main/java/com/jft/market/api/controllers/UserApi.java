@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jft.market.api.ws.RoleWS;
 import com.jft.market.api.ws.UserWS;
 
 @RequestMapping(value = BaseApi.BASE_PATH + UserApi.USER)
@@ -48,4 +49,23 @@ public interface UserApi extends BaseApi {
 	public
 	@ResponseBody
 	ResponseEntity deleteUser(@PathVariable("userUuid") String userUuid);
+
+	@RequestMapping(value = {"update/{userUuid}"},
+			method = RequestMethod.PUT,
+			produces = {MediaType.APPLICATION_JSON_VALUE},
+			consumes = {MediaType.APPLICATION_JSON_VALUE})
+	public
+	@ResponseBody
+	ResponseEntity updateUser(@RequestBody UserWS userWS,
+							  @PathVariable("userUuid") String userUuid);
+
+
+	@RequestMapping(value = {"update/user/{userUuid}/role"},
+			method = RequestMethod.PUT,
+			produces = {MediaType.APPLICATION_JSON_VALUE},
+			consumes = {MediaType.APPLICATION_JSON_VALUE})
+	public
+	@ResponseBody
+	ResponseEntity updateUserRole(@RequestBody RoleWS roleWS,
+								  @PathVariable("userUuid") String userUuid);
 }

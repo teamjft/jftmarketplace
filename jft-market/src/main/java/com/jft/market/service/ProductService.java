@@ -18,8 +18,6 @@ public interface ProductService {
 
 	public Product convertWStoEntity(ProductWS productWS);
 
-	public Product convertBeanToEntity(ProductBean productBean);
-
 	public ProductBean createProductBean(Product product);
 
 	public ProductWS convertEntityToWS(Product product);

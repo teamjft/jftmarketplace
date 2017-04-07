@@ -28,4 +28,12 @@ public interface CustomerService {
 	public List<CustomerWS> convertEntityListToWSList(List<Customer> customers);
 
 	public void deleteCustomer(Customer customer);
+
+	public Boolean isValidCustomer(Customer customer);
+
+	public void updateCustomer(Customer customer, CustomerWS customerWS);
+
+	public Customer checkAndUpdateCustomer(Customer customer, CustomerWS customerWS);
+
+	public void validateCustomerWS(CustomerWS customerWS);
 }

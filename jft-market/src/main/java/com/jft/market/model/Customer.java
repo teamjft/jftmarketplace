@@ -1,8 +1,6 @@
 package com.jft.market.model;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -24,7 +22,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "customers")
-public class Customer {
+public class Customer extends TimestampedFieldObject {
 
 	@javax.persistence.Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -49,6 +47,7 @@ public class Customer {
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
 	Set<PaymentInstrument> paymentInstrumentList = new HashSet<PaymentInstrument>();
 
-	@OneToMany(mappedBy = "customer")
-	private List<Product> products = new ArrayList<Product>();
+	@OneToMany(mappedBy = "customer", cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE})
+	private Set<PurchaseOrder> purchaseOrders = new HashSet<>();
+
 }

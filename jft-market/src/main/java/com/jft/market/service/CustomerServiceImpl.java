@@ -12,12 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jft.market.api.ws.CustomerWS;
-import com.jft.market.api.ws.RoleWS;
 import com.jft.market.api.ws.Roles;
 import com.jft.market.api.ws.UserWS;
+import com.jft.market.exceptions.ExceptionConstants;
 import com.jft.market.model.Customer;
 import com.jft.market.model.User;
 import com.jft.market.repository.CustomerRepository;
+import com.jft.market.util.Preconditions;
 
 @Service("customerService")
 public class CustomerServiceImpl implements CustomerService {
@@ -52,6 +53,9 @@ public class CustomerServiceImpl implements CustomerService {
 			User user = userService.convertWStoEntity(userWS);
 			customer.setUser(user);
 			user.setCustomer(customer);
+			if (StringUtils.isEmpty(user.getUuid())) {
+				user.setUuid(UUID.randomUUID().toString());
+			}
 			return customer;
 		}
 		return null;
@@ -77,9 +81,9 @@ public class CustomerServiceImpl implements CustomerService {
 			userWS.setEmail(customerWS.getEmail());
 			userWS.setGender(customerWS.getGender());
 			userWS.setUuid(UUID.randomUUID().toString());
-			RoleWS roleWS = new RoleWS();
-			roleWS.setName(Roles.ROLE_USER.getName());
-			userWS.getRoles().add(roleWS);
+			/*RoleWS roleWS = new RoleWS();
+			roleWS.setName(Roles.ROLE_USER.getName());*/
+			userWS.getRoles().add(Roles.ROLE_USER.getName());
 			return userWS;
 		}
 		return null;
@@ -96,6 +100,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Transactional
 	public Customer readCustomerByUuid(String customerUuid) {
 		Customer customer = customerRepository.findByUuid(customerUuid);
+		Preconditions.check(!isValidCustomer(customer), ExceptionConstants.CUSTOMER_NOT_ENABLED);
 		return customer;
 	}
 
@@ -118,7 +123,13 @@ public class CustomerServiceImpl implements CustomerService {
 	@Transactional
 	public List<CustomerWS> getAllCustomers() {
 		List<Customer> customers = customerRepository.findAll();
-		return convertEntityListToWSList(customers);
+		List<Customer> enabledCustomers = new ArrayList<>();
+		customers.forEach(customer -> {
+			if (isValidCustomer(customer)) {
+				enabledCustomers.add(customer);
+			}
+		});
+		return convertEntityListToWSList(enabledCustomers);
 
 	}
 
@@ -146,7 +157,39 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public void deleteCustomer(Customer customer) {
-		customerRepository.delete(customer);
+		customer.setDeleted(Boolean.TRUE);
+		customer.setEnabled(Boolean.FALSE);
+		customerRepository.save(customer);
 	}
 
+	@Override
+	public Boolean isValidCustomer(Customer customer) {
+		if (customer.getEnabled().equals(Boolean.TRUE) && customer.getDeleted().equals(Boolean.FALSE)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	@Transactional
+	public void updateCustomer(Customer customer, CustomerWS customerWS) {
+		Customer updatedCustomer = checkAndUpdateCustomer(customer, customerWS);
+		customerRepository.save(updatedCustomer);
+	}
+
+	@Override
+	public Customer checkAndUpdateCustomer(Customer customer, CustomerWS customerWS) {
+		customer.setName(customerWS.getCustomerName());
+		customer.setPhone(customerWS.getPhone());
+		customer.setEmail(customerWS.getEmail());
+		return customer;
+	}
+
+	@Override
+	public void validateCustomerWS(CustomerWS customerWS) {
+		Preconditions.check(StringUtils.isEmpty(customerWS.getCustomerName()), ExceptionConstants.CUSTOMER_NAME_CANNOT_BE_EMPTY);
+		Preconditions.check(StringUtils.isEmpty(customerWS.getEmail()), ExceptionConstants.EMAIL_CANNOT_BE_EMPTY);
+		Preconditions.check(StringUtils.isEmpty(String.valueOf(customerWS.getPhone())), ExceptionConstants.PHONE_NUMBER_CANNOT_BE_EMPTY);
+	}
 }

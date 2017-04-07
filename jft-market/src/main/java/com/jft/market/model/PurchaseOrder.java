@@ -1,9 +1,11 @@
 package com.jft.market.model;
 
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -11,18 +13,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "productEntitlement")
+@Table(name = "purchase_orders")
 @Setter
 @Getter
 @NoArgsConstructor
-public class ProductEntitlement extends TimestampedFieldObject {
+public class PurchaseOrder extends TimestampedFieldObject {
 
 	@javax.persistence.Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "order_id")
 	private Long Id;
+	@Column(name = "order_status")
+	private String orderStatus;
 	private String uuid;
 
-	private Long userId;
-	private Long productId;
-	private String activePaymentinstrument;
+	@ManyToOne
+	private Customer customer;
+
+	@ManyToOne
+	@JoinColumn(name = "product_id")
+	private Product product;
 }
