@@ -1,5 +1,6 @@
 package com.jft.market.api.controllers;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -14,10 +15,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jft.market.api.ws.RoleWS;
 import com.jft.market.api.ws.UserWS;
+import com.jft.market.exceptions.ExceptionConstants;
 import com.jft.market.exceptions.InvalidRequestException;
 import com.jft.market.model.User;
 import com.jft.market.service.UserService;
+import com.jft.market.util.Preconditions;
 
 @Slf4j
 @RestController
@@ -59,10 +63,18 @@ public class UserApiImpl implements UserApi {
 	}
 
 	@Override
-	public ResponseEntity updateCustomer(@RequestBody UserWS userWS, @PathVariable("userUuid") String userUuid) {
+	public ResponseEntity updateUser(@RequestBody UserWS userWS, @PathVariable("userUuid") String userUuid) {
 		userService.validateUserWS(userWS);
 		User user = userService.readUserByUuid(userUuid);
 		userService.updateUser(user, userWS);
+		return null;
+	}
+
+	@Override
+	public ResponseEntity updateUserRole(@RequestBody RoleWS roleWS, @PathVariable("userUuid") String userUuid) {
+		List<String> roles = Arrays.asList(roleWS.getRoles());
+		Preconditions.check(roles.isEmpty(), ExceptionConstants.NO_ROLE_TO_SAVE);
+		userService.updateUserRoles(userUuid);
 		return null;
 	}
 }

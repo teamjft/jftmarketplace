@@ -169,6 +169,22 @@ public class UserServiceImpl implements UserService {
 		user.setEmail(userWS.getEmail());
 		userRepository.save(user);
 	}
+
+	@Override
+	@Transactional
+	public void updateUserRoles(String userUuid) {
+		User user = readUserByUuid(userUuid);
+		Role adminRole = getAdminRole();
+		user.getRoles().add(adminRole);
+		saveUser(user);
+	}
+
+	@Override
+	@Transactional
+	public Role getAdminRole() {
+		return roleRepository.findByName(Roles.ROLE_ADMIN.getName());
+
+	}
 }
 
 
