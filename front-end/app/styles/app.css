@@ -156,3 +156,8 @@ body{
 .slider-wrap md-input-container {
   padding: 0;
 }
+
+.buyNowSpan {
+  background-color: seagreen;
+  cursor: pointer;
+}

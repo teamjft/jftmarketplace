@@ -1,5 +1,6 @@
 <header>
     {{#if isAdmin}}
+    {{sweet-alert title="Login Succesfully" text="As Administrator" type="success"}}
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <a href="#" class="navbar-brand navbar-right" {{action "signOutAction"}}> Sign Out </a>
@@ -10,10 +11,10 @@
             </div>
             <ul class="nav navbar-nav">
                 <li>{{#link-to "admin" }}Home{{/link-to}}</li>
-                <li class="active">{{#link-to "products" }}Products{{/link-to}}</li>
+                <li class="active">{{#link-to "productlist" }}Products{{/link-to}}</li>
                 <li>{{#link-to "addproduct" }}Add Products{{/link-to}}</li>
                 <li>{{#link-to "addcategory" }}Add Category{{/link-to}}</li>
-                <li>{{#link-to "addcategory" }}Mange Role{{/link-to}}</li>
+                <li>{{#link-to "managerole" }}Mange Role{{/link-to}}</li>
             </ul>
         </div>
     </nav>
@@ -46,18 +47,32 @@
                 title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
                 {{#link-to "home" class="w3-bar-item w3-button w3-padding-large" }}HOME {{/link-to}}
                 <a href="#band" class="w3-bar-item w3-button w3-padding-large w3-hide-small">ABOUT US</a>
-                <a href="#tour" class="w3-bar-item w3-button w3-padding-large w3-hide-small">SALE ON JFT</a>
+                {{#link-to "saleonjft" class="w3-bar-item w3-button w3-padding-large w3-hide-small" }} SALE ON JFT {{/link-to}}
                 <a href="#contact" class="w3-bar-item w3-button w3-padding-large w3-hide-small">CONTACT</a>
                 <div class="w3-dropdown-hover w3-hide-small">
                     <button class="w3-padding-large w3-button" title="More">OFFER ZONE <i class="fa fa-caret-down"></i></button>
                     <div class="w3-dropdown-content w3-bar-block w3-card-4">
-                        <a href="#" class="w3-bar-item w3-button">Today's Offer</a>
-                        <a href="#" class="w3-bar-item w3-button">Tomarrow's Offer</a>
-                        <a href="#" class="w3-bar-item w3-button">Coming Sunday's Offer </a>
+                        <a href="#" class="w3-bar-item w3-button">
+                            Today's Offer
+                            <span class="pull-right badge buyNowSpan"> Offers </span> 
+                            <span class="pull-right badge"> 2 </span> 
+                        </a>
+                        <a href="#" class="w3-bar-item w3-button">
+                            Tomarrow's Offer 
+                            <span class="pull-right badge buyNowSpan"> Offers </span>
+                            <span class="pull-right badge"> 3 </span>
+                        </a>
+                        <a href="#" class="w3-bar-item w3-button">
+                            Coming Sunday's Offer
+                            <span class="pull-right badge buyNowSpan"> Offers </span>
+                            <span class="pull-right badge"> 8 </span> 
+                            
+                        </a>
                     </div>
                 </div>
                 <a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class=""></i></a>
                 {{#if isLogin}}
+                    {{sweet-alert title="Login Succesfully" text="As User" type="success"}}
                     <a href="#" class="navbar-brand navbar-right" {{action "signOutAction"}} >Sign Out </a>
                     {{#link-to "registration" class="navbar-brand navbar-right"}}Raj Ojha{{/link-to}}
                 {{else}}

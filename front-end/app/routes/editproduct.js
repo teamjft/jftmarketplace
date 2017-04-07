@@ -7,8 +7,8 @@ export default Ember.Route.extend(ResetScrollPositionMixin, {
 
   model(params) {
     const products = this.get('store1');
-    let product = products.getProducts()[params.prod_id - 1];
-    product.set('categories', products.getCategories());
+    let product = this.get('store').findRecord('product', 3);//products.getProducts()[params.prod_id - 1];
+    //product.set('categories', products.getCategories());
     return product;
   }
 

@@ -9,7 +9,7 @@ const Router = Ember.Router.extend({
 Router.map(function () {
   this.route('/', {path: "/market/login"})
   this.route('registration', { path: "user/register" });
-  this.route('products');
+  this.route('productlist');
   this.route('addproduct', { path: "/product/add" });
   this.route('editproduct', { path: "/product/edit/:prod_id" });
   this.route('addcategory', { path: "/categories" });
@@ -22,6 +22,8 @@ Router.map(function () {
   this.route('summarypage');
   this.route('admin');
   this.route('carts');
+  this.route('managerole');
+  this.route('saleonjft');
 });
 
 export default Router;

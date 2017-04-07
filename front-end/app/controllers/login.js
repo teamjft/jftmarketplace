@@ -10,6 +10,8 @@ export default Ember.Controller.extend({
             console.log(formData);
             Ember.set(this.get('application'), 'isLogin', true);
             if (formData.email == 'admin' && formData.password == 'admin') {
+                localStorage.setItem("isAdmin", true);
+                localStorage.setItem("isUser", false);
                 Ember.set(this.get('application'), 'isAdmin', true);
                 Ember.set(this.get('application'), 'isUser', false);
                 this.transitionToRoute('admin');
