@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jft.market.api.ws.CustomerWS;
-import com.jft.market.api.ws.RoleWS;
 import com.jft.market.api.ws.Roles;
 import com.jft.market.api.ws.UserWS;
 import com.jft.market.exceptions.ExceptionConstants;
@@ -82,9 +81,9 @@ public class CustomerServiceImpl implements CustomerService {
 			userWS.setEmail(customerWS.getEmail());
 			userWS.setGender(customerWS.getGender());
 			userWS.setUuid(UUID.randomUUID().toString());
-			RoleWS roleWS = new RoleWS();
-			roleWS.setName(Roles.ROLE_USER.getName());
-			userWS.getRoles().add(roleWS);
+			/*RoleWS roleWS = new RoleWS();
+			roleWS.setName(Roles.ROLE_USER.getName());*/
+			userWS.getRoles().add(Roles.ROLE_USER.getName());
 			return userWS;
 		}
 		return null;

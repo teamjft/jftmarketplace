@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jft.market.api.ws.PaymentInstrumentWS;
+import com.jft.market.api.ws.ResponseStatus;
 import com.jft.market.exceptions.InvalidRequestException;
 import com.jft.market.service.PaymentInstrumentService;
 import com.jft.market.service.PurchaseService;
@@ -33,7 +34,7 @@ public class PaymentInstrumentApiimpl implements PaymentInstrumentApi {
 			throw new InvalidRequestException(bindingResult);
 		}
 		paymentInstrumentService.createAndSavePaymentInstrument(paymentInstrumentWS);
-		return new ResponseEntity(HttpStatus.OK);
+		return ResponseStatus.SUCCESS.getResponse();
 	}
 
 	@Override
@@ -45,6 +46,6 @@ public class PaymentInstrumentApiimpl implements PaymentInstrumentApi {
 	@Override
 	public ResponseEntity deletPaymnetInstrument(@PathVariable("paymentInstrumentUuid") String paymentinstrumentUuid) {
 		paymentInstrumentService.readAndDeletePaymentInstrument(paymentinstrumentUuid);
-		return new ResponseEntity(HttpStatus.OK);
+		return ResponseStatus.SUCCESS.getResponse();
 	}
 }

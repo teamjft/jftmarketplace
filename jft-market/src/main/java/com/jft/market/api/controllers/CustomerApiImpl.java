@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jft.market.api.ws.CustomerWS;
+import com.jft.market.api.ws.ResponseStatus;
 import com.jft.market.exceptions.EntityAlreadyExist;
 import com.jft.market.exceptions.EntityNotFoundException;
 import com.jft.market.exceptions.ExceptionConstants;
@@ -46,7 +47,7 @@ public class CustomerApiImpl implements CustomerApi {
 			throw new EntityAlreadyExist(ExceptionConstants.CUSTOMER_ALREADY_EXISTS);
 		}
 		customerService.convertWStoEntityAndSave(customerWS);
-		return null;
+		return ResponseStatus.SUCCESS.getResponse();
 	}
 
 	@Override
@@ -76,7 +77,7 @@ public class CustomerApiImpl implements CustomerApi {
 			throw new EntityNotFoundException(ExceptionConstants.CUSTOMER_NOT_FOUND);
 		}
 		customerService.deleteCustomer(customer);
-		return new ResponseEntity(HttpStatus.OK);
+		return ResponseStatus.SUCCESS.getResponse();
 	}
 
 	@Override
@@ -87,6 +88,6 @@ public class CustomerApiImpl implements CustomerApi {
 			throw new EntityNotFoundException(ExceptionConstants.CUSTOMER_NOT_FOUND);
 		}
 		customerService.updateCustomer(customer, customerWS);
-		return new ResponseEntity(HttpStatus.OK);
+		return ResponseStatus.SUCCESS.getResponse();
 	}
 }
