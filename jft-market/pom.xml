@@ -169,27 +169,23 @@
             <version>17.0</version>
         </dependency>
 
-        <!-- PAYPAL INTEGRATION-->
-        <!--     https://mvnrepository.com/artifact/com.paypal.sdk/rest-api-sdk-->
-        <!-- https://mvnrepository.com/artifact/com.paypal.sdk/paypal-core -->
-        <!--<dependency>
-            <groupId>com.paypal.sdk</groupId>
-            <artifactId>paypal-core</artifactId>
-            <version>1.7.2</version>
-        </dependency>-->
-
-        <!-- https://mvnrepository.com/artifact/com.paypal.sdk/rest-api-sdk -->
-        <!--<dependency>
-            <groupId>com.paypal.sdk</groupId>
-            <artifactId>rest-api-sdk</artifactId>
-            <version>0.7.1</version>
+        <!-- https://mvnrepository.com/artifact/org.hibernate.javax.persistence/hibernate-jpa-2.0-api -->
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <version>1.0.1.Final</version>
         </dependency>
--->
+
 
         <dependency>
             <groupId>com.litle</groupId>
             <artifactId>litle-sdk-for-java</artifactId>
             <version>9.3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>3.4.3</version>
         </dependency>
     </dependencies>
 

@@ -1,6 +1,6 @@
 package com.jft.market.api.ws;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -12,21 +12,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.jft.market.model.Product;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@XmlRootElement(name = "product")
+@XmlRootElement(name = "category")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ProductWS {
+public class CategoryWS {
+
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private List<Product> products;
 
 	@NotNull
 	private String name;
 	@NotNull
-	private Long price;
 	private String description;
-	private String features;
+
 	private String uuid;
-	@NotNull
-	private List<CategoryWS> categories = new ArrayList<>();
 }

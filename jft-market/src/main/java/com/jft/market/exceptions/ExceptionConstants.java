@@ -13,7 +13,9 @@ public class ExceptionConstants {
 
 	public static final String PRODUCT_NOT_FOUND = "Product not found";
 	public static final String PRODUCT_ALREADY_PURCHASED = "Product not found";
+	public static final String PRODUCT_ALREADY_EXIST = "Product already exists.";
 	public static final String PRODUCT_NOT_FOUND_TO_DELETE = "Product not found. Please provide valid product Id to delete.";
+	public static final String PRODUCT_IS_DELETED = "Product is deleted";
 
 	public static final String PAYMENT_INSTRUMENT_NOT_FOUND = "Paymnet Instrument not found";
 
@@ -28,4 +30,10 @@ public class ExceptionConstants {
 	public static final String EMAIL_CANNOT_BE_EMPTY = "Email cannot be empty";
 
 	public static final String NO_ROLE_TO_SAVE = "No role to save";
+  
+	public static final String CATEGORY_NOT_FOUND = "Category not found";
+	public static final String NO_CATEGORY_FOUND = "No category found";
+	public static final String PLEASE_CREATE_CATEGORY = "No category exist with this name. Please create category first.";
+	public static final String CATEGORY_IS_DELETED = "Category not found. It is deleted";
+
 }

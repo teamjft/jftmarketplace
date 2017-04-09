@@ -48,4 +48,14 @@ public interface ProductApi extends BaseApi {
 	public
 	@ResponseBody
 	ResponseEntity deleteProduct(@PathVariable("productUuid") String productUuid);
+
+
+	@RequestMapping(value = {"/category/{categoryName}"},
+			method = RequestMethod.GET,
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public
+	@ResponseBody
+	ResponseEntity readProductByCategory(@PathVariable("categoryName") String categoryName);
+
+
 }
