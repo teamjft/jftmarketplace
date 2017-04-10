@@ -31,13 +31,16 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
 	private CustomerRepository customerRepository;
 
 	@Autowired
-	PaymentInstrumentRepository paymentInstrumentRepository;
+	private PaymentInstrumentRepository paymentInstrumentRepository;
+
+	@Autowired
+	private CustomerService customerService;
 
 	@Override
 	public CustomerWS createCustomerWSfromPaymentInstrumentWS(PaymentInstrumentWS paymentInstrumentWS) {
 		Preconditions.check(paymentInstrumentWS == null, ExceptionConstants.PAYMENT_INSTRUMENT_NOT_FOUND);
 		CustomerWS customerWS = new CustomerWS();
-		customerWS.setCustomerName(paymentInstrumentWS.getCustomerName());
+		customerWS.setEmail(paymentInstrumentWS.getCustomerEmail());
 		customerWS.setUuid(paymentInstrumentWS.getCustomerUuid());
 		return customerWS;
 	}
@@ -63,14 +66,14 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
 
 	@Override
 	public PaymentInstrument convertAndLinkCustomerWithPaymentInstrument(PaymentInstrumentWS paymentInstrumentWS, Customer customer) {
-		if (paymentInstrumentWS != null) {
+		Preconditions.check(paymentInstrumentWS == null, ExceptionConstants.PAYMENT_INSTRUMENT_NOT_FOUND);
 			PaymentInstrument paymentInstrument = new PaymentInstrument();
 			paymentInstrument.setUuid(paymentInstrumentWS.getPaymentInstrumentUuid());
 			paymentInstrument.setCity(paymentInstrumentWS.getCity());
 			paymentInstrument.setCountry(paymentInstrumentWS.getCountry());
 			paymentInstrument.setCreditCartNumber(paymentInstrumentWS.getCreditCartNumber());
 			paymentInstrument.setType(paymentInstrumentWS.getType());
-			paymentInstrument.setDeleted(Boolean.FALSE);
+		//paymentInstrument.setDeleted(Boolean.FALSE);
 			paymentInstrument.setNameOnCard(paymentInstrumentWS.getNameOnCard());
 			paymentInstrument.setExpirationMonth(paymentInstrumentWS.getExpirationMonth());
 			paymentInstrument.setExpirationYear(paymentInstrumentWS.getExpirationYear());
@@ -86,8 +89,6 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
 			customer.getPaymentInstrumentList().add(paymentInstrument);
 
 			return paymentInstrument;
-		}
-		return null;
 	}
 
 	@Override
@@ -95,8 +96,10 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
 	public List<PaymentInstrumentWS> readPaymentInstruments(String customerUuid) {
 		Customer customer = customerRepository.findByUuid(customerUuid);
 		Preconditions.check(customer == null, ExceptionConstants.CUSTOMER_NOT_FOUND);
+		Preconditions.check(!customerService.isValidCustomer(customer), ExceptionConstants.CUSTOMER_NOT_ENABLED);
 		List<PaymentInstrument> paymentInstrumentList = paymentInstrumentRepository.findByCustomerUuid(customerUuid);
-		return convertPaymentInstrumentListToWSList(paymentInstrumentList);
+		List<PaymentInstrument> validPaymentInstruments = getvalidPaymentInstruments(paymentInstrumentList);
+		return convertPaymentInstrumentListToWSList(validPaymentInstruments);
 
 	}
 
@@ -105,7 +108,9 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
 	public void readAndDeletePaymentInstrument(String paymentinstrumentUuid) {
 		PaymentInstrument paymentInstrument = paymentInstrumentRepository.findByUuid(paymentinstrumentUuid);
 		Preconditions.check(paymentInstrument == null, ExceptionConstants.PAYMENT_INSTRUMENT_NOT_FOUND);
-		paymentInstrumentRepository.delete(paymentInstrument);
+		paymentInstrument.setDeleted(Boolean.TRUE);
+		paymentInstrument.setEnabled(Boolean.FALSE);
+		paymentInstrumentRepository.save(paymentInstrument);
 	}
 
 	@Override
@@ -114,12 +119,11 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
 		List<PaymentInstrumentWS> paymentInstrumentWsList = new ArrayList<>();
 		paymentInstruments.forEach(paymentInstrument -> {
 			PaymentInstrumentWS paymentInstrumentWS = new PaymentInstrumentWS();
-			paymentInstrumentWS.setCustomerName(paymentInstrument.getFirstName());
+			paymentInstrumentWS.setCustomerEmail(paymentInstrument.getCustomer().getEmail());
 			paymentInstrumentWS.setCity(paymentInstrument.getCity());
 			paymentInstrumentWS.setCountry(paymentInstrument.getCountry());
 			paymentInstrumentWS.setCreditCartNumber(paymentInstrument.getCreditCartNumber());
 			paymentInstrumentWS.setCustomerUuid(paymentInstrument.getCustomer().getUuid());
-			paymentInstrumentWS.setDeleted(paymentInstrument.isDeleted());
 			paymentInstrumentWS.setExpirationMonth(paymentInstrument.getExpirationMonth());
 			paymentInstrumentWS.setFirstName(paymentInstrument.getFirstName());
 			paymentInstrumentWS.setLastName(paymentInstrument.getLastName());
@@ -130,11 +134,21 @@ public class PaymentInstrumentServiceImpl implements PaymentInstrumentService {
 			paymentInstrumentWS.setStreet2(paymentInstrument.getStreet2());
 			paymentInstrumentWS.setPhoneNumber(paymentInstrument.getPhoneNumber());
 			paymentInstrumentWS.setExpirationYear(paymentInstrument.getExpirationYear());
-			paymentInstrumentWS.setCustomerName(paymentInstrument.getCustomer().getName());
 			paymentInstrumentWS.setState(paymentInstrument.getState());
 			paymentInstrumentWS.setNameOnCard(paymentInstrument.getNameOnCard());
 			paymentInstrumentWsList.add(paymentInstrumentWS);
 		});
 		return paymentInstrumentWsList;
+	}
+
+	@Override
+	public List<PaymentInstrument> getvalidPaymentInstruments(List<PaymentInstrument> paymentInstruments) {
+		List<PaymentInstrument> validPaymentInstruments = new ArrayList<>();
+		paymentInstruments.forEach(paymentInstrument -> {
+			if (paymentInstrument.getEnabled().equals(Boolean.TRUE) && paymentInstrument.getDeleted().equals(Boolean.FALSE)) {
+				validPaymentInstruments.add(paymentInstrument);
+			}
+		});
+		return validPaymentInstruments;
 	}
 }

@@ -24,7 +24,6 @@ import com.jft.market.exceptions.ExceptionConstants;
 import com.jft.market.exceptions.InvalidRequestException;
 import com.jft.market.model.Customer;
 import com.jft.market.service.CustomerService;
-import com.jft.market.service.UserService;
 
 
 @Slf4j
@@ -34,9 +33,6 @@ public class CustomerApiImpl implements CustomerApi {
 
 	@Autowired
 	private CustomerService customerService;
-
-	@Autowired
-	private UserService userService;
 
 	@Override
 	public ResponseEntity createCustomer(@Valid @RequestBody CustomerWS customerWS, BindingResult bindingResult) {

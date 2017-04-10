@@ -36,4 +36,6 @@ public interface CustomerService {
 	public Customer checkAndUpdateCustomer(Customer customer, CustomerWS customerWS);
 
 	public void validateCustomerWS(CustomerWS customerWS);
+
+
 }

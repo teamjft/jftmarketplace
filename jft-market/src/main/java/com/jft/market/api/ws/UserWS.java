@@ -18,11 +18,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @XmlRootElement(name = "user")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class UserWS {
-
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private Long id;
+	
 	@NotNull
-	private String username;
+	private String fname;
+	@NotNull
+	private String lname;
 	@NotNull
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
