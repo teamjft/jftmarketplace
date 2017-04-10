@@ -60,7 +60,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<UserWS> convertUsersToUsersWS(List<User> users) {
 		List<UserWS> userWSList = new ArrayList<UserWS>();
-		Preconditions.check(users.isEmpty(), ExceptionConstants.USER_NOT_FOUND);
 		users.forEach(user -> {
 			UserWS userWS = convertEntityToWS(user);
 			userWSList.add(userWS);

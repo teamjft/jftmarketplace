@@ -57,5 +57,12 @@ public interface ProductApi extends BaseApi {
 	@ResponseBody
 	ResponseEntity readProductByCategory(@PathVariable("categoryName") String categoryName);
 
-
+	@RequestMapping(value = {"update/{productUuid}"},
+			method = RequestMethod.PUT,
+			produces = {MediaType.APPLICATION_JSON_VALUE},
+			consumes = {MediaType.APPLICATION_JSON_VALUE})
+	public
+	@ResponseBody
+	ResponseEntity updateProduct(@RequestBody ProductWS productWS,
+								 @PathVariable("productUuid") String productUuid, BindingResult bindingResult);
 }
