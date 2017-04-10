@@ -17,9 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jft.market.api.ws.ProductWS;
 import com.jft.market.api.ws.ResponseStatus;
-
-import com.jft.market.exceptions.EntityNotFoundException;
-
 import com.jft.market.exceptions.InvalidRequestException;
 import com.jft.market.service.ProductService;
 
@@ -78,5 +75,15 @@ public class ProductApiImpl implements ProductApi {
 	public ResponseEntity readProductByCategory(@PathVariable("categoryName") String categoryName) {
 		List<ProductWS> products = productService.readProductsByCategoryName(categoryName);
 		return new ResponseEntity(products, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity updateProduct(@Valid @RequestBody ProductWS productWS, @PathVariable("productUuid") String productUuid, BindingResult bindingResult) {
+		log.info("Validating paylaod");
+		if (bindingResult.hasErrors()) {
+			throw new InvalidRequestException(bindingResult);
+		}
+		productService.updateProduct(productWS, productUuid);
+		return ResponseStatus.SUCCESS.getResponse();
 	}
 }
