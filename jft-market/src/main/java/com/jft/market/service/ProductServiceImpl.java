@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional
 	public ProductWS readProduct(String productUuid) {
-		Product product = productRepository.findByUuid(productUuid);
+		Product product = readProductByUuid(productUuid);
 		Preconditions.check(product.getDeleted().equals(Boolean.TRUE), ExceptionConstants.PRODUCT_IS_DELETED);
 		return convertEntityToWS(product);
 	}
@@ -77,13 +77,21 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Product convertWStoEntity(ProductWS productWS) {
-		Product product = new Product();
-		product.setName(productWS.getName());
-		product.setDescription(productWS.getDescription());
-		product.setFeatures(productWS.getFeatures());
-		product.setPrice(productWS.getPrice());
-		return product;
+	public Product convertWStoEntity(ProductWS productWS, Product product1) {
+		if (product1 == null) {
+			Product product = new Product();
+			product.setName(productWS.getName());
+			product.setDescription(productWS.getDescription());
+			product.setFeatures(productWS.getFeatures());
+			product.setPrice(productWS.getPrice());
+			return product;
+		} else {
+			product1.setName(productWS.getName());
+			product1.setDescription(productWS.getDescription());
+			product1.setFeatures(productWS.getFeatures());
+			product1.setPrice(productWS.getPrice());
+			return product1;
+		}
 	}
 
 	@Override
@@ -108,7 +116,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional
 	public void createProduct(ProductWS productWS) {
-		Product product = convertWStoEntity(productWS);
+		Product product = convertWStoEntity(productWS, null);
 		checkIfProductExist(product);
 		List<CategoryWS> categoryWSList = productWS.getCategories();
 		List<String> categoryNamesFromWS = new ArrayList<>();
@@ -152,6 +160,36 @@ public class ProductServiceImpl implements ProductService {
 			}
 		});
 		return productWSList;
+	}
+
+	@Override
+	@Transactional
+	public void updateProduct(ProductWS productWS, String uuid) {
+		Product product = readProductByUuid(uuid);
+		Preconditions.check(product == null, ExceptionConstants.PRODUCT_NOT_FOUND);
+		Preconditions.check(!isProductEnabled(product), ExceptionConstants.PRODUCT_IS_DELETED);
+		updateAndSaveProduct(product, productWS);
+	}
+
+	@Override
+	@Transactional
+	public Product readProductByUuid(String uuid) {
+		return productRepository.findByUuid(uuid);
+	}
+
+	@Override
+	public Boolean isProductEnabled(Product product) {
+		return (product.getEnabled().equals(Boolean.TRUE) && product.getDeleted().equals(Boolean.FALSE)) ? true : false;
+	}
+
+	@Override
+	@Transactional
+	public void updateAndSaveProduct(Product product, ProductWS productWS) {
+		product.setName(productWS.getName());
+		product.setDescription(productWS.getDescription());
+		product.setFeatures(productWS.getFeatures());
+		product.setPrice(productWS.getPrice());
+		productRepository.save(product);
 	}
 }
 

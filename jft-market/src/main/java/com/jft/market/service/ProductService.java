@@ -16,7 +16,7 @@ public interface ProductService {
 
 	public void deleteProduct(String productUuid);
 
-	public Product convertWStoEntity(ProductWS productWS);
+	public Product convertWStoEntity(ProductWS productWS, Product product);
 
 	public ProductWS convertEntityToWS(Product product);
 
@@ -27,4 +27,12 @@ public interface ProductService {
 	public List<ProductWS> readProductsByCategoryName(String name);
 
 	public List<ProductWS> convertProductsListToWSList(List<Product> products);
+
+	public void updateProduct(ProductWS productWS, String uuid);
+
+	public Product readProductByUuid(String uuid);
+
+	public Boolean isProductEnabled(Product product);
+
+	public void updateAndSaveProduct(Product product, ProductWS productWS);
 }
