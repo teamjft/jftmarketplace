@@ -7,8 +7,7 @@ import com.jft.market.model.User;
 
 
 public interface UserRepository extends JpaRepository<User, Long> {
-
-	public User findByusername(String userName);
+	
 
 	public User findByUuid(String userUUID);
 

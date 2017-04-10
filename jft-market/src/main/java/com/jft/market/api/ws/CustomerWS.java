@@ -18,10 +18,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class CustomerWS {
 
 	@NotNull
-	private String customerName;
+	private String fname;
 	@NotNull
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private String password;
+	private String lname;
 	@NotNull
 	private String email;
 	@NotNull
@@ -29,8 +28,12 @@ public class CustomerWS {
 	private String uuid;
 	@NotNull
 	private Long phone;
+
+	@NotNull
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String password;
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private UserWS userWS;
 
-	private Boolean enabled = Boolean.FALSE;
+	/*private Boolean enabled = Boolean.FALSE;*/
 }

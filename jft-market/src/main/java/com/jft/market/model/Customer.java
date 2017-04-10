@@ -27,27 +27,28 @@ public class Customer extends TimestampedFieldObject {
 	@javax.persistence.Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long Id;
-	private String name;
-	private String password;
 	@Column(unique = true)
 	private String email;
-	private String gender;
-	private Long phone;
 	private String uuid;
-	private Boolean enabled = Boolean.FALSE;
+
 	@OneToOne(cascade = {javax.persistence.CascadeType.PERSIST, CascadeType.REMOVE})
 	@JoinColumn(name = "user_id")
 	private User user;
-
-	public Customer(String name, Long phone) {
-		this.name = name;
-		this.phone = phone;
-	}
-
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
 	Set<PaymentInstrument> paymentInstrumentList = new HashSet<PaymentInstrument>();
 
 	@OneToMany(mappedBy = "customer", cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE})
 	private Set<PurchaseOrder> purchaseOrders = new HashSet<>();
+
+
+
+	/*private String name;*/
+
+/*	private String password;*/
+
+/*	private String gender;
+	private Long phone;*/
+
+/*	private Boolean enabled = Boolean.FALSE;*/
 
 }

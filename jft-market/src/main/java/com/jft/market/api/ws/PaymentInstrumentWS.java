@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jft.market.api.CreditCardTypes;
 
 @Setter
@@ -16,12 +15,12 @@ import com.jft.market.api.CreditCardTypes;
 public class PaymentInstrumentWS {
 
 	@NotNull
-	private String customerName;
+	private String customerEmail;
 	@NotNull
 	private String customerUuid;
 
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private String Id;
+	/*@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String Id;*/
 	private String paymentInstrumentUuid;
 	@NotNull
 	private Long creditCartNumber;

@@ -23,4 +23,6 @@ public interface PaymentInstrumentService {
 	public void readAndDeletePaymentInstrument(String paymentinstrumentUuid);
 
 	public List<PaymentInstrumentWS> convertPaymentInstrumentListToWSList(List<PaymentInstrument> paymentInstrument);
+
+	public List<PaymentInstrument> getvalidPaymentInstruments(List<PaymentInstrument> paymentInstrument);
 }
