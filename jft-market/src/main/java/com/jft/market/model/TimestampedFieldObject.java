@@ -27,12 +27,16 @@ public abstract class TimestampedFieldObject implements ITimestampedObject {
 	@Column(name = "is_deleted")
 	@Type(type = "yes_no")
 	private Boolean deleted;
+	@Column(name = "is_enabled")
+	@Type(type = "yes_no")
+	private Boolean enabled;
 
 	public TimestampedFieldObject(ITimestampedObject timestampedObject) {
 		super();
 		this.createdOn = timestampedObject.getCreatedOn();
 		this.lastModified = timestampedObject.getLastModified();
 		this.deleted = timestampedObject.getDeleted();
+		this.enabled = timestampedObject.getEnabled();
 	}
 
 	@PrePersist
@@ -41,6 +45,7 @@ public abstract class TimestampedFieldObject implements ITimestampedObject {
 		setCreatedOn(newEntryDate);
 		setLastModified(newEntryDate);
 		setDeleted(Boolean.FALSE);
+		setEnabled(Boolean.TRUE);
 	}
 
 	@PreUpdate

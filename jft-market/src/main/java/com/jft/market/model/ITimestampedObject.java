@@ -15,4 +15,8 @@ public interface ITimestampedObject extends Serializable {
 	public void setDeleted(Boolean isDeleted);
 
 	public Boolean getDeleted();
+
+	public void setEnabled(Boolean isEnabled);
+
+	public Boolean getEnabled();
 }

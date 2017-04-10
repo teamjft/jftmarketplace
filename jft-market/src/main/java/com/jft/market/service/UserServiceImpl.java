@@ -34,6 +34,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public void convertWsToEnityAndSave(UserWS userWS) {
+		User user1 = findByEmail(userWS.getEmail());
+		Preconditions.check(user1 != null, ExceptionConstants.USER_ALREADY_EXIST);
 		User user = convertWStoEntity(userWS);
 		saveUser(user);
 	}
@@ -43,11 +45,10 @@ public class UserServiceImpl implements UserService {
 		// USER and ROLE entity is populating
 		Preconditions.check(userWS == null, ExceptionConstants.USER_NOT_FOUND);
 		User user = new User();
-		user.setId(userWS.getId());
-		user.setUsername(userWS.getUsername());
+		user.setFname(userWS.getFname());
+		user.setLname(userWS.getLname());
 		user.setPassword(passwordEncoder.encode(userWS.getPassword()));
 		user.setEmail(userWS.getEmail());
-		user.setEnabled(Boolean.TRUE);
 		user.setGender(userWS.getGender());
 		user.setPhone(userWS.getPhone());
 		Role role = roleRepository.findByName(Roles.ROLE_USER.getName());
@@ -61,17 +62,7 @@ public class UserServiceImpl implements UserService {
 		List<UserWS> userWSList = new ArrayList<UserWS>();
 		Preconditions.check(users.isEmpty(), ExceptionConstants.USER_NOT_FOUND);
 		users.forEach(user -> {
-			UserWS userWS = new UserWS();
-			userWS.setUsername(user.getUsername());
-			userWS.setPassword(user.getPassword());
-			userWS.setEmail(user.getEmail());
-			userWS.setGender(user.getGender());
-			userWS.setEnabled(user.getEnabled());
-			userWS.setPhone(user.getPhone());
-			user.getRoles().forEach(role -> {
-				userWS.getRoles().add(role.getName());
-			});
-			userWS.setUuid(user.getUuid());
+			UserWS userWS = convertEntityToWS(user);
 			userWSList.add(userWS);
 		});
 		return userWSList;
@@ -117,7 +108,8 @@ public class UserServiceImpl implements UserService {
 	public UserWS convertEntityToWS(User user) {
 		Preconditions.check(user == null, ExceptionConstants.USER_NOT_FOUND);
 		UserWS userWS = new UserWS();
-		userWS.setUsername(user.getUsername());
+		userWS.setFname(user.getFname());
+		userWS.setLname(user.getLname());
 		userWS.setUuid(user.getUuid());
 		userWS.setEnabled(user.getEnabled());
 		userWS.setGender(user.getGender());
@@ -150,7 +142,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void validateUserWS(UserWS userWS) {
-		Preconditions.check(StringUtils.isEmpty(userWS.getUsername()), ExceptionConstants.USER_NAME_CANNOT_BE_EMPTY);
+		//	Preconditions.check(StringUtils.isEmpty(userWS.getUsername()), ExceptionConstants.USER_NAME_CANNOT_BE_EMPTY);
 		Preconditions.check(StringUtils.isEmpty(userWS.getEmail()), ExceptionConstants.EMAIL_CANNOT_BE_EMPTY);
 		Preconditions.check(StringUtils.isEmpty(String.valueOf(userWS.getPhone())), ExceptionConstants.PHONE_NUMBER_CANNOT_BE_EMPTY);
 	}
@@ -158,7 +150,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public void updateUser(User user, UserWS userWS) {
-		user.setUsername(userWS.getUsername());
+		//	user.setUsername(userWS.getUsername());
 		user.setPhone(userWS.getPhone());
 		user.setEmail(userWS.getEmail());
 		userRepository.save(user);
@@ -185,6 +177,19 @@ public class UserServiceImpl implements UserService {
 	public UserWS readUser(String userUuid) {
 		User user = readUserByUuid(userUuid);
 		return convertEntityToWS(user);
+	}
+
+	@Override
+	@Transactional
+	public Boolean checkIfUserAlreadyExist(String email) {
+		User user = findByEmail(email);
+		return user == null ? false : true;
+	}
+
+	@Override
+	@Transactional
+	public User findByEmail(String email) {
+		return userRepository.findByemail(email);
 	}
 }
 

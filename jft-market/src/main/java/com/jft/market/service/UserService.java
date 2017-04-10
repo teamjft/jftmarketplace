@@ -37,4 +37,8 @@ public interface UserService {
 	public Role getAdminRole();
 
 	public UserWS readUser(String userUuid);
+
+	public Boolean checkIfUserAlreadyExist(String email);
+
+	public User findByEmail(String email);
 }

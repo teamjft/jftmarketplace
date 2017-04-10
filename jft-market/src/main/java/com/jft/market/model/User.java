@@ -29,8 +29,12 @@ public class User extends TimestampedFieldObject {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long Id;
-	@Column(unique = true)
-	private String username;
+	/*@Column(unique = true)
+	private String username;*/
+	@Column(name = "first_name")
+	private String fname;
+	@Column(name = "last_name")
+	private String lname;
 	private String password;
 	@Column(name = "is_enabled")
 	private Boolean enabled;

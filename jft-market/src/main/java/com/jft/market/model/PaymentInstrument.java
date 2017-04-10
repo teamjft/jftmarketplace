@@ -15,8 +15,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import org.hibernate.annotations.Type;
-
 import com.jft.market.api.CreditCardTypes;
 
 @Entity
@@ -24,7 +22,7 @@ import com.jft.market.api.CreditCardTypes;
 @Setter
 @Getter
 @NoArgsConstructor
-public class PaymentInstrument {
+public class PaymentInstrument extends TimestampedFieldObject {
 
 	@javax.persistence.Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -49,9 +47,9 @@ public class PaymentInstrument {
 	@Column(name = "exp_year")
 	private Long expirationYear;
 
-	@Column(name = "is_deleted", nullable = false, columnDefinition = "char(1) default 'N'")
+/*	@Column(name = "is_deleted", nullable = false, columnDefinition = "char(1) default 'N'")
 	@Type(type = "yes_no")
-	private boolean deleted = false;
+	private boolean deleted = false;*/
 
 	@Column(name = "first_name")
 	private String firstName;

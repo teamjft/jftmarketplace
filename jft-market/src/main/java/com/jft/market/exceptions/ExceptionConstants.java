@@ -5,6 +5,7 @@ public class ExceptionConstants {
 
 	public static final String USER_NOT_FOUND = "User not found";
 	public static final String USER_NOT_ENABLED = "User is not enabled or is deleted.";
+	public static final String USER_ALREADY_EXIST = "User already exist";
 
 	public static final String CUSTOMER_NOT_FOUND = "Customer not found";
 	public static final String CUSTOMER_ALREADY_EXISTS = "Customer already exists";
@@ -35,5 +36,9 @@ public class ExceptionConstants {
 	public static final String NO_CATEGORY_FOUND = "No category found";
 	public static final String PLEASE_CREATE_CATEGORY = "No category exist with this name. Please create category first.";
 	public static final String CATEGORY_IS_DELETED = "Category not found. It is deleted";
+
+	public static final String CUSTOMER_PAYLOAD_EMPTY = "Customer payload is empty. Please provide valid payload.";
+
+
 
 }
