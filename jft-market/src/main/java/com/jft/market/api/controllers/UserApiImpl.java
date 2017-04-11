@@ -44,7 +44,7 @@ public class UserApiImpl implements UserApi {
 		}
 		log.info("Converting WS to Entity");
 		userService.convertWsToEnityAndSave(userWS);
-		BeanAttribute userBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.USER);
+		BeanAttribute userBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.REGISTRATION);
 		return new ResponseEntity(new EmberResponse<>(userBeanAttribute), HttpStatus.OK);
 	}
 
@@ -52,7 +52,7 @@ public class UserApiImpl implements UserApi {
 	public ResponseEntity readUser(@PathVariable("userUuid") String userUuid) {
 		log.info("Reading user from database");
 		UserWS userWS = userService.readUser(userUuid);
-		BeanAttribute userBeanAttribute = new BeanAttribute(userWS.getUuid(), userWS, ApiConstants.USERS);
+		BeanAttribute userBeanAttribute = new BeanAttribute(userWS.getUuid(), userWS, ApiConstants.REGISTRATION);
 		return new ResponseEntity(new EmberResponse<>(userBeanAttribute), HttpStatus.OK);
 	}
 
@@ -62,7 +62,7 @@ public class UserApiImpl implements UserApi {
 		List<UserWS> users = userService.readAllUsers();
 		List<BeanAttribute> userBeanAttributes = new ArrayList<>();
 		users.forEach(userWS -> {
-			BeanAttribute productBeanAttribute = new BeanAttribute(userWS.getUuid(), userWS, ApiConstants.USERS);
+			BeanAttribute productBeanAttribute = new BeanAttribute(userWS.getUuid(), userWS, ApiConstants.REGISTRATION);
 			userBeanAttributes.add(productBeanAttribute);
 		});
 		return new ResponseEntity(new EmberResponse<>(userBeanAttributes), HttpStatus.OK);
@@ -71,7 +71,7 @@ public class UserApiImpl implements UserApi {
 	@Override
 	public ResponseEntity deleteUser(@PathVariable("userUuid") String userUuid) {
 		userService.deleteUser(userUuid);
-		BeanAttribute userBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.USER);
+		BeanAttribute userBeanAttribute = new BeanAttribute(userUuid, new SuccessWS(ApiConstants.SUCCESS), ApiConstants.REGISTRATION);
 		return new ResponseEntity(new EmberResponse<>(userBeanAttribute), HttpStatus.OK);
 	}
 
@@ -79,7 +79,7 @@ public class UserApiImpl implements UserApi {
 	public ResponseEntity updateUser(@RequestBody UserWS userWS, @PathVariable("userUuid") String userUuid) {
 		userService.validateUserWS(userWS);
 		userService.updateUser(userWS, userUuid);
-		BeanAttribute userBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.USER);
+		BeanAttribute userBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.REGISTRATION);
 		return new ResponseEntity(new EmberResponse<>(userBeanAttribute), HttpStatus.OK);
 	}
 
@@ -88,7 +88,7 @@ public class UserApiImpl implements UserApi {
 		List<String> roles = Arrays.asList(roleWS.getRoles());
 		Preconditions.check(roles.isEmpty(), ExceptionConstants.NO_ROLE_TO_SAVE);
 		userService.updateUserRoles(userUuid);
-		BeanAttribute userBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.USER);
+		BeanAttribute userBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.REGISTRATION);
 		return new ResponseEntity(new EmberResponse<>(userBeanAttribute), HttpStatus.OK);
 	}
 }

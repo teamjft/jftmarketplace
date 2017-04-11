@@ -28,4 +28,6 @@ public interface CategoryService {
 	public Category findCategoryByName(String name);
 
 	public void updateCategory(CategoryWS categoryWS, String uuid);
+
+	public void deleteCategory(String uuid);
 }

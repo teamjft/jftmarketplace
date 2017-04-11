@@ -86,7 +86,8 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	@Transactional
 	public List<Category> readCategories() {
-		List<Category> categories = categoryRepository.findAll();
+		//List<Category> categories = categoryRepository.findAll();
+		List<Category> categories = categoryRepository.findAllByDeleted(Boolean.FALSE);
 		Preconditions.check(categories == null, ExceptionConstants.CATEGORY_NOT_FOUND);
 		return categories;
 	}
@@ -120,6 +121,17 @@ public class CategoryServiceImpl implements CategoryService {
 		Preconditions.check(category == null, ExceptionConstants.CATEGORY_NOT_FOUND);
 		category.setName(categoryWS.getName());
 		category.setDescription(categoryWS.getDescription());
+		saveCategory(category);
+	}
+
+	@Override
+	@Transactional
+	public void deleteCategory(String uuid) {
+		Category category = readCategoryByUuid(uuid);
+		Preconditions.check(category == null, ExceptionConstants.CATEGORY_NOT_FOUND);
+		Preconditions.check(category.getDeleted().equals(Boolean.TRUE), ExceptionConstants.CATEGORY_ALREADY_DELETED);
+		category.setDeleted(Boolean.TRUE);
+		category.setEnabled(Boolean.FALSE);
 		saveCategory(category);
 	}
 }
