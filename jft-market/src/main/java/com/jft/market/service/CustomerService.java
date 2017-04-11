@@ -31,11 +31,11 @@ public interface CustomerService {
 
 	public Boolean isValidCustomer(Customer customer);
 
-	public void updateCustomer(Customer customer, CustomerWS customerWS);
-
-	public Customer checkAndUpdateCustomer(Customer customer, CustomerWS customerWS);
+	public void updateCustomer(CustomerWS customerWS, String uuid);
 
 	public void validateCustomerWS(CustomerWS customerWS);
+
+	public UserWS readUpdatedCustmerWS(String uuid);
 
 
 }

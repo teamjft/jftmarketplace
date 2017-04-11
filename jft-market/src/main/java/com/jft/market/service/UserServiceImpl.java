@@ -132,27 +132,26 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Boolean isValidUser(User user) {
-		if (user.getEnabled().equals(Boolean.TRUE) && user.getDeleted().equals(Boolean.FALSE)) {
-			return true;
-		} else {
-			return false;
-		}
+		return (user.getEnabled().equals(Boolean.TRUE) && user.getDeleted().equals(Boolean.FALSE)) ? true : false;
+
 	}
 
 	@Override
 	public void validateUserWS(UserWS userWS) {
-		//	Preconditions.check(StringUtils.isEmpty(userWS.getUsername()), ExceptionConstants.USER_NAME_CANNOT_BE_EMPTY);
 		Preconditions.check(StringUtils.isEmpty(userWS.getEmail()), ExceptionConstants.EMAIL_CANNOT_BE_EMPTY);
+		Preconditions.check(StringUtils.isEmpty(userWS.getFname()), ExceptionConstants.FIRST_NAME_CANNOT_BE_EMPTY);
+		Preconditions.check(StringUtils.isEmpty(userWS.getLname()), ExceptionConstants.LAST_NAME_CANNOT_BE_EMPTY);
 		Preconditions.check(StringUtils.isEmpty(String.valueOf(userWS.getPhone())), ExceptionConstants.PHONE_NUMBER_CANNOT_BE_EMPTY);
 	}
 
 	@Override
 	@Transactional
-	public void updateUser(User user, UserWS userWS) {
-		//	user.setUsername(userWS.getUsername());
-		user.setPhone(userWS.getPhone());
-		user.setEmail(userWS.getEmail());
-		userRepository.save(user);
+	public void updateUser(UserWS userWS, String userUuid) {
+		User enabledUser = readUserByUuid(userUuid);
+		enabledUser.setFname(userWS.getFname());
+		enabledUser.setLname(userWS.getLname());
+		enabledUser.setPhone(userWS.getPhone());
+		userRepository.save(enabledUser);
 	}
 
 	@Override

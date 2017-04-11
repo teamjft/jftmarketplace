@@ -94,6 +94,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Transactional
 	public Customer readCustomerByUuid(String customerUuid) {
 		Customer customer = customerRepository.findByUuid(customerUuid);
+		Preconditions.check(customer == null, ExceptionConstants.CUSTOMER_NOT_FOUND);
 		Preconditions.check(!isValidCustomer(customer), ExceptionConstants.CUSTOMER_NOT_ENABLED);
 		return customer;
 	}
@@ -158,25 +159,33 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	@Transactional
-	public void updateCustomer(Customer customer, CustomerWS customerWS) {
-		Customer updatedCustomer = checkAndUpdateCustomer(customer, customerWS);
-		customerRepository.save(updatedCustomer);
-	}
-
-	@Override
-	public Customer checkAndUpdateCustomer(Customer customer, CustomerWS customerWS) {
-		//customer.setName(customerWS.getCustomerName());
-	/*	customer.setPhone(customerWS.getPhone());*/
-		customer.setEmail(customerWS.getEmail());
-		return customer;
+	public void updateCustomer(CustomerWS customerWS, String uuid) {
+		Customer enabledCustomer = readCustomerByUuid(uuid);
+		User associatedUser = userRepository.findByemail(enabledCustomer.getEmail());
+		Boolean isAssociatedUserEnabled = userService.isValidUser(associatedUser);
+		Preconditions.check(!isAssociatedUserEnabled, ExceptionConstants.CUSTOMER_NOT_ENABLED);
+		if (isAssociatedUserEnabled) {
+			associatedUser.setFname(customerWS.getFname());
+			associatedUser.setLname(customerWS.getLname());
+			associatedUser.setPhone(customerWS.getPhone());
+			userService.saveUser(associatedUser);
+		}
 	}
 
 	@Override
 	public void validateCustomerWS(CustomerWS customerWS) {
-		//	Preconditions.check(StringUtils.isEmpty(customerWS.getCustomerName()), ExceptionConstants.CUSTOMER_NAME_CANNOT_BE_EMPTY);
 		Preconditions.check(StringUtils.isEmpty(customerWS.getEmail()), ExceptionConstants.EMAIL_CANNOT_BE_EMPTY);
+		Preconditions.check(StringUtils.isEmpty(customerWS.getFname()), ExceptionConstants.FIRST_NAME_CANNOT_BE_EMPTY);
+		Preconditions.check(StringUtils.isEmpty(customerWS.getLname()), ExceptionConstants.LAST_NAME_CANNOT_BE_EMPTY);
 		Preconditions.check(StringUtils.isEmpty(String.valueOf(customerWS.getPhone())), ExceptionConstants.PHONE_NUMBER_CANNOT_BE_EMPTY);
 	}
 
-
+	@Override
+	@Transactional
+	public UserWS readUpdatedCustmerWS(String uuid) {
+		Preconditions.check(uuid == null, ExceptionConstants.CUSTOMER_NOT_FOUND);
+		String userEmail = customerRepository.findByUuid(uuid).getUser().getEmail();
+		User updatedUser = userService.findByEmail(userEmail);
+		return userService.convertEntityToWS(updatedUser);
+	}
 }
