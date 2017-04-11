@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
-    model(){
+    model() {
         let users = this.get('store').findAll('registration');
         return users;
     }

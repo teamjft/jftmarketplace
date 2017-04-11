@@ -1,8 +1,7 @@
 <h2 class="text-center text-info"> || Product Listing Page || </h2>
 <div class="container">
   <h3 class="w3-wide w3-opacity text-center">
-    <span class="glyphicon glyphicon-thumbs-up"> </span>
-    All Products ..
+    <span class="glyphicon glyphicon-thumbs-up"> </span> All Products ..
     <span class="glyphicon glyphicon-thumbs-up"> </span>
   </h3>
   {{#each model as | product |}}
@@ -11,9 +10,9 @@
       <h2>{{product.name}}, &#8377; {{product.price}} Only</h2>
       <p>{{product.description}}</p>
       <p>
-        <a class="btn btn-warning btn" href="#" role="button">See Details &raquo;</a> 
-        {{#link-to "editproduct" product.id class="btn btn-primary btn" }}Edit{{/link-to}}
-        <a class="btn btn-info btn" href="#" role="button">Delete</a> 
+        <a class="btn btn-warning btn" href="#" role="button">See Details &raquo;</a> {{#link-to "editproduct" product.uuid
+        class="btn btn-primary btn" }}Edit{{/link-to}}
+        <a class="btn btn-info btn" href="#" role="button">Delete</a>
       </p>
     </div>
   </div>

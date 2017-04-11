@@ -1,10 +1,15 @@
 import Ember from 'ember';
+import Category from 'jft-sale/models/category';
+
 export default Ember.Controller.extend({
 
     store1: Ember.inject.service(),
     actions: {
         chooseCategory(data) {
             console.log(data);
+            this.get('model').category.pushObject({"name": data})
+            console.log(this.get('model').category, "cacaxac");
+
         },
         addProduct(model) {
             let msg = [], validationFlag = false;
@@ -24,13 +29,22 @@ export default Ember.Controller.extend({
                 Ember.set(model, 'msg', msg);
                 this.transitionToRoute('addProduct');
             }else{
+                console.log("category", model.category)
+                // let category = [];
+                // let catObj = //this.get('store').createRecord('category', {name: "Mobile", description: "sddf"});
+                // //catObj.name= "Mobile;"
+                // {
+                //     name: "cat5"
+                // }
+                // category.pushObject(catObj);
                 const products = this.get('store1');
                 console.log(model, 'lololo');
                 let jsondata = {
                     "name":model.name+"", 
                     "price":model.price,
                     "description":model.description+"",
-                    "features":"64Gb"
+                    "features":"64Gb",
+                    "categories": model.category
                 };
                 // $.ajax({
                 //     headers: { 
@@ -48,8 +62,14 @@ export default Ember.Controller.extend({
                 //         console.log("ooooooooooo",err);
                 //     }
                 // })
-                this.get('store').createRecord('product', jsondata).save();
-                this.transitionToRoute('productlist');
+                let self = this;
+                this.get('store').createRecord('product', jsondata).save().then(function(res){
+                    self.transitionToRoute('productlist');
+                }).catch(function(err){
+                    console.log('we are in Error');
+                    self.transitionToRoute('productlist');
+                });
+                
             }
         }
     }

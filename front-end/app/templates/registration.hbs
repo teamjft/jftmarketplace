@@ -4,37 +4,37 @@
     <form {{action "registerUser" model on="submit" }}><br/>
         <h2 class="w3-wide w3-opacity text-center">User Registration Form</h2>
         <div class="text-danger">
-                <ul>
-                    {{#each model.msg as | ms |}}
-                    <li>{{ms}}</li>
-                    {{/each}}
-                </ul>
+            <ul>
+                {{#each model.msg as | ms |}}
+                <li>{{ms}}</li>
+                {{/each}}
+            </ul>
         </div>
 
         <div class="jumbotron">
             <div class="form-group">
-                <label for='fname'>First Name</label> 
-                {{input value=model.fname id='fname' class="form-control"}}
+                <label for='fname'>First Name  {{isAdmin}}</label> {{input value=model.fname id='fname' class="form-control"}}
             </div>
 
             <div class="form-group">
-                <label for='lname'>Last Name</label> 
-                {{input value=model.lname id='lname' class="form-control"}}
+                <label for='lname'>Last Name</label> {{input value=model.lname id='lname' class="form-control"}}
             </div>
 
             <div class="form-group">
-                <label for='email'>Email Id</label> 
-                {{input value=model.email id='email' type="email" class="form-control"}}
+                <label for='email'>Email Id</label> {{input value=model.email id='email' type="email" class="form-control"}}
             </div>
 
             <div class="form-group">
-                <label for='password'>Password</label> 
-                {{input value=model.password id='password' type="password" class="form-control"}}
+                <label for='password'>Password</label> {{input value=model.password id='password' type="password" class="form-control"}}
             </div>
 
             <div class="form-group">
-                <label for='confirmPassword'>Confirm Password</label> 
-                {{input value=model.confirmPassword id='confirmPassword' type="password" class="form-control"}}
+                <label for='confirmPassword'>Confirm Password</label> {{input value=model.confirmPassword id='confirmPassword'
+                type="password" class="form-control"}}
+            </div>
+
+            <div class="form-group">
+                <label for='confirmPassword'>Phone No.</label> {{input value=model.phone id='phone' type="text" class="form-control"}}
             </div>
 
             <div class="form-group">
@@ -52,15 +52,17 @@
             </div>
         </div>
     </form>
+    
     {{else}}
-    <br/> <br/>
-        {{sweet-alert title="Registered Succesfully" type="success"}}
-        <h3  class="text-center text-success">
-            || You have Registered on JFT-Portal Succesfully. ||
-        </h3>
-         <h4 class="w3-wide w3-opacity text-center">
-             Please Click on <span class="badge"> {{#link-to "login"}} Login {{/link-to}}</span>
-         </h4> 
+    <br/> <br/> 
+    {{sweet-alert title="Registered Succesfully" type="success"}}
+    <h3 class="text-center text-success">
+        
+        || You have Registered on JFT-Portal Succesfully. ||
+    </h3>
+    <h4 class="w3-wide w3-opacity text-center">
+        Please Click on <span class="badge"> {{#link-to "login"}} Login {{/link-to}}</span>
+    </h4>
     {{/if}}
 </div>
 {{outlet}}

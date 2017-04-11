@@ -7,7 +7,7 @@ export default Ember.Route.extend(ResetScrollPositionMixin, {
   model() {
       const categories = this.get('store1');
       let model = {};
-      let category = categories.getCategories();
+      let category = this.get('store').findAll('categorylist');
       model.categories = category;
       model.catVal = [];
       model.images = [];

@@ -16,7 +16,6 @@ export default Ember.Route.extend(ResetScrollPositionMixin, {
     },
     actions: {
         registerUser(model) {
-            //console.log(Register);
             let msg = [], validationFlag = false;
             if (model.fname == '' || model.fname == null) {
                 msg.push("First Name can not be Empty.");
@@ -39,51 +38,50 @@ export default Ember.Route.extend(ResetScrollPositionMixin, {
                 Ember.set(model, 'confirmPassword', '');
                 msg.push("Password did not matched. Please try again.");
             }
-            this.get('store').findRecord('registration', 1).then(function (person) {
-                console.log(person, "hhhh");
-            });
-            if (validationFlag) {
-
-
-                Ember.set(model, 'msg', msg);
-                this.transitionTo('registration');  
-            }else{
-                console.log(model);
-            let jsondata = {
-                "customername": model.email, 
-                "email": model.email,
-                "password":model.password,
-                "phone": 4566,
-                "gender":"m"
-            };
-
-            // // Em.$.ajax({
-            // //     headers: { 
-            // //     'Accept': 'application/json',
-            // //     'Content-Type': 'application/json' 
-            // // },
-            // //     type: 'POST',
-            // //     url: `http://localhost:9191/market/api/v1/product/create`,
-            // //     dataType: 'json',
-            // //     data: jsondata
-            // // }).then(function(data) {
-            // //     //Ember.run(null, resolve, data);
-            // //     console.log(data);  
-            // // });
-            console.log(model.isRegister,'dddddddddddddddddd', jsondata);
-             this.get('store').createRecord('registration', jsondata).save().then(function(res){
-                 console.log('fffff',res);
-             }).catch(function(err){
-                 Ember.set(model, 'isRegister', false);
-                 this.transitionTo('registration');
-                 console.log('Eorr in response', err);
-             });
+            if (model.phone == '' || model.phone == null) {
+                msg.push("Phone No field can not be Empty.");
+                validationFlag = true;
             }
-            
+            // this.get('store').findRecord('registration', 1).then(function (person) {
+            //     console.log(person, "hhhh");
+            // });
+            if (validationFlag) {
+                Ember.set(model, 'msg', msg);
+                this.transitionTo('registration');
+            } else {
+                console.log(model);
+                let jsondata = {
+                    "fname": model.fname,
+                    "lname": model.lname,
+                    "email": model.email,
+                    "password": model.password,
+                    "phone": model.phone,
+                    "gender": "m"
+                };
 
-            //post.save();
-            //TODO: Register USer Functionality.
-            //this.transitionTo('registration');
+                // // Em.$.ajax({
+                // //     headers: { 
+                // //     'Accept': 'application/json',
+                // //     'Content-Type': 'application/json' 
+                // // },
+                // //     type: 'POST',
+                // //     url: `http://localhost:9191/market/api/v1/product/create`,
+                // //     dataType: 'json',
+                // //     data: jsondata
+                // // }).then(function(data) {
+                // //     //Ember.run(null, resolve, data);
+                // //     console.log(data);  
+                // // });
+                let self = this;
+                this.get('store').createRecord('registration', jsondata).save().then(function (res) {
+                    Ember.set(model, 'isRegister', false);
+                    self.transitionTo('registration');
+                }).catch(function (err) {
+                    console.log('Eorr in response Registration', err);
+                    self.transitionTo('registration');
+                    msg.push("There is some error in Registration, Please Try again");
+                });
+            }
         }
     }
 });

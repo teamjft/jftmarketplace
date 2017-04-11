@@ -8,10 +8,16 @@ export default Ember.Controller.extend({
         chooseCategory(data) {
             Ember.set(this.get('model'), 'category', data);
         },
-        editProduct(model) {
-            //const products = this.get('store1');
-            //products.editProducts(model);
-            this.transitionToRoute('products');
+        editProduct(formData) {
+            console.log('c',formData);
+            this.get('store').findRecord('productlist', formData.id).then(function(product) {
+                 product.get('name');
+                 product.set('name', 'A new post');
+
+                 product.save();
+                console.log("product", product);
+            });
+            this.transitionToRoute('productlist');
         }
     }
 });

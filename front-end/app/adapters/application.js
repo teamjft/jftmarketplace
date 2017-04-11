@@ -1,7 +1,21 @@
 import DS from 'ember-data';
 
 export default DS.JSONAPIAdapter.extend({
-    
+        // shouldReloadRecord: function (store, snapshot) {
+        //     return false;
+        // },
+
+        // shouldReloadAll: function (store, snapshot) {
+        //     return false;
+        // },
+
+        // shouldBackgroundReloadRecord: function (store, snapshot) {
+        //     return true;
+        // },
+
+        // shouldBackgroundReloadAll: function (store, snapshot) {
+        //     return true;
+        // },
     namespace: "/api/v1",
 
     headers: {

@@ -8,13 +8,13 @@
     <div class="jumbotron">
         <div class="container">
             <h3 class="w3-wide w3-opacity">
-                {{cartItem.name}}, &#8377; {{cartItem.price}} Only 
+                {{cartItem.name}}, &#8377; {{cartItem.price}} Only
                 <span class="catDiv pull-right glyphicon glyphicon-remove"></span>
             </h3>
             <p>{{cartItem.description}}</p>
             <p>
-                <a class="btn btn-warning btn" href="#" role="button">See Details &raquo;</a> 
-                <a class="btn btn-primary btn"{{action "incermentQuantity" cartItem}}> Quantity &nbsp; <span class="badge"> (+1) </span> 
+                <a class="btn btn-warning btn" href="#" role="button">See Details &raquo;</a>
+                <a class="btn btn-primary btn" {{action "incermentQuantity" cartItem}}> Quantity &nbsp; <span class="badge"> (+1) </span> 
                 </a>
                 <a class="btn btn-info btn" href="#" role="button">Remove</a>
                 <span class="pull-right badge">Quantity - {{cartItem.itemQantity}}</span>
@@ -22,13 +22,12 @@
         </div>
     </div>
     {{else}}
-    
+
     <br/>
     <div class="text-center text-danger">
         Sorry! You have not added any item in you cart yet.
     </div>
-    <br/>
-    {{/each}}
+    <br/> {{/each}}
     <div class="text-center">
         {{#link-to "home" class="btn btn-primary text-center" }} Continue Shopping {{/link-to}}
         <a href="#" class="btn btn-success text-center" {{action "buyNowAction" model.cartItems}}> Make Purchase Now </a>

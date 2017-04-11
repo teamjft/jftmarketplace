@@ -3,7 +3,7 @@ import Ember from 'ember';
 import ResetScrollPositionMixin from 'jft-sale/mixins/reset-scroll-position';
 
 export default Ember.Route.extend(ResetScrollPositionMixin, {
-    
+
     store1: Ember.inject.service('store1'),
 
     model() {
