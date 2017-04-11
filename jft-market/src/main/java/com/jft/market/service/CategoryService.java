@@ -24,4 +24,8 @@ public interface CategoryService {
 	public List<Category> readCategories();
 
 	public List<CategoryWS> convertEntityListToWSList(List<Category> categories);
+
+	public Category findCategoryByName(String name);
+
+	public void updateCategory(CategoryWS categoryWS, String uuid);
 }

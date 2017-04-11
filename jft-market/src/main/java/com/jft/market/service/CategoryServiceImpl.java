@@ -24,8 +24,11 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	@Transactional
 	public void createCategory(CategoryWS categoryWS) {
-		Category category = convertWsToEntity(categoryWS);
-		saveCategory(category);
+		Category category = findCategoryByName(categoryWS.getName());
+		if (category == null || !category.getName().equals(categoryWS.getName())) {
+			Category category1 = convertWsToEntity(categoryWS);
+			saveCategory(category1);
+		}
 	}
 
 	@Override
@@ -93,12 +96,30 @@ public class CategoryServiceImpl implements CategoryService {
 		Preconditions.check(categories == null, ExceptionConstants.NO_CATEGORY_FOUND);
 		List<CategoryWS> categoryWSList = new ArrayList<>();
 		categories.forEach(category -> {
-			CategoryWS categoryWS = new CategoryWS();
-			categoryWS.setName(category.getName());
-			categoryWS.setDescription(category.getDescription());
-			categoryWS.setUuid(category.getUuid());
-			categoryWSList.add(categoryWS);
+			if (category.getDeleted().equals(Boolean.FALSE)) {
+				CategoryWS categoryWS = new CategoryWS();
+				categoryWS.setName(category.getName());
+				categoryWS.setDescription(category.getDescription());
+				categoryWS.setUuid(category.getUuid());
+				categoryWSList.add(categoryWS);
+			}
 		});
 		return categoryWSList;
+	}
+
+	@Override
+	@Transactional
+	public Category findCategoryByName(String name) {
+		return categoryRepository.findByname(name);
+	}
+
+	@Override
+	@Transactional
+	public void updateCategory(CategoryWS categoryWS, String uuid) {
+		Category category = categoryRepository.findByUuid(uuid);
+		Preconditions.check(category == null, ExceptionConstants.CATEGORY_NOT_FOUND);
+		category.setName(categoryWS.getName());
+		category.setDescription(categoryWS.getDescription());
+		saveCategory(category);
 	}
 }

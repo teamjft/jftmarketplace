@@ -1,6 +1,7 @@
 package com.jft.market.api.controllers;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -14,11 +15,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jft.market.api.ApiConstants;
+import com.jft.market.api.BeanAttribute;
+import com.jft.market.api.ws.EmberResponse;
 import com.jft.market.api.ws.PaymentInstrumentWS;
-import com.jft.market.api.ws.ResponseStatus;
+import com.jft.market.api.ws.SuccessWS;
 import com.jft.market.exceptions.InvalidRequestException;
 import com.jft.market.service.PaymentInstrumentService;
-import com.jft.market.service.PurchaseService;
 
 @RestController
 @CrossOrigin
@@ -27,27 +30,32 @@ public class PaymentInstrumentApiimpl implements PaymentInstrumentApi {
 	@Autowired
 	PaymentInstrumentService paymentInstrumentService;
 
-	@Autowired
-	private PurchaseService purchaseService;
-
 	@Override
 	public ResponseEntity createPaymentInstrument(@Valid @RequestBody PaymentInstrumentWS paymentInstrumentWS, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new InvalidRequestException(bindingResult);
 		}
 		paymentInstrumentService.createAndSavePaymentInstrument(paymentInstrumentWS);
-		return ResponseStatus.SUCCESS.getResponse();
+		BeanAttribute paymentInstrumentBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.PAYMENT_INSTRUMENT);
+		return new ResponseEntity(new EmberResponse<>(paymentInstrumentBeanAttribute), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity readPaymentInstrument(@PathVariable("customerUuid") String customerUuid) {
 		List<PaymentInstrumentWS> paymentInstruments = paymentInstrumentService.readPaymentInstruments(customerUuid);
-		return new ResponseEntity(paymentInstruments, HttpStatus.OK);
+		List<BeanAttribute> paymentInstrumentBeanAttributes = new ArrayList<>();
+		paymentInstruments.forEach(paymentInstrumentWS -> {
+			BeanAttribute paymentInstrumentBeanAttribute = new BeanAttribute(paymentInstrumentWS.getPaymentInstrumentUuid(), paymentInstrumentWS, ApiConstants.PAYMENT_INSTRUMENT);
+			paymentInstrumentBeanAttributes.add(paymentInstrumentBeanAttribute);
+		});
+		return new ResponseEntity(new EmberResponse<>(paymentInstrumentBeanAttributes), HttpStatus.OK);
+
 	}
 
 	@Override
 	public ResponseEntity deletPaymnetInstrument(@PathVariable("paymentInstrumentUuid") String paymentinstrumentUuid) {
 		paymentInstrumentService.readAndDeletePaymentInstrument(paymentinstrumentUuid);
-		return ResponseStatus.SUCCESS.getResponse();
+		BeanAttribute paymentInstrumentBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.PAYMENT_INSTRUMENT);
+		return new ResponseEntity(new EmberResponse<>(paymentInstrumentBeanAttribute), HttpStatus.OK);
 	}
 }

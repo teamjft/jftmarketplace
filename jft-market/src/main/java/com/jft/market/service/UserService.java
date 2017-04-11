@@ -30,7 +30,7 @@ public interface UserService {
 
 	public void validateUserWS(UserWS userWS);
 
-	public void updateUser(User user, UserWS userWS);
+	public void updateUser(UserWS userWS, String uuid);
 
 	public void updateUserRoles(String userUuid);
 

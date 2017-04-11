@@ -25,14 +25,16 @@ public class ExceptionConstants {
 
 	public static final String INVALID_REQUEST = "Invalid request";
 
-	public static final String CUSTOMER_NAME_CANNOT_BE_EMPTY = "Customer name cannot be empty";
-	public static final String USER_NAME_CANNOT_BE_EMPTY = "User name cannot be empty";
+
 	public static final String PHONE_NUMBER_CANNOT_BE_EMPTY = "Phone number cannot be empty";
 	public static final String EMAIL_CANNOT_BE_EMPTY = "Email cannot be empty";
+	public static final String FIRST_NAME_CANNOT_BE_EMPTY = "First name cannot be empty";
+	public static final String LAST_NAME_CANNOT_BE_EMPTY = "Last name cannot be empty";
 
 	public static final String NO_ROLE_TO_SAVE = "No role to save";
   
 	public static final String CATEGORY_NOT_FOUND = "Category not found";
+	public static final String CATEGORY_ALREADY_EXIST = "Category already exist";
 	public static final String NO_CATEGORY_FOUND = "No category found";
 	public static final String PLEASE_CREATE_CATEGORY = "No category exist with this name. Please create category first.";
 	public static final String CATEGORY_IS_DELETED = "Category not found. It is deleted";

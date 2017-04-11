@@ -1,5 +1,6 @@
 package com.jft.market.api.controllers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,12 +17,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jft.market.api.ws.ResponseStatus;
+import com.jft.market.api.ApiConstants;
+import com.jft.market.api.BeanAttribute;
+import com.jft.market.api.ws.EmberResponse;
 import com.jft.market.api.ws.RoleWS;
+import com.jft.market.api.ws.SuccessWS;
 import com.jft.market.api.ws.UserWS;
 import com.jft.market.exceptions.ExceptionConstants;
 import com.jft.market.exceptions.InvalidRequestException;
-import com.jft.market.model.User;
 import com.jft.market.service.UserService;
 import com.jft.market.util.Preconditions;
 
@@ -41,35 +44,43 @@ public class UserApiImpl implements UserApi {
 		}
 		log.info("Converting WS to Entity");
 		userService.convertWsToEnityAndSave(userWS);
-		return ResponseStatus.SUCCESS.getResponse();
+		BeanAttribute userBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.USER);
+		return new ResponseEntity(new EmberResponse<>(userBeanAttribute), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity readUser(@PathVariable("userUuid") String userUuid) {
 		log.info("Reading user from database");
 		UserWS userWS = userService.readUser(userUuid);
-		return new ResponseEntity(userWS, HttpStatus.OK);
+		BeanAttribute userBeanAttribute = new BeanAttribute(userWS.getUuid(), userWS, ApiConstants.USERS);
+		return new ResponseEntity(new EmberResponse<>(userBeanAttribute), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity readUsers() {
 		log.info("Reading users from database");
 		List<UserWS> users = userService.readAllUsers();
-		return new ResponseEntity(users, HttpStatus.OK);
+		List<BeanAttribute> userBeanAttributes = new ArrayList<>();
+		users.forEach(userWS -> {
+			BeanAttribute productBeanAttribute = new BeanAttribute(userWS.getUuid(), userWS, ApiConstants.USERS);
+			userBeanAttributes.add(productBeanAttribute);
+		});
+		return new ResponseEntity(new EmberResponse<>(userBeanAttributes), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity deleteUser(@PathVariable("userUuid") String userUuid) {
 		userService.deleteUser(userUuid);
-		return ResponseStatus.SUCCESS.getResponse();
+		BeanAttribute userBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.USER);
+		return new ResponseEntity(new EmberResponse<>(userBeanAttribute), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity updateUser(@RequestBody UserWS userWS, @PathVariable("userUuid") String userUuid) {
 		userService.validateUserWS(userWS);
-		User user = userService.readUserByUuid(userUuid);
-		userService.updateUser(user, userWS);
-		return ResponseStatus.SUCCESS.getResponse();
+		userService.updateUser(userWS, userUuid);
+		BeanAttribute userBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.USER);
+		return new ResponseEntity(new EmberResponse<>(userBeanAttribute), HttpStatus.OK);
 	}
 
 	@Override
@@ -77,6 +88,7 @@ public class UserApiImpl implements UserApi {
 		List<String> roles = Arrays.asList(roleWS.getRoles());
 		Preconditions.check(roles.isEmpty(), ExceptionConstants.NO_ROLE_TO_SAVE);
 		userService.updateUserRoles(userUuid);
-		return ResponseStatus.SUCCESS.getResponse();
+		BeanAttribute userBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.USER);
+		return new ResponseEntity(new EmberResponse<>(userBeanAttribute), HttpStatus.OK);
 	}
 }

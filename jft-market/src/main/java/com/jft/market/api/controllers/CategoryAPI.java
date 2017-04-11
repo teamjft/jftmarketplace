@@ -40,4 +40,14 @@ public interface CategoryAPI {
 	public
 	@ResponseBody
 	ResponseEntity readCategories();
+
+	@RequestMapping(value = {"update/{categoryUuid}"},
+			method = RequestMethod.PUT,
+			produces = {MediaType.APPLICATION_JSON_VALUE},
+			consumes = {MediaType.APPLICATION_JSON_VALUE})
+	public
+	@ResponseBody
+	ResponseEntity updateCategory(@RequestBody CategoryWS categoryWS,
+								  @PathVariable("categoryUuid") String categoryUuid);
+
 }
