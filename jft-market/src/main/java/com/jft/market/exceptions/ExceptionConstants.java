@@ -32,15 +32,15 @@ public class ExceptionConstants {
 	public static final String LAST_NAME_CANNOT_BE_EMPTY = "Last name cannot be empty";
 
 	public static final String NO_ROLE_TO_SAVE = "No role to save";
-  
+
 	public static final String CATEGORY_NOT_FOUND = "Category not found";
 	public static final String CATEGORY_ALREADY_EXIST = "Category already exist";
 	public static final String NO_CATEGORY_FOUND = "No category found";
 	public static final String PLEASE_CREATE_CATEGORY = "No category exist with this name. Please create category first.";
 	public static final String CATEGORY_IS_DELETED = "Category not found. It is deleted";
+	public static final String CATEGORY_ALREADY_DELETED = "Category already deleted";
 
 	public static final String CUSTOMER_PAYLOAD_EMPTY = "Customer payload is empty. Please provide valid payload.";
-
 
 
 }

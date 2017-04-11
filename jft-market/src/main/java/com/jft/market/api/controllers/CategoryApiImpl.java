@@ -64,4 +64,11 @@ public class CategoryApiImpl implements CategoryAPI {
 		BeanAttribute categorytBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.CATEGORY);
 		return new ResponseEntity(new EmberResponse<>(categorytBeanAttribute), HttpStatus.OK);
 	}
+
+	@Override
+	public ResponseEntity deleteCategory(@PathVariable("uuid") String uuid) {
+		categoryService.deleteCategory(uuid);
+		BeanAttribute categorytBeanAttribute = new BeanAttribute(uuid, new SuccessWS(ApiConstants.SUCCESS), ApiConstants.CATEGORY);
+		return new ResponseEntity(new EmberResponse<>(categorytBeanAttribute), HttpStatus.OK);
+	}
 }

@@ -144,7 +144,8 @@ public class ProductServiceImpl implements ProductService {
 		List<Product> products = productRepository.findAll(
 				Specifications.where(((root, criteriaQuery, criteriaBuilder) -> {
 					Join<Product, Category> categories = root.join("categories", JoinType.INNER);
-					return criteriaBuilder.equal(categories.get("name"), name);
+					return criteriaBuilder.and(criteriaBuilder.equal(categories.get("name"), name),
+							criteriaBuilder.equal(categories.get("deleted"), Boolean.FALSE));
 				}))
 		);
 		return convertProductsListToWSList(products);
@@ -154,10 +155,8 @@ public class ProductServiceImpl implements ProductService {
 	public List<ProductWS> convertProductsListToWSList(List<Product> products) {
 		List<ProductWS> productWSList = new ArrayList<>();
 		products.forEach(product -> {
-			if (product.getDeleted().equals(Boolean.FALSE)) {
-				ProductWS productWS = convertEntityToWS(product);
-				productWSList.add(productWS);
-			}
+			ProductWS productWS = convertEntityToWS(product);
+			productWSList.add(productWS);
 		});
 		return productWSList;
 	}
