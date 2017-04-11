@@ -50,4 +50,11 @@ public interface CategoryAPI {
 	ResponseEntity updateCategory(@RequestBody CategoryWS categoryWS,
 								  @PathVariable("categoryUuid") String categoryUuid);
 
+	@RequestMapping(value = {"delete/{uuid}"},
+			method = RequestMethod.DELETE,
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public
+	@ResponseBody
+	ResponseEntity deleteCategory(@PathVariable("uuid") String uuid);
+
 }
