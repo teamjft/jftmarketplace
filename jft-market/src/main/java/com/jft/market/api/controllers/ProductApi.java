@@ -43,7 +43,7 @@ public interface ProductApi extends BaseApi {
 	ResponseEntity readProducts();
 
 	@RequestMapping(value = {"delete/{productUuid}"},
-			method = RequestMethod.POST,
+			method = RequestMethod.DELETE,
 			produces = {MediaType.APPLICATION_JSON_VALUE})
 	public
 	@ResponseBody

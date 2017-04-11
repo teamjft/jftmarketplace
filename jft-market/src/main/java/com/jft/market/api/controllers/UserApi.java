@@ -44,7 +44,7 @@ public interface UserApi extends BaseApi {
 	ResponseEntity readUsers();
 
 	@RequestMapping(value = {"delete/{userUuid}"},
-			method = RequestMethod.POST,
+			method = RequestMethod.DELETE,
 			produces = {MediaType.APPLICATION_JSON_VALUE})
 	public
 	@ResponseBody

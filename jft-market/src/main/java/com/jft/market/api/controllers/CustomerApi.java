@@ -43,7 +43,7 @@ public interface CustomerApi {
 	ResponseEntity readCustomers();
 
 	@RequestMapping(value = {"delete/{customerUuid}"},
-			method = RequestMethod.POST,
+			method = RequestMethod.DELETE,
 			produces = {MediaType.APPLICATION_JSON_VALUE})
 	public
 	@ResponseBody

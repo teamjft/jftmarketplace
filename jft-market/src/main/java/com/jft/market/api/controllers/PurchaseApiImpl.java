@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jft.market.api.ws.PaymentResponseWS;
+import com.jft.market.api.ApiConstants;
+import com.jft.market.api.BeanAttribute;
+import com.jft.market.api.ws.EmberResponse;
+import com.jft.market.api.ws.SuccessWS;
 import com.jft.market.service.PurchaseService;
 
 @RestController
@@ -20,7 +23,8 @@ public class PurchaseApiImpl implements PurchaseApi {
 
 	@Override
 	public ResponseEntity purchaseProduct(@PathVariable("customerUuid") String customerUuid, @PathVariable("productUuid") String productUuid) {
-		PaymentResponseWS paymentResponseWS = purchaseService.purchaseProduct(customerUuid, productUuid);
-		return new ResponseEntity(paymentResponseWS, HttpStatus.OK);
+		purchaseService.purchaseProduct(customerUuid, productUuid);
+		BeanAttribute paymentInstrumentBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.PAYMENT_INSTRUMENT);
+		return new ResponseEntity(new EmberResponse<>(paymentInstrumentBeanAttribute), HttpStatus.OK);
 	}
 }
