@@ -1,0 +1,164 @@
+<header>
+    {{#if isAdmin}} 
+    {{!--{{sweet-alert title="Login Succesfully" text="As Administrator" type="success"}}--}}
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <a href="#" class="navbar-brand navbar-right" {{action "signOutAction"}}> Sign Out </a> {{#link-to "admin" class="navbar-brand
+            navbar-right"}}Hello, Admin{{/link-to}}
+
+            <div class="navbar-header">
+                {{#link-to "admin" class="navbar-brand"}}JellyFish Sale {{/link-to}}
+            </div>
+            <ul class="nav navbar-nav">
+                <li>{{#link-to "admin" }}Home{{/link-to}}</li>
+                <li class="active">{{#link-to "productlist" }}Products{{/link-to}}</li>
+                <li>{{#link-to "addproduct" }}Add Products{{/link-to}}</li>
+                <li>{{#link-to "addcategory" }}Add Category{{/link-to}}</li>
+                <li>{{#link-to "managerole" }}Mange User{{/link-to}}</li>
+                <li>{{#link-to "registration" }}Create User{{/link-to}}</li>
+            </ul>
+        </div>
+    </nav>
+    {{/if}}
+</header>
+
+{{outlet}}
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    body {
+        font-family: "Lato", sans-serif
+    }
+    
+    .mySlides {
+        display: none
+    }
+</style>
+
+<body>
+    <!-- Navbar -->
+    {{#if isUser}}
+    <div class="w3-top">
+        <div class="w3-bar w3-black w3-card-2">
+            <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()"
+                title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+                {{#link-to "home" class="w3-bar-item w3-button w3-padding-large" }}HOME {{/link-to}}
+                <a href="#band" class="w3-bar-item w3-button w3-padding-large w3-hide-small">ABOUT US</a> {{#link-to "saleonjft"
+                class="w3-bar-item w3-button w3-padding-large w3-hide-small" }} SALE ON JFT {{/link-to}}
+                <a href="#contact" class="w3-bar-item w3-button w3-padding-large w3-hide-small">CONTACT</a>
+                <div class="w3-dropdown-hover w3-hide-small">
+                    <button class="w3-padding-large w3-button" title="More">OFFER ZONE <i class="fa fa-caret-down"></i></button>
+                    <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                        <a href="#" class="w3-bar-item w3-button">
+                            Today's Offer
+                            <span class="pull-right badge buyNowSpan"> Offers </span> 
+                            <span class="pull-right badge"> 2 </span> 
+                        </a>
+                        <a href="#" class="w3-bar-item w3-button">
+                            Tomarrow's Offer 
+                            <span class="pull-right badge buyNowSpan"> Offers </span>
+                            <span class="pull-right badge"> 3 </span>
+                        </a>
+                        <a href="#" class="w3-bar-item w3-button">
+                            Coming Sunday's Offer
+                            <span class="pull-right badge buyNowSpan"> Offers </span>
+                            <span class="pull-right badge"> 8 </span> 
+                            
+                        </a>
+                    </div>
+                </div>
+                <a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class=""></i></a>                {{#if isLogin}} {{sweet-alert title="Login Succesfully" text="As User" type="success"}}
+                <a href="#" class="navbar-brand navbar-right" {{action "signOutAction"}}>Sign Out </a> {{#link-to "registration"
+                class="navbar-brand navbar-right"}}Raj Ojha{{/link-to}} {{else}} {{#link-to "login" class="navbar-brand navbar-right"}}Login{{/link-to}}
+                {{#link-to "registration" class="navbar-brand navbar-right"}}Register{{/link-to}} {{/if}} {{#link-to "carts"
+                class=" navbar-brand navbar-right btn btn-info btn-lg" }}
+                <span class="glyphicon glyphicon-shopping-cart"></span> - {{cart}} {{/link-to}}
+        </div>
+    </div>
+
+    <!-- Navbar on small screens -->
+
+    <div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
+        <a href="#band" class="w3-bar-item w3-button w3-padding-large">ABOUT US</a>
+        <a href="#tour" class="w3-bar-item w3-button w3-padding-large">SALE CONTACT JFT</a>
+        <a href="#contact" class="w3-bar-item w3-button w3-padding-large">CONTACT</a>
+        <a href="#" class="w3-bar-item w3-button w3-padding-large">MERCH</a>
+    </div>
+
+    <!-- Page content -->
+    <div class="w3-content" style="max-width:2000px;margin-top:46px">
+
+        <!-- The Band Section -->
+        <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
+            <h2 class="w3-wide">ABOUT US</h2>
+            <p class="w3-opacity"><i>We love to sale products</i></p>
+            <p class="w3-justify">We have a middile ware to sale the usable and famous product to reach you. We also provide the service as a middleware
+                with the manufacuring comapny. tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing
+                elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <div class="w3-row w3-padding-32">
+                <div class="w3-third">
+                    <p>Gaurav Chauhan-CEO</p>
+                    <img src="{{Constant.CONTEXT_PATH}}assets/images/gaurav_sir.jpg" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
+                </div>
+                <div class="w3-third">
+                    <p>Ashutosh Ojha-Front-End Engineer</p>
+                    <img src="{{Constant.CONTEXT_PATH}}assets/images/ashutosh2.jpg" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
+                </div>
+                <div class="w3-third">
+                    <p>Gagan Chhabra-Back-End Engineer</p>
+                    <img src="{{Constant.CONTEXT_PATH}}assets/images/gagan.jpg" class="w3-round" alt="Random Name" style="width:60%">
+                </div>
+            </div>
+        </div>
+
+        <!-- The Contact Section -->
+        <div class="w3-container w3-content w3-padding-64" style="max-width:800px" id="contact">
+            <h2 class="w3-wide w3-center">CONTACT</h2>
+            <p class="w3-opacity w3-center"><i>Fan? Drop a note!</i></p>
+            <div class="w3-row w3-padding-32">
+                <div class="w3-col m6 w3-large w3-margin-bottom">
+                    <i class="fa fa-map-marker" style="width:30px"></i>G-76, Sector-63<br>
+                    <i class="fa fa-phone" style="width:30px"></i> Noida, Uttar Pradesh, 201301<br>
+                    <i class="fa fa-envelope" style="width:30px"> </i> Email: he@jellyfishtechnologies.com<br>
+                </div>
+                <div class="w3-col m6">
+                    <form action="/action_page.php" target="_blank">
+                        <div class="w3-row-padding" style="margin:0 -16px 8px -16px">
+                            <div class="w3-half">
+                                <input class="w3-input w3-border" type="text" placeholder="Name" required name="Name">
+                            </div>
+                            <div class="w3-half">
+                                <input class="w3-input w3-border" type="text" placeholder="Email" required name="Email">
+                            </div>
+                        </div>
+                        <input class="w3-input w3-border" type="text" placeholder="Message" required name="Message">
+                        <button class="w3-button w3-black w3-section w3-right" type="submit">SEND</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- End Page Content -->
+    </div>
+    <!-- Add Google Maps -->
+    {{/if}}
+
+    <footer class="footer scfooter_bottom">
+        <div class="wrapper">
+            <ul>
+                <p>© 2016 Company, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
+            </ul>
+            <div class="sc_copyright">
+                <img src="http://www.logodesignconsultant.com/images/category_based_logos/luxury-shoping-logo.gif" alt="">
+            </div>
+        </div>
+    </footer>
+</body>

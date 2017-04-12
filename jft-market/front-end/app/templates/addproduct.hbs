@@ -1,0 +1,46 @@
+<h1 class="text-center text-info"> || Add Product page || </h1>
+<div class="container">
+    <form {{action "addProduct" model on="submit" }}>
+        <h3 class="w3-wide w3-opacity text-center">
+            <span class="glyphicon glyphicon-thumbs-up"> </span> Add Product Form..
+            <span class="glyphicon glyphicon-thumbs-up"> </span>
+        </h3>
+        <div class="jumbotron">
+            <div class="text-danger">
+                <ul>
+                    {{#each model.msg as | ms |}}
+                    <li>{{ms}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+
+            <div class="form-group">
+                <label for='name'>Product Name</label> {{input value=model.name id='name' class="form-control"}}
+            </div>
+
+            <div class="form-group">
+                <label for='price'>Product Price</label> {{input value=model.price id='price' class="form-control"}}
+            </div>
+
+            <div class="form-group">
+                <label for='description'>Product Description</label> {{input value=model.description id='description' class="form-control"}}
+            </div>
+
+            <div class="form-group">
+                <label for='category'>Product Category</label>
+                <select class="form-control" onchange={{ action "chooseCategory" value="target.value" }}>
+                    <option value="Not Selected" >Select</option>
+                    {{#each model.categories as |category|}}
+                        <option value={{category.name}} >{{category.name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <div class="form-group text-center">
+                <button class="btn btn-primary" type="submit">Save</button>
+                <button class="btn" type="button">Reset</button>
+            </div>
+            {{#each prod1 as |pro|}} {{pro.data.name}} {{/each}} {{prod.name}}
+        </div>
+    </form>
+</div>

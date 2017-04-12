@@ -1,0 +1,32 @@
+<br/><br/><br/>
+<div class="container">
+    {{#each model.categories as | category |}}
+    <div class="col-md-2 catDiv" {{action "getProdByCat" category.name}}>
+        <h4 class="w3-opacity">{{category.name}}</h4>
+    </div>
+    {{/each}}
+</div>
+
+<div class="container">
+    {{#each model.catVal as | product |}}
+    <div class="jumbotron">
+        <div class="container">
+            {{!--
+            <h4>{{product.id}} </h4>--}}
+            <h2>{{product.attributes.name}}, &#8377; {{product.attributes.price}} Only</h2>
+            <p>{{product.attributes.description}}</p>
+            <p>
+                <a class="btn btn-default active btn" href="#" role="button">See Details &raquo;</a>
+                <button type="button" class="btn btn-success btn" {{action "buyNowAction" product}}>Buy Now</button>
+                <button type="button" class="btn btn-info btn" {{action "addToCart" product}}>Add to Cart</button>
+            </p>
+        </div>
+    </div>
+    <br/> {{/each}}
+</div>
+
+<div class="container">
+    {{#ember-image-slider content=model.images limit=40 shouldDisplayArrows=true as |image|}} {{/ember-image-slider}}
+</div>
+
+{{outlet}}

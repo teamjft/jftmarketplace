@@ -1,0 +1,28 @@
+<h2> This is user login Page </h2>
+<div class="container">
+    <form {{action "userLogin" model on="submit" }}> <br/>
+        <h2 class="w3-wide w3-opacity text-center"> Login Form</h2>
+        <div class="jumbotron">
+            {{#if invalidUser}}
+            <div class="text-danger">
+                <ul>
+                    <li>Invalid Credentials, Try Again!!!</li>
+                </ul>
+            </div>
+            {{/if}}
+            <div class="form-group">
+                <label for='email'>User Email</label> {{input value=model.email id='email' class="form-control"}}
+            </div>
+
+            <div class="form-group">
+                <label for='password'>Password</label> {{input value=model.password type='password' id='password' class="form-control"}}
+            </div>
+
+            <div class="form-group text-center">
+                <button class="btn btn-primary" type="submit">Login</button>
+                <button class="btn" type="button">Reset</button>
+            </div>
+        </div>
+    </form>
+</div>
+{{outlet}}
