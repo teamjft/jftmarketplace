@@ -14,6 +14,12 @@
         </repository>
     </repositories>
 
+    <properties>
+        <jersey.version>2.26-b01</jersey.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <ember.build.dir>../src/main/webapp/WEB-INF/resources</ember.build.dir>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -201,10 +207,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <properties>
-        <jersey.version>2.26-b01</jersey.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
     <build>
         <finalName>jft-market</finalName>
         <plugins>
@@ -276,7 +278,17 @@
                             <goal>ember</goal>
                         </goals>
                         <configuration>
-                            <arguments>build --output-path=../src/main/webapp/WEB-INF/resources</arguments>
+                            <arguments>build --output-path=${ember.build.dir}</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>ember build validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>ember</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>build --output-path=${ember.build.dir}</arguments>
                         </configuration>
                     </execution>
                 </executions>
