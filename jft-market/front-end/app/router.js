@@ -7,7 +7,7 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function () {
-  this.route('/', {path: "/market/login"})
+  this.route('/', {path: "/market"});
   this.route('registration', { path: "user/register" });
   this.route('productlist');
   this.route('addproduct', { path: "/product/add" });

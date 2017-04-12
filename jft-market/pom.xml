@@ -259,6 +259,17 @@
                     </execution>
 
                     <execution>
+                        <id>bower-install-dependencies</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>bower</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
                         <id>ember build</id>
                         <phase>generate-resources</phase>
                         <goals>
