@@ -1,0 +1,33 @@
+<h1 class="text-center text-info"> || Added Produts in Carts || </h1>
+<div class="container">
+    <h3 class="w3-wide w3-opacity text-center">
+        <span class="glyphicon glyphicon-thumbs-up"> </span> You have added the following products..
+        <span class="glyphicon glyphicon-thumbs-up"> </span>
+    </h3>
+    {{#each model.cartItems as |cartItem|}} {{cartItem.name}}
+    <div class="jumbotron">
+        <div class="container">
+            <h2>{{cartItem.name}}, &#8377; {{cartItem.price}} Only</h2>
+            <p>{{cartItem.description}}</p>
+            <p>
+                <a class="btn btn-warning btn" href="#" role="button">See Details &raquo;</a> 
+                {{#link-to "editproduct" product.id 
+                    class="btn btn-primary btn" }}Quantity &nbsp; <span class="badge"> (+1) </span> 
+                {{/link-to}}
+                <a class="btn btn-info btn" href="#" role="button">Remove</a>
+            </p>
+        </div>
+    </div>
+    {{else}}
+    
+    <br/>
+    <div class="text-center text-danger">
+        Sorry! You have not added any item in you cart yet.
+    </div>
+    {{/each}}
+    <div class="text-center">
+        {{#link-to "home" class="btn btn-primary text-center" }} Continue Shopping {{/link-to}}
+        <a href="#" class="btn btn-success text-center" {{action "buyNowAction" model.cartItems}}> Make Purchase Now </a>
+    </div>
+</div>
+{{outlet}}

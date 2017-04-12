@@ -1,0 +1,6 @@
+{
+  "name": "jft-sale",
+  "dependencies": {
+    "sweetalert2": "^6.1.0"
+  }
+}

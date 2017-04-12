@@ -1,0 +1,60 @@
+<h2> This is add shipping address page </h2>
+<div class="container">
+    <form {{action "shipAddress" model.address on="submit" }}>
+        <h2 class="w3-wide w3-opacity text-center">Add Shipping Address</h2>
+        <div class="text-danger">
+            <ul>
+                {{#each model.msg as | ms |}}
+                <li>{{ms}}</li>
+                {{/each}}
+            </ul>
+        </div>
+        
+        <div class="jumbotron">
+            <div class="form-group">
+                <label for='name'>Name</label> 
+                {{input value=model.address.name id='name' class="form-control"}}
+            </div>
+
+            <div class="form-group">
+                <label for='houseNo'>House no./Plot No</label> 
+                {{input value=model.address.houseNo id='houseNo' class="form-control"}}
+            </div>
+
+            <div class="form-group">
+                <label for='street'>Street/Area/Landmark/Locality</label> 
+                {{input value=model.address.street id='street' class="form-control"}}
+            </div>
+
+            <div class="form-group">
+                <label for='city'>City</label> 
+                {{input value=model.address.city id='city' class="form-control"}}
+            </div>
+
+            <div class="form-group">
+                <label for='state'>State</label> 
+                {{input value=model.address.state id='state' class="form-control"}}
+            </div>
+
+            <div class="form-group">
+                <label for='pincode'>Pincode</label> 
+                {{input value=model.address.pincode id='pincode' class="form-control"}}
+            </div>
+
+            <div class="form-group">
+                <label for='category'>Address Type</label>
+                <select class="form-control" onchange={{ action "chooseAddressType" value="target.value" }}>
+                    {{#each model.addressTypes as |addressType|}}
+                        <option value={{addressType}} >{{addressType}}</option>
+                    {{/each}}
+                </select> 
+            </div>
+        </div>
+
+        <div class="form-group text-center">
+            <button class="btn btn-primary" type="button">Back</button>
+            <button class="btn" type="submit">Next</button>
+        </div>
+    </form>
+</div>
+{{outlet}}

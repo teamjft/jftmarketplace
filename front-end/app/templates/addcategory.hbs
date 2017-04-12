@@ -1,0 +1,56 @@
+<h1 class="text-center text-info"> || Add Product Category Page || </h1>
+<div class="container">
+    <form {{action "addCategory" model.post on="submit" }}>
+        <h3 class="w3-wide w3-opacity text-center">
+            <span class="glyphicon glyphicon-thumbs-up"> </span> 
+            Add Category Form ...
+            <span class="glyphicon glyphicon-thumbs-up"> </span> 
+        </h3>
+        <div class="jumbotron">
+            <div class="text-danger">
+                <ul>
+                    {{#each model.post.msg as | ms |}}
+                    <li>{{ms}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="form-group">
+                <label for='name'>Category Name</label> 
+                {{input value=model.post.name id='name' class="form-control"}}
+            </div>
+            <div class="form-group">
+                <label for='description'>Category Description</label> 
+                {{input value=model.post.description id='description' class="form-control"}}
+            </div>
+            <div class="form-group text-center">
+                <button class="btn btn-primary" type="submit">Save</button>
+                <button class="btn" type="button">Reset</button>
+            </div>
+        </div>
+    </form>
+</div>
+<h3 class="w3-wide w3-opacity text-center"> Category Table </h3> <br/>
+<div class="container">
+    <table class="table table-striped table-bordered table-responsive">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each model.categories as | category |}}
+            <tr>
+                <td>{{category.id}} </td>
+                <td>{{category.name}}</td>
+                <td>{{category.description}}</td>
+                <td>{{#link-to "editcategory" category.id class="btn btn-primary btn" }}Edit{{/link-to}}</td>
+                <td><a href="#" {{action "deleteCategory" category}} class="btn btn-info btn" >Delete</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
