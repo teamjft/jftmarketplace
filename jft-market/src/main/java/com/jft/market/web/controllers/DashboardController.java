@@ -10,6 +10,6 @@ public class DashboardController {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home() {
-		return "dashboard/home";
+		return "index";
 	}
 }

@@ -6,7 +6,9 @@
 
     <security:http auto-config="true">
 
+        <security:intercept-url pattern="/" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/resources/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/logout" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/api/v1/user/create" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/api/v1/product/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
