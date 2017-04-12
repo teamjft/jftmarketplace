@@ -11,16 +11,13 @@ export default Ember.Controller.extend({
         editProduct(model) {
             console.log('c',model);
             var post = this.get(model.id);
-            this.get('store').push('productlist', model);
-            // this.get('store').findRecord('productlist', model.id, {reload:true}).then(function(product) {
-            //    console.log("=========================", product.get('name'))
-            //       product.set('name', model.get("name"));
-            //       product.set('description', model.get("description"));
-            //       product.set('price', model.get("price"));
-            //       product.save();
-            //     //console.log("product", product);
-            // });
-            //this.transitionToRoute('productlist');
+            this.get('store').findRecord('productlist', model.id).then(function(productResponse) {
+                productResponse.set('name', model.get("name"));
+                productResponse.set('description', model.get("description"));
+                productResponse.set('price', model.get("price"));
+                productResponse.save();
+            });
+            this.transitionToRoute('productlist');
         }
     }
 });
