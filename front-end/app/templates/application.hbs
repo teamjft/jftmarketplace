@@ -1,10 +1,10 @@
 <header>
-    {{#if isAdmin}}
-    {{sweet-alert title="Login Succesfully" text="As Administrator" type="success"}}
+    {{#if isAdmin}} 
+    {{!--{{sweet-alert title="Login Succesfully" text="As Administrator" type="success"}}--}}
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
-            <a href="#" class="navbar-brand navbar-right" {{action "signOutAction"}}> Sign Out </a>
-            {{#link-to "admin" class="navbar-brand navbar-right"}}Hello, Admin{{/link-to}} 
+            <a href="#" class="navbar-brand navbar-right" {{action "signOutAction"}}> Sign Out </a> {{#link-to "admin" class="navbar-brand
+            navbar-right"}}Hello, Admin{{/link-to}}
 
             <div class="navbar-header">
                 {{#link-to "admin" class="navbar-brand"}}JellyFish Sale {{/link-to}}
@@ -14,7 +14,8 @@
                 <li class="active">{{#link-to "productlist" }}Products{{/link-to}}</li>
                 <li>{{#link-to "addproduct" }}Add Products{{/link-to}}</li>
                 <li>{{#link-to "addcategory" }}Add Category{{/link-to}}</li>
-                <li>{{#link-to "managerole" }}Mange Role{{/link-to}}</li>
+                <li>{{#link-to "managerole" }}Mange User{{/link-to}}</li>
+                <li>{{#link-to "registration" }}Create User{{/link-to}}</li>
             </ul>
         </div>
     </nav>
@@ -46,8 +47,8 @@
             <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()"
                 title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
                 {{#link-to "home" class="w3-bar-item w3-button w3-padding-large" }}HOME {{/link-to}}
-                <a href="#band" class="w3-bar-item w3-button w3-padding-large w3-hide-small">ABOUT US</a>
-                {{#link-to "saleonjft" class="w3-bar-item w3-button w3-padding-large w3-hide-small" }} SALE ON JFT {{/link-to}}
+                <a href="#band" class="w3-bar-item w3-button w3-padding-large w3-hide-small">ABOUT US</a> {{#link-to "saleonjft"
+                class="w3-bar-item w3-button w3-padding-large w3-hide-small" }} SALE ON JFT {{/link-to}}
                 <a href="#contact" class="w3-bar-item w3-button w3-padding-large w3-hide-small">CONTACT</a>
                 <div class="w3-dropdown-hover w3-hide-small">
                     <button class="w3-padding-large w3-button" title="More">OFFER ZONE <i class="fa fa-caret-down"></i></button>
@@ -70,18 +71,12 @@
                         </a>
                     </div>
                 </div>
-                <a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class=""></i></a>
-                {{#if isLogin}}
-                    {{sweet-alert title="Login Succesfully" text="As User" type="success"}}
-                    <a href="#" class="navbar-brand navbar-right" {{action "signOutAction"}} >Sign Out </a>
-                    {{#link-to "registration" class="navbar-brand navbar-right"}}Raj Ojha{{/link-to}}
-                {{else}}
-                    {{#link-to "login" class="navbar-brand navbar-right"}}Login{{/link-to}} 
-                    {{#link-to "registration" class="navbar-brand navbar-right"}}Register{{/link-to}}
-                {{/if}}
-                {{#link-to "carts" class=" navbar-brand navbar-right btn btn-info btn-lg" }}
-                    <span class="glyphicon glyphicon-shopping-cart"></span> - {{cart}}
-                {{/link-to}}
+                <a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class=""></i></a>                {{#if isLogin}} {{sweet-alert title="Login Succesfully" text="As User" type="success"}}
+                <a href="#" class="navbar-brand navbar-right" {{action "signOutAction"}}>Sign Out </a> {{#link-to "registration"
+                class="navbar-brand navbar-right"}}Raj Ojha{{/link-to}} {{else}} {{#link-to "login" class="navbar-brand navbar-right"}}Login{{/link-to}}
+                {{#link-to "registration" class="navbar-brand navbar-right"}}Register{{/link-to}} {{/if}} {{#link-to "carts"
+                class=" navbar-brand navbar-right btn btn-info btn-lg" }}
+                <span class="glyphicon glyphicon-shopping-cart"></span> - {{cart}} {{/link-to}}
         </div>
     </div>
 
@@ -96,7 +91,7 @@
 
     <!-- Page content -->
     <div class="w3-content" style="max-width:2000px;margin-top:46px">
-        
+
         <!-- The Band Section -->
         <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
             <h2 class="w3-wide">ABOUT US</h2>

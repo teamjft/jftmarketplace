@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import sweetAlert from 'ember-sweetalert';
 
 export default Ember.Controller.extend({
     
@@ -8,12 +9,34 @@ export default Ember.Controller.extend({
 
     actions: {
         getProdByCat(data) {
-            const serviceObj = this.get('store1');
-            let products = serviceObj.getProducts();
-            let catVal = products.filter(function (element) {
-                return data === element.category;
-            });
-            Ember.set(this.get('model'), 'catVal', catVal);
+            let self = this;
+            $.ajax({
+                headers: { 
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json' 
+                },
+                type: 'GET',
+                url: 'http://localhost:9191/market/api/v1/product/category/'+ data,
+                dataType: 'json'
+            }).done(function(res){
+                
+                console.log('res', res);
+                if(res.data.length == 0){
+                    sweetAlert("No Products in slected category", "", "error");
+                }
+                Ember.set(self.get('model'), 'catVal', res.data);
+            }).fail(function(err){
+                console.log('err', err)
+            }) //serviceObj.getProducts();
+            // this.get('store').findRecord('productlist', data).then(function(res){
+            //     console.log(res);
+            // }).catch(function(err){
+            //     console.log(err);
+            // });
+            // let catVal = products.filter(function (element) {
+            //     return data === element.category;
+            // });
+           
         },
 
         buyNowAction(data) {

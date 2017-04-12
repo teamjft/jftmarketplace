@@ -4,9 +4,9 @@ import sweetAlert from 'ember-sweetalert';
 
 export default Ember.Controller.extend({
   
-  isAdmin: false,
+  isAdmin: true  ,
 
-  isUser: true,
+  isUser: false,
   
   isLogin: false,
 

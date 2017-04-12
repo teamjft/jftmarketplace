@@ -6,11 +6,9 @@ export default Ember.Route.extend(ResetScrollPositionMixin, {
   store1: Ember.inject.service(),
 
   model: function (params) {
-    const categories = this.get('store1');
-    let category = categories.getCategories()[params.cat_id - 1];
     let data = {};
-    data.categories = Object.create(categories.getCategories());
-    data.category = category;
+    data.categories = this.get('store').peekAll('categorylist');
+    data.category = this.get('store').findRecord('category', params.cat_id);
     return data;
   },
 
@@ -21,5 +19,5 @@ export default Ember.Route.extend(ResetScrollPositionMixin, {
       this.transitionTo('addcategory');
     }
   }
-  
+
 });
