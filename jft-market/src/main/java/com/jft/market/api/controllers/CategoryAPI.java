@@ -42,7 +42,7 @@ public interface CategoryAPI {
 	ResponseEntity readCategories();
 
 	@RequestMapping(value = {"update/{categoryUuid}"},
-			method = RequestMethod.PUT,
+			method = RequestMethod.PATCH,
 			produces = {MediaType.APPLICATION_JSON_VALUE},
 			consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public

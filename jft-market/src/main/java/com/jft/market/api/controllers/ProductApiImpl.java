@@ -67,9 +67,7 @@ public class ProductApiImpl implements ProductApi {
 	@Override
 	public ResponseEntity deleteProduct(@PathVariable("productUuid") String productUuid) {
 		productService.deleteProduct(productUuid);
-		SuccessWS successWS = new SuccessWS();
-		successWS.setStatus("success");
-		BeanAttribute productBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS("success"), ApiConstants.PRODUCT);
+		BeanAttribute productBeanAttribute = new BeanAttribute(productUuid, new SuccessWS("success"), ApiConstants.PRODUCT);
 		return new ResponseEntity(new EmberResponse<>(productBeanAttribute), HttpStatus.OK);
 
 	}
@@ -93,7 +91,7 @@ public class ProductApiImpl implements ProductApi {
 			throw new InvalidRequestException(bindingResult);
 		}
 		productService.updateProduct(productWS, productUuid);
-		BeanAttribute productBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS("success"), ApiConstants.PRODUCT);
+		BeanAttribute productBeanAttribute = new BeanAttribute(productUuid, new SuccessWS("success"), ApiConstants.PRODUCT);
 		return new ResponseEntity(new EmberResponse<>(productBeanAttribute), HttpStatus.OK);
 	}
 }

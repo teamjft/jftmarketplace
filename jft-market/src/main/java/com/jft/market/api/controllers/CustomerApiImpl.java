@@ -54,7 +54,7 @@ public class CustomerApiImpl implements CustomerApi {
 			throw new EntityAlreadyExist(ExceptionConstants.CUSTOMER_ALREADY_EXISTS);
 		}
 		customerService.convertWStoEntityAndSave(customerWS);
-		BeanAttribute customerBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.CUSTOMER);
+		BeanAttribute customerBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.REGISTRATION);
 		return new ResponseEntity(new EmberResponse<>(customerBeanAttribute), HttpStatus.OK);
 	}
 
@@ -91,7 +91,7 @@ public class CustomerApiImpl implements CustomerApi {
 			throw new EntityNotFoundException(ExceptionConstants.CUSTOMER_NOT_FOUND);
 		}
 		customerService.deleteCustomer(customer);
-		BeanAttribute customerBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.CUSTOMER);
+		BeanAttribute customerBeanAttribute = new BeanAttribute(customerUuid, new SuccessWS(ApiConstants.SUCCESS), ApiConstants.CUSTOMER);
 		return new ResponseEntity(new EmberResponse<>(customerBeanAttribute), HttpStatus.OK);
 	}
 

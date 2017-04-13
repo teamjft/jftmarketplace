@@ -61,7 +61,7 @@ public class CategoryApiImpl implements CategoryAPI {
 	@Override
 	public ResponseEntity updateCategory(@RequestBody CategoryWS categoryWS, @PathVariable("categoryUuid") String categoryUuid) {
 		categoryService.updateCategory(categoryWS, categoryUuid);
-		BeanAttribute categorytBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.CATEGORY);
+		BeanAttribute categorytBeanAttribute = new BeanAttribute(categoryUuid, new SuccessWS(ApiConstants.SUCCESS), ApiConstants.CATEGORY);
 		return new ResponseEntity(new EmberResponse<>(categorytBeanAttribute), HttpStatus.OK);
 	}
 

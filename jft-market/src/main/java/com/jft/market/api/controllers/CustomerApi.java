@@ -51,7 +51,7 @@ public interface CustomerApi {
 
 
 	@RequestMapping(value = {"update/{customerUuid}"},
-			method = RequestMethod.PUT,
+			method = RequestMethod.PATCH,
 			produces = {MediaType.APPLICATION_JSON_VALUE},
 			consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public
