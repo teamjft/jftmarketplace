@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import config from './config/environment';
+import Constant from 'jft-sale/constant';
 
 const Router = Ember.Router.extend({
   location: config.locationType,
@@ -7,20 +8,20 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function () {
-  this.route('/', {path: "/market"});
-  this.route('registration', { path: "user/register" });
-  this.route('productlist');
-  this.route('addproduct', { path: "/product/add" });
-  this.route('editproduct', { path: "/product/edit/:prod_id" });
-  this.route('addcategory', { path: "/categories" });
-  this.route('editcategory', { path: "/category/:cat_id" });
+  this.route('/', {path: Constant.CONTEXT_PATH});
+  this.route('registration', { path: "/market/user/register" });
+  this.route('productlist', { path: "/market/productlist" });
+  this.route('addproduct', { path: "/market/product/add" });
+  this.route('editproduct', { path: "/market/product/edit/:prod_id" });
+  this.route('addcategory', { path: "/market/categories" });
+  this.route('editcategory', { path: "/market/category/:cat_id" });
   this.route('rental');
-  this.route('login', { path: "user/login" });
-  this.route('home');
+  this.route('login', { path: "/market/user/login" });
+  this.route('home', { path: "/market/home" });
   this.route('home-page');
   this.route('shippingaddress');
   this.route('summarypage');
-  this.route('admin');
+  this.route('admin', { path: "/market/admin" });
   this.route('carts');
   this.route('managerole');
   this.route('saleonjft');
