@@ -23,12 +23,12 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	@Transactional
-	public void createCategory(CategoryWS categoryWS) {
+	public String createCategory(CategoryWS categoryWS) {
 		Category category = findCategoryByName(categoryWS.getName());
-		if (category == null || !category.getName().equals(categoryWS.getName())) {
-			Category category1 = convertWsToEntity(categoryWS);
-			saveCategory(category1);
-		}
+		Preconditions.check(category != null, ExceptionConstants.CATEGORY_ALREADY_EXIST);
+		category = convertWsToEntity(categoryWS);
+		saveCategory(category);
+		return category.getUuid();
 	}
 
 	@Override

@@ -51,4 +51,7 @@ public class Product extends TimestampedFieldObject {
 			inverseJoinColumns = {@JoinColumn(name = "category_id")}
 	)
 	private Set<Category> categories = new HashSet<>();
+
+	@ManyToMany
+	private Set<OrderCart> orderCarts = new HashSet<>();
 }

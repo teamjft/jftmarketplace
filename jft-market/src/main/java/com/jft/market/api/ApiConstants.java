@@ -15,11 +15,10 @@ public class ApiConstants {
 	public static final String PRODUCT = "product";
 	public static final String CUSTOMERS = "customerlist";
 	public static final String CUSTOMER = "customer";
-	public static final String USERS = "userlist";
-	public static final String USER = "user";
+
 	public static final String REGISTRATION = "registration";
 	public static final String PAYMENT_INSTRUMENT = "paymentinstrument";
-	public static final String PAYMENT_INSTRUMENTS = "paymentinstruments";
+	public static final String ORDERCART = "ordercart";
 
 	public static String getSucessId() {
 		return UUID.randomUUID().toString();

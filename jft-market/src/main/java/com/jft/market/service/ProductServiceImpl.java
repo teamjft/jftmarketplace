@@ -190,5 +190,14 @@ public class ProductServiceImpl implements ProductService {
 		product.setPrice(productWS.getPrice());
 		productRepository.save(product);
 	}
+
+	@Override
+	@Transactional
+	public void saveProduct(Product product) {
+		if (StringUtils.isEmpty(product.getUuid())) {
+			product.setUuid(UUID.randomUUID().toString());
+		}
+		productRepository.save(product);
+	}
 }
 
