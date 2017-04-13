@@ -51,7 +51,7 @@ public interface UserApi extends BaseApi {
 	ResponseEntity deleteUser(@PathVariable("userUuid") String userUuid);
 
 	@RequestMapping(value = {"update/{userUuid}"},
-			method = RequestMethod.PUT,
+			method = RequestMethod.PATCH,
 			produces = {MediaType.APPLICATION_JSON_VALUE},
 			consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public
@@ -61,7 +61,7 @@ public interface UserApi extends BaseApi {
 
 
 	@RequestMapping(value = {"update/user/{userUuid}/role"},
-			method = RequestMethod.PUT,
+			method = RequestMethod.PATCH,
 			produces = {MediaType.APPLICATION_JSON_VALUE},
 			consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public

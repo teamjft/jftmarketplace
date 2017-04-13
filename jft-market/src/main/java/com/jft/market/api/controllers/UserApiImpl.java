@@ -79,7 +79,7 @@ public class UserApiImpl implements UserApi {
 	public ResponseEntity updateUser(@RequestBody UserWS userWS, @PathVariable("userUuid") String userUuid) {
 		userService.validateUserWS(userWS);
 		userService.updateUser(userWS, userUuid);
-		BeanAttribute userBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.REGISTRATION);
+		BeanAttribute userBeanAttribute = new BeanAttribute(userUuid, new SuccessWS(ApiConstants.SUCCESS), ApiConstants.REGISTRATION);
 		return new ResponseEntity(new EmberResponse<>(userBeanAttribute), HttpStatus.OK);
 	}
 
@@ -88,7 +88,7 @@ public class UserApiImpl implements UserApi {
 		List<String> roles = Arrays.asList(roleWS.getRoles());
 		Preconditions.check(roles.isEmpty(), ExceptionConstants.NO_ROLE_TO_SAVE);
 		userService.updateUserRoles(userUuid);
-		BeanAttribute userBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.REGISTRATION);
+		BeanAttribute userBeanAttribute = new BeanAttribute(userUuid, new SuccessWS(ApiConstants.SUCCESS), ApiConstants.REGISTRATION);
 		return new ResponseEntity(new EmberResponse<>(userBeanAttribute), HttpStatus.OK);
 	}
 }
