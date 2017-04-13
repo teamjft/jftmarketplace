@@ -42,5 +42,10 @@ public class ExceptionConstants {
 
 	public static final String CUSTOMER_PAYLOAD_EMPTY = "Customer payload is empty. Please provide valid payload.";
 
+	public static final String CUSTOMER_ALREADY_HAS_ORDER_CART = "Customer already has order cart";
+
+	public static final String NO_ORDER_CART_FOUND = "Order cart not found";
+	public static final String PRODUCT_ALREADY_ADDED_INTO_CART = "Product already added into cart.";
+
 
 }

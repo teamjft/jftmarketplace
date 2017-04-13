@@ -35,4 +35,6 @@ public interface ProductService {
 	public Boolean isProductEnabled(Product product);
 
 	public void updateAndSaveProduct(Product product, ProductWS productWS);
+
+	public void saveProduct(Product product);
 }

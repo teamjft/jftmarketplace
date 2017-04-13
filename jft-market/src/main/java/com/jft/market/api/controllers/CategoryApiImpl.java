@@ -35,15 +35,15 @@ public class CategoryApiImpl implements CategoryAPI {
 		if (bindingResult.hasErrors()) {
 			throw new InvalidRequestException(bindingResult);
 		}
-		categoryService.createCategory(categoryWS);
-		BeanAttribute categorytBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.CATEGORY);
+		String uuid = categoryService.createCategory(categoryWS);
+		BeanAttribute categorytBeanAttribute = new BeanAttribute(uuid, new SuccessWS(ApiConstants.SUCCESS), ApiConstants.CATEGORY);
 		return new ResponseEntity(new EmberResponse<>(categorytBeanAttribute), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity readCategory(@PathVariable("categoryUuid") String categoryUuid) {
 		CategoryWS categoryWS = categoryService.readCategory(categoryUuid);
-		BeanAttribute categorytBeanAttribute = new BeanAttribute(categoryWS.getUuid(), categoryWS, ApiConstants.CATEGORIES);
+		BeanAttribute categorytBeanAttribute = new BeanAttribute(categoryWS.getUuid(), categoryWS, ApiConstants.CATEGORY);
 		return new ResponseEntity(new EmberResponse<>(categorytBeanAttribute), HttpStatus.OK);
 	}
 
@@ -52,7 +52,7 @@ public class CategoryApiImpl implements CategoryAPI {
 		List<CategoryWS> categories = categoryService.readCategoriesWS();
 		List<BeanAttribute> categoryBeanAttributes = new ArrayList<>();
 		categories.forEach(categoryWS -> {
-			BeanAttribute categorytBeanAttribute = new BeanAttribute(categoryWS.getUuid(), categoryWS, ApiConstants.CATEGORIES);
+			BeanAttribute categorytBeanAttribute = new BeanAttribute(categoryWS.getUuid(), categoryWS, ApiConstants.CATEGORY);
 			categoryBeanAttributes.add(categorytBeanAttribute);
 		});
 		return new ResponseEntity(new EmberResponse<>(categoryBeanAttributes), HttpStatus.OK);

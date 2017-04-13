@@ -7,7 +7,7 @@ import com.jft.market.model.Category;
 
 public interface CategoryService {
 
-	public void createCategory(CategoryWS categoryWS);
+	public String createCategory(CategoryWS categoryWS);
 
 	public Category convertWsToEntity(CategoryWS categoryWS);
 
