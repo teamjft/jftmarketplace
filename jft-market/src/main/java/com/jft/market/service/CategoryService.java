@@ -30,4 +30,6 @@ public interface CategoryService {
 	public void updateCategory(CategoryWS categoryWS, String uuid);
 
 	public void deleteCategory(String uuid);
+
+	public boolean isValidCategory(Category category);
 }
