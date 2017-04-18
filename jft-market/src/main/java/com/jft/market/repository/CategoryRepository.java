@@ -17,4 +17,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 	public List<Category> findByNameIn(Collection<String> nameList);
 
 	public List<Category> findAllByDeleted(Boolean isDeleted);
+
+	public List<Category> findBycategory(Category category);
 }

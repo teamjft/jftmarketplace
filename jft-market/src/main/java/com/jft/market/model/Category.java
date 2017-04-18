@@ -3,11 +3,15 @@ package com.jft.market.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -31,4 +35,11 @@ public class Category extends TimestampedFieldObject {
 
 	@ManyToMany(mappedBy = "categories")
 	private Set<Product> products = new HashSet<>();
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "parent_category_id")
+	private Category category;
+
+	@OneToMany(mappedBy = "category")
+	private Set<Category> subCategories = new HashSet<>();
 }

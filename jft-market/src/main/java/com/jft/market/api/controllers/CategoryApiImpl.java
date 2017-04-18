@@ -21,14 +21,17 @@ import com.jft.market.api.ws.EmberResponse;
 import com.jft.market.api.ws.SuccessWS;
 import com.jft.market.exceptions.InvalidRequestException;
 import com.jft.market.service.CategoryService;
+import com.jft.market.service.SubCategoryService;
 
 @RestController
 @CrossOrigin
 public class CategoryApiImpl implements CategoryAPI {
 
-
 	@Autowired
 	private CategoryService categoryService;
+
+	@Autowired
+	private SubCategoryService subCategoryService;
 
 	@Override
 	public ResponseEntity createCategory(@Valid @RequestBody CategoryWS categoryWS, BindingResult bindingResult) {
@@ -70,5 +73,23 @@ public class CategoryApiImpl implements CategoryAPI {
 		categoryService.deleteCategory(uuid);
 		BeanAttribute categorytBeanAttribute = new BeanAttribute(uuid, new SuccessWS(ApiConstants.SUCCESS), ApiConstants.CATEGORY);
 		return new ResponseEntity(new EmberResponse<>(categorytBeanAttribute), HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity createSubCategory(@Valid @RequestBody CategoryWS subCategoryWS, BindingResult bindingResult, @PathVariable("categoryUuid") String categoryUuid) {
+		String subCategoryUuid = subCategoryService.createSubCategory(subCategoryWS, categoryUuid);
+		BeanAttribute subCategorytBeanAttribute = new BeanAttribute(subCategoryUuid, new SuccessWS(ApiConstants.SUCCESS), ApiConstants.CATEGORY);
+		return new ResponseEntity(new EmberResponse<>(subCategorytBeanAttribute), HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity readAllSubCategoriesForParentCategory(@PathVariable("categoryUuid") String parentcategoryUuid) {
+		List<CategoryWS> categories = subCategoryService.readAllSubCategoriesForParentCategory(parentcategoryUuid);
+		List<BeanAttribute> categoryBeanAttributes = new ArrayList<>();
+		categories.forEach(categoryWS -> {
+			BeanAttribute categorytBeanAttribute = new BeanAttribute(categoryWS.getUuid(), categoryWS, ApiConstants.CATEGORY);
+			categoryBeanAttributes.add(categorytBeanAttribute);
+		});
+		return new ResponseEntity(new EmberResponse<>(categoryBeanAttributes), HttpStatus.OK);
 	}
 }

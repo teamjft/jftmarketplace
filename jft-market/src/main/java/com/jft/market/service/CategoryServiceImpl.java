@@ -86,7 +86,6 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	@Transactional
 	public List<Category> readCategories() {
-		//List<Category> categories = categoryRepository.findAll();
 		List<Category> categories = categoryRepository.findAllByDeleted(Boolean.FALSE);
 		Preconditions.check(categories == null, ExceptionConstants.CATEGORY_NOT_FOUND);
 		return categories;
@@ -133,5 +132,10 @@ public class CategoryServiceImpl implements CategoryService {
 		category.setDeleted(Boolean.TRUE);
 		category.setEnabled(Boolean.FALSE);
 		saveCategory(category);
+	}
+
+	@Override
+	public boolean isValidCategory(Category category) {
+		return (category.getDeleted().equals(Boolean.FALSE) && category.getEnabled().equals(Boolean.TRUE)) ? true : false;
 	}
 }

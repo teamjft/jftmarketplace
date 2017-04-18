@@ -57,4 +57,21 @@ public interface CategoryAPI {
 	@ResponseBody
 	ResponseEntity deleteCategory(@PathVariable("uuid") String uuid);
 
+	@RequestMapping(value = {"{categoryUuid}/subcategory"},
+			method = RequestMethod.POST,
+			produces = {MediaType.APPLICATION_JSON_VALUE},
+			consumes = {MediaType.APPLICATION_JSON_VALUE})
+	public
+	@ResponseBody
+	ResponseEntity createSubCategory(@Valid @RequestBody CategoryWS categoryWS,
+									 BindingResult bindingResult,
+									 @PathVariable("categoryUuid") String categoryUuid);
+
+	@RequestMapping(value = {"{categoryUuid}/subcategories"},
+			method = RequestMethod.GET,
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public
+	@ResponseBody
+	ResponseEntity readAllSubCategoriesForParentCategory(@PathVariable("categoryUuid") String parentcategoryUuid);
+
 }
