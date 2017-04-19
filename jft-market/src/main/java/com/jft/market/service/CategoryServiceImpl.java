@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.EntityManagerFactory;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,14 +14,22 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jft.market.api.ws.CategoryWS;
 import com.jft.market.exceptions.ExceptionConstants;
 import com.jft.market.model.Category;
+import com.jft.market.model.QCategory;
 import com.jft.market.repository.CategoryRepository;
 import com.jft.market.util.Preconditions;
+import com.mysema.query.jpa.JPQLQuery;
+import com.mysema.query.jpa.impl.JPAQuery;
+import com.mysema.query.types.Predicate;
+
 
 @Service("categoryService")
 public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
+
+	@Autowired
+	private EntityManagerFactory entityManagerFactory;
 
 	@Override
 	@Transactional
@@ -59,7 +69,10 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public CategoryWS readCategory(String uuid) {
-		Category category = readCategoryByUuid(uuid);
+		QCategory qCategory = QCategory.category1;
+		JPQLQuery query = new JPAQuery(entityManagerFactory.createEntityManager());
+		Predicate predicate = qCategory.uuid.eq(uuid);
+		Category category = query.from(qCategory).where(predicate).uniqueResult(qCategory);
 		Preconditions.check(category == null, ExceptionConstants.CATEGORY_NOT_FOUND);
 		Preconditions.check(category.getDeleted().equals(Boolean.TRUE), ExceptionConstants.CATEGORY_IS_DELETED);
 		return convertEntityToWS(category);
@@ -86,7 +99,10 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	@Transactional
 	public List<Category> readCategories() {
-		List<Category> categories = categoryRepository.findAllByDeleted(Boolean.FALSE);
+		QCategory qCategory = QCategory.category1;
+		JPQLQuery query = new JPAQuery(entityManagerFactory.createEntityManager());
+		Predicate isEnabled = qCategory.enabled.eq(Boolean.TRUE).and(qCategory.deleted.eq(Boolean.FALSE));
+		List<Category> categories = query.from(qCategory).where(isEnabled).list(qCategory);
 		Preconditions.check(categories == null, ExceptionConstants.CATEGORY_NOT_FOUND);
 		return categories;
 	}

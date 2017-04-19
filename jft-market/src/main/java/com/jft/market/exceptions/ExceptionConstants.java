@@ -46,6 +46,7 @@ public class ExceptionConstants {
 
 	public static final String NO_ORDER_CART_FOUND = "Order cart not found";
 	public static final String PRODUCT_ALREADY_ADDED_INTO_CART = "Product already added into cart.";
+	public static final String PRODUCT_NOT_ASSOCIATED_TO_CART = "Product not associated to this cart.";
 
 
 }

@@ -29,4 +29,13 @@ public interface OrderCartApi {
 	@ResponseBody
 	ResponseEntity createOrderCartForCustomer(@PathVariable("customerUuid") String customerUuid,
 											  @PathVariable("productUuid") String productUuid);
+
+
+	@RequestMapping(value = {"{ordercartUuid}/remove/product/{productUuid}"},
+			method = RequestMethod.POST,
+			produces = {MediaType.APPLICATION_JSON_VALUE})
+	public
+	@ResponseBody
+	ResponseEntity deleteProductFromOrderCart(@PathVariable("ordercartUuid") String ordercartUuid,
+											  @PathVariable("productUuid") String productUuid);
 }

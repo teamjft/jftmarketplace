@@ -188,11 +188,17 @@
             <artifactId>litle-sdk-for-java</artifactId>
             <version>9.3.3</version>
         </dependency>
-        <dependency>
-            <groupId>com.mysema.querydsl</groupId>
-            <artifactId>querydsl-jpa</artifactId>
-            <version>3.7.4</version>
-        </dependency>
+        <!--   <dependency>
+               <groupId>com.querydsl</groupId>
+               <artifactId>querydsl-jpa</artifactId>
+               <version>4.1.4</version>
+           </dependency>
+
+           <dependency>
+               <groupId>com.querydsl</groupId>
+               <artifactId>querydsl-apt</artifactId>
+               <version>4.1.4</version>
+           </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/com.mysema.querydsl/querydsl-apt -->
         <dependency>
@@ -200,6 +206,26 @@
             <artifactId>querydsl-apt</artifactId>
             <version>3.7.4</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.mysema.querydsl/querydsl-jpa -->
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>3.7.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-core</artifactId>
+            <version>3.7.4</version>
+        </dependency>
+        <!--
+
+                &lt;!&ndash; https://mvnrepository.com/artifact/com.querydsl/querydsl-core &ndash;&gt;
+                <dependency>
+                    <groupId>com.querydsl</groupId>
+                    <artifactId>querydsl-core</artifactId>
+                    <version>4.1.4</version>
+                </dependency>-->
 
 
     </dependencies>
@@ -232,7 +258,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>src/main/java/com/jft/market/qentities</outputDirectory>
-                            <processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
+                            <processor>com.mysema.query.apt.jpa.JPAAnnotationng-Processor</processor>
                         </configuration>
                     </execution>
                 </executions>
