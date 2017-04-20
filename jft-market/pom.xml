@@ -17,8 +17,18 @@
     <properties>
         <jersey.version>2.26-b01</jersey.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <npm.build.phase>generate-resources</npm.build.phase>
         <ember.build.dir>../src/main/webapp/WEB-INF/resources</ember.build.dir>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>skip-npm</id>
+            <properties>
+                <npm.build.phase>none</npm.build.phase>
+            </properties>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>
@@ -305,7 +315,7 @@
 
                     <execution>
                         <id>npm-install-dependencies</id>
-                        <phase>generate-resources</phase>
+                        <phase>${npm.build.phase}</phase>
                         <goals>
                             <goal>npm</goal>
                         </goals>
@@ -316,7 +326,7 @@
 
                     <execution>
                         <id>bower-install-dependencies</id>
-                        <phase>generate-resources</phase>
+                        <phase>${npm.build.phase}</phase>
                         <goals>
                             <goal>bower</goal>
                         </goals>
@@ -327,7 +337,7 @@
 
                     <execution>
                         <id>ember build</id>
-                        <phase>generate-resources</phase>
+                        <phase>${npm.build.phase}</phase>
                         <goals>
                             <goal>ember</goal>
                         </goals>
