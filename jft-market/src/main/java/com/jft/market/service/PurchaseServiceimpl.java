@@ -1,16 +1,16 @@
 package com.jft.market.service;
 
+import static com.jft.market.model.QPurchaseOrder.purchaseOrder;
+
 import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,8 +27,12 @@ import com.jft.market.repository.CustomerRepository;
 import com.jft.market.repository.OrderRepository;
 import com.jft.market.repository.PaymentInstrumentRepository;
 import com.jft.market.repository.ProductRepository;
+import com.jft.market.util.EntityPredicates;
 import com.jft.market.util.Preconditions;
 import com.litle.sdk.generate.SaleResponse;
+import com.mysema.query.jpa.JPQLQuery;
+import com.mysema.query.jpa.impl.JPAQuery;
+import com.mysema.query.types.Predicate;
 
 
 @Slf4j
@@ -50,8 +54,8 @@ public class PurchaseServiceimpl implements PurchaseService {
 	@Autowired
 	private OrderRepository orderRepository;
 
-	@Autowired
-	EntityManager entityManager;
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	public final String successResponse = "000";
 
@@ -120,10 +124,10 @@ public class PurchaseServiceimpl implements PurchaseService {
 	@Override
 	@Transactional
 	public List<PurchaseOrder> getOrdersByProductId(Product product) {
-		Session session = entityManager.unwrap(Session.class);
-		Criteria criteria = session.createCriteria(PurchaseOrder.class);
-		criteria.add(Restrictions.eq("product", product));
-		return criteria.list();
+		JPQLQuery query = new JPAQuery(entityManager);
+		Predicate predicate = purchaseOrder.product.eq(product).
+				and(EntityPredicates.isTimestampedFieldEnabledAndNotDeleted(purchaseOrder._super));
+		return query.from(purchaseOrder).where(predicate).list(purchaseOrder);
 	}
 
 	@Override

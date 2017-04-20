@@ -1,9 +1,12 @@
 package com.jft.market.service;
 
+import static com.jft.market.model.QCategory.category1;
+
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jft.market.api.ws.CategoryWS;
 import com.jft.market.exceptions.ExceptionConstants;
 import com.jft.market.model.Category;
-import com.jft.market.model.QCategory;
 import com.jft.market.repository.CategoryRepository;
+import com.jft.market.util.EntityPredicates;
 import com.jft.market.util.Preconditions;
 import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.jpa.impl.JPAQuery;
@@ -29,8 +32,8 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 
-	@Autowired
-	private EntityManagerFactory entityManagerFactory;
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	@Override
 	@Transactional
@@ -68,12 +71,10 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 	@Transactional
 	public List<CategoryWS> readAllSubCategoriesForParentCategory(String parentCategoryUuid) {
 		Category category = categoryService.readCategoryByUuid(parentCategoryUuid);
-		QCategory qCategory = QCategory.category1;
-		JPQLQuery query = new JPAQuery(entityManagerFactory.createEntityManager());
-		Predicate validCategories = qCategory.category.eq(category).
-				and(qCategory.deleted.eq(Boolean.FALSE)).
-				and(qCategory.enabled.eq(Boolean.TRUE));
-		List<Category> categories = query.from(qCategory).where(validCategories).list(qCategory);
+		JPQLQuery query = new JPAQuery(entityManager);
+		Predicate validCategories = category1.eq(category).
+				and(EntityPredicates.isTimestampedFieldEnabledAndNotDeleted(category1._super));
+		List<Category> categories = query.from(category1).where(validCategories).list(category1);
 		return categoryService.convertEntityListToWSList(categories);
 	}
 }

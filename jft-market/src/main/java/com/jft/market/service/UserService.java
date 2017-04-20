@@ -14,8 +14,6 @@ public interface UserService {
 
 	public List<UserWS> convertUsersToUsersWS(List<User> users);
 
-	public List<User> readUsers();
-
 	public List<UserWS> readAllUsers();
 
 	public void saveUser(User user);
