@@ -35,4 +35,11 @@ public class OrderCartApiImpl implements OrderCartApi {
 		BeanAttribute orderCartBeanAttribute = new BeanAttribute(orderCartUuid, new SuccessWS(ApiConstants.SUCCESS), ApiConstants.ORDERCART);
 		return new ResponseEntity(new EmberResponse<>(orderCartBeanAttribute), HttpStatus.OK);
 	}
+
+	@Override
+	public ResponseEntity deleteProductFromOrderCart(@PathVariable("ordercartUuid") String ordercartUuid, @PathVariable("productUuid") String productUuid) {
+		orderCartService.removeProductFromOrderCart(ordercartUuid, productUuid);
+		BeanAttribute orderCartBeanAttribute = new BeanAttribute(ordercartUuid, new SuccessWS(ApiConstants.SUCCESS), ApiConstants.ORDERCART);
+		return new ResponseEntity(new EmberResponse<>(orderCartBeanAttribute), HttpStatus.OK);
+	}
 }

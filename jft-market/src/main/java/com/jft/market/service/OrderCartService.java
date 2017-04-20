@@ -18,4 +18,6 @@ public interface OrderCartService {
 	public String createOrderCart(String customerUuid, String productUuid);
 
 	public String associateProductWithOrderCart(OrderCartWS orderCartWS, String productUuid);
+
+	public void removeProductFromOrderCart(String orderCartUuid, String productUuid);
 }

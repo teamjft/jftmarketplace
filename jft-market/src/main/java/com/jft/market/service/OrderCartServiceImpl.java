@@ -2,6 +2,8 @@ package com.jft.market.service;
 
 import java.util.UUID;
 
+import javax.persistence.EntityManagerFactory;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import com.jft.market.model.Customer;
 import com.jft.market.model.OrderCart;
 import com.jft.market.model.Product;
 import com.jft.market.repository.OrderCartRepository;
+import com.jft.market.repository.ProductRepository;
 import com.jft.market.util.Preconditions;
 
 @Slf4j
@@ -29,6 +32,12 @@ public class OrderCartServiceImpl implements OrderCartService {
 
 	@Autowired
 	private ProductService productService;
+
+	@Autowired
+	private EntityManagerFactory entityManagerFactory;
+
+	@Autowired
+	private ProductRepository productRepository;
 
 	@Override
 	@Transactional
@@ -117,5 +126,23 @@ public class OrderCartServiceImpl implements OrderCartService {
 		orderCartRepository.save(orderCart);
 
 		return orderCart.getUuid();
+	}
+
+	@Override
+	@Transactional
+	public void removeProductFromOrderCart(String orderCartUuid, String productUuid) {
+		OrderCart orderCart = orderCartRepository.findByUuid(orderCartUuid);
+		Preconditions.check(orderCart == null, ExceptionConstants.NO_ORDER_CART_FOUND);
+		Product product = productRepository.findByUuid(productUuid);
+		Preconditions.check(product == null, ExceptionConstants.PRODUCT_NOT_FOUND);
+		product.getOrderCarts().forEach(orderCart1 -> {
+			Preconditions.check(!orderCart1.getUuid().equals(orderCartUuid), ExceptionConstants.PRODUCT_NOT_ASSOCIATED_TO_CART);
+			if (orderCart1.getUuid().equals(orderCartUuid)) {
+				orderCart1.getProducts().remove(product);
+				product.getOrderCarts().remove(orderCart1);
+				orderCartRepository.save(orderCart1);
+				productRepository.save(product);
+			}
+		});
 	}
 }
