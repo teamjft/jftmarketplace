@@ -19,7 +19,7 @@
         <security:intercept-url pattern="/api/v1/ordercart/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/api/v1/paymentInstrument/read/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/loginFailed" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/**" access="ROLE_USER"/>
+        <!--<security:intercept-url pattern="/**" access="ROLE_USER"/>-->
 
         <security:form-login login-page="/login" authentication-failure-url="/loginFailed"/>
         <security:logout logout-success-url="/"/>
