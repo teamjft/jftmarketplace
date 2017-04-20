@@ -7,19 +7,8 @@
     <import resource="security-url-mapping.xml"/>
 
     <security:authentication-manager>
-        <security:authentication-provider>
+        <security:authentication-provider user-service-ref="userDetailsServiceImpl">
             <security:password-encoder ref="passwordEncoder"></security:password-encoder>
-            <security:jdbc-user-service data-source-ref="dataSource"
-                                        users-by-username-query=
-                                                "SELECT username,password, is_enabled
-                                                 FROM users
-                                                 WHERE username=?"
-                                        authorities-by-username-query=
-                                                "SELECT u.username, r.name
-                                                 FROM user_roles ur
-                                                 INNER JOIN users u on ur.user_id=u.id
-                                                 INNER JOIN roles r on ur.role_id=r.id
-                                                 WHERE u.username=?;"/>
         </security:authentication-provider>
     </security:authentication-manager>
 
