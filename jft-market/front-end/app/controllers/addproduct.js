@@ -29,14 +29,7 @@ export default Ember.Controller.extend({
                 Ember.set(model, 'msg', msg);
                 this.transitionToRoute('addProduct');
             }else{
-                console.log("category", model.category)
-                // let category = [];
-                // let catObj = //this.get('store').createRecord('category', {name: "Mobile", description: "sddf"});
-                // //catObj.name= "Mobile;"
-                // {
-                //     name: "cat5"
-                // }
-                // category.pushObject(catObj);
+                console.log("category", model.category);
                 const products = this.get('store1');
                 console.log(model, 'lololo');
                 let jsondata = {

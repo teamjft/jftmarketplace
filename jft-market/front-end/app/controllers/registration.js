@@ -2,8 +2,6 @@ import Ember from 'ember';
 import sweetAlert from 'ember-sweetalert';
 
 export default Ember.Controller.extend({
-    //needs: ['application'],
-    //isAdmin: Ember.computed.alias(Ember.inject.controller('application'))
     application : Ember.inject.controller(),
     actions: {
         selectGender(val) {
@@ -36,9 +34,6 @@ export default Ember.Controller.extend({
                 msg.push("Phone No field can not be Empty.");
                 validationFlag = true;
             }
-            // this.get('store').findRecord('registration', 1).then(function (person) {
-            //     console.log(person, "hhhh");
-            // });
             if (validationFlag) {
                 Ember.set(model, 'msg', msg);
                 this.transitionToRoute('registration');

@@ -5,12 +5,12 @@ export default ApplicationAdapter.extend({
         return this.get('host') + this.get('namespace') + '/product/products';
     },
     urlForDeleteRecord(id, modelName, snapshot) {
-        return 'http://localhost:9191/market/api/v1/product/delete/' + id;
+        return this.get('host') + this.get('namespace') + '/product/delete/' + id;
     },
     urlForUpdateRecord(id, modelName, snapshot) {
-        return 'http://localhost:9191/market/api/v1/product/update/' + id;
+        return this.get('host') + this.get('namespace') + '/product/update/' + id;
     },
     urlForFindRecord(id, modelName, snapshot) {
-        return 'http://localhost:9191/market/api/v1/product/' + id;
+        return this.get('host') + this.get('namespace') + '/product/' + id;
     }
 });
