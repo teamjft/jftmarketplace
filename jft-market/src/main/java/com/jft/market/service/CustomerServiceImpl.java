@@ -1,9 +1,13 @@
 package com.jft.market.service;
 
+import static com.jft.market.model.QCustomer.customer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +23,10 @@ import com.jft.market.model.Customer;
 import com.jft.market.model.User;
 import com.jft.market.repository.CustomerRepository;
 import com.jft.market.repository.UserRepository;
+import com.jft.market.util.EntityPredicates;
 import com.jft.market.util.Preconditions;
+import com.mysema.query.jpa.JPQLQuery;
+import com.mysema.query.jpa.impl.JPAQuery;
 
 @Service("customerService")
 public class CustomerServiceImpl implements CustomerService {
@@ -35,6 +42,9 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	@Override
 	@Transactional
@@ -119,14 +129,11 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	@Transactional
 	public List<CustomerWS> getAllCustomers() {
-		List<Customer> customers = customerRepository.findAll();
-		List<Customer> enabledCustomers = new ArrayList<Customer>();
-		customers.forEach(customer -> {
-			if (isValidCustomer(customer)) {
-				enabledCustomers.add(customer);
-			}
-		});
-		return convertEntityListToWSList(enabledCustomers);
+		JPQLQuery query = new JPAQuery(entityManager);
+		List<Customer> customers = query.from(customer)
+				.where(EntityPredicates.isTimestampedFieldEnabledAndNotDeleted(customer._super))
+				.list(customer);
+		return convertEntityListToWSList(customers);
 
 	}
 

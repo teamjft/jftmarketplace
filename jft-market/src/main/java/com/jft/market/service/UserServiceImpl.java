@@ -1,9 +1,13 @@
 package com.jft.market.service;
 
+import static com.jft.market.model.QUser.user;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +22,10 @@ import com.jft.market.model.Role;
 import com.jft.market.model.User;
 import com.jft.market.repository.RoleRepository;
 import com.jft.market.repository.UserRepository;
+import com.jft.market.util.EntityPredicates;
 import com.jft.market.util.Preconditions;
+import com.mysema.query.jpa.JPQLQuery;
+import com.mysema.query.jpa.impl.JPAQuery;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -29,6 +36,8 @@ public class UserServiceImpl implements UserService {
 	private RoleRepository roleRepository;
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	@PersistenceContext
+	private EntityManager entityManager;
 
 
 	@Override
@@ -67,24 +76,14 @@ public class UserServiceImpl implements UserService {
 		return userWSList;
 	}
 
-
-	@Override
-	public List<User> readUsers() {
-		return userRepository.findAll();
-
-	}
-
 	@Override
 	@Transactional
 	public List<UserWS> readAllUsers() {
-		List<User> users = readUsers();
-		List<User> enabledUsers = new ArrayList<>();
-		users.forEach(user -> {
-			if(isValidUser(user)){
-				enabledUsers.add(user);
-			}
-		});
-		return convertUsersToUsersWS(enabledUsers);
+		JPQLQuery query = new JPAQuery(entityManager);
+		List<User> users = query.from(user)
+				.where(EntityPredicates.isTimestampedFieldEnabledAndNotDeleted(user._super))
+				.list(user);
+		return convertUsersToUsersWS(users);
 	}
 
 	@Override
