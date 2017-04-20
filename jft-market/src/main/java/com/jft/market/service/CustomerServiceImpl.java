@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,6 +102,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public CustomerWS convertEntityToWS(Customer customer) {
+		System.out.println(" ============ SecurityContextHolder.getContext().getAuthentication().getPrincipal() ============= " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 		Preconditions.check(customer == null, ExceptionConstants.CUSTOMER_NOT_FOUND);
 		Preconditions.check(!isValidCustomer(customer), ExceptionConstants.CUSTOMER_NOT_ENABLED);
 		CustomerWS customerWS = new CustomerWS();

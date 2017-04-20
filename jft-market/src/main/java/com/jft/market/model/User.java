@@ -36,8 +36,6 @@ public class User extends TimestampedFieldObject {
 	@Column(name = "last_name")
 	private String lname;
 	private String password;
-	@Column(name = "is_enabled")
-	private Boolean enabled;
 	@Column(unique = true)
 	private String email;
 	private String gender;
