@@ -8,15 +8,11 @@ export default Ember.Controller.extend({
             let self = this;
             this.get('store').findRecord('category', catId, { reload: true }).then(function (category) {
                 category.destroyRecord();
-                
                 Ember.set(self.get('model'), 'post.description', '');
                 Ember.set(self.get('model'), 'post.name', '');
-                //Ember.set(self.get('model'), 'categories', self.get('store').findAll('category'), { reload: true });
                 sweetAlert("Category Deleted Successfully", "", "success");
                 self.transitionToRoute('addcategory');
             });
-            //Ember.get(this.get('store1'), 'categories').popObject(data);
-            //this.transitionToRoute('addcategory');
         },
         addCategory(model) {
             console.log('we are here1');
@@ -38,8 +34,6 @@ export default Ember.Controller.extend({
                 this.get('store').createRecord('category', model).save().then(function (res) {
                     Ember.set(self.get('model'), 'post.description', '');
                     Ember.set(self.get('model'), 'post.name', '');
-                    //Ember.set(self.get('model'), 'categories', self.get('store').findAll('category'));
-                    //self.transitionToRoute('addcategory');
                 }).catch(function (err) {
                     console.log("error in addCategory action", err);
                     self.transitionToRoute('addcategory');

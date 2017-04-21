@@ -5,7 +5,7 @@ export default Ember.Route.extend({
 
     model() {
         let post = {
-            cartItems: JSON.parse(localStorage.getItem('cartItems'))//Ember.get(this.get('store1'), 'cartItems')
+            cartItems: JSON.parse(localStorage.getItem('cartItems'))
         }
         return post;
     }

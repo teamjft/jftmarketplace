@@ -14,31 +14,4 @@ export default ApplicationSerializer.extend({
         delete json.data;
         return json;
     },
-
-    // normalizeResponse(store, primaryModelClass, payload, id, requestType) {
-    //     if (payload.status == 'success') {
-    //         payload.data = {
-    //             type: 'registration',
-    //             id: new Date(),
-    //             attributes: {
-    //             }
-    //         }
-    //     } else {
-    //         payload.data = payload.data || [];
-    //         payload.forEach(function (customer, index) {
-    //             payload.data.pushObject({
-    //                 type: 'registration',
-    //                 id: customer.uuid,
-    //                 attributes: {
-    //                     id: customer.uuid,
-    //                     fname: customer.fname,
-    //                     lanme: customer.lname,
-    //                     email: customer.email,
-    //                     phone: customer.phone,
-    //                 }
-    //             })
-    //         });
-    //     }
-    //     return this._super(...arguments);
-    // }
 });

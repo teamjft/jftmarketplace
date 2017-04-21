@@ -9,25 +9,4 @@ export default ApplicationSerializer.extend({
         delete json.data;
         return json;
     },
-    // normalizeResponse(store, primaryModelClass, payload, id, requestType) {
-    //     if (payload.status == 'success') {
-    //         payload.data = {
-    //             type: 'category',
-    //             id: new Date(),
-    //             attributes: {
-    //             }
-    //         }
-    //     } else {
-    //         payload.data = {
-    //             type: 'category',
-    //             id: payload.uuid,
-    //             attributes: {
-    //                 id: payload.uuid,
-    //                 name: payload.name,
-    //                 description: payload.description
-    //             }
-    //         }
-    //     }
-    //     return this._super(...arguments);
-    // },
 });

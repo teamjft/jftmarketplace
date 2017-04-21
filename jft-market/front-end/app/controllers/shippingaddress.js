@@ -10,7 +10,6 @@ export default Ember.Controller.extend({
         },
         
         shipAddress(formData) {
-            //Ember.set(this.get('store1'), 'shipAddr', formData);
             localStorage.setItem('shipAddr', JSON.stringify(formData));
             this.transitionToRoute('summarypage');
         }

@@ -16,9 +16,6 @@ export default Ember.Controller.extend({
 
   actions: {
     signOutAction(param) {
-
-      //console.info(localStorage, 'ppll');
-      //localStorage.setItem("ddd", "ddddddddd")
       this.set('isLogin', false);
       this.set('isAdmin', false);
       this.set('isUser', true);

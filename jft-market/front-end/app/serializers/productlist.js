@@ -16,21 +16,4 @@ export default ApplicationSerializer.extend({
         delete json.data;
         return json;
     },
-//   normalizeResponse(store, primaryModelClass, payload, id, requestType) {
-//     payload.data = payload.data || [];
-//     payload.forEach(function (product, index) {
-//         payload.data.pushObject({
-//             type: 'productlist',
-//             id: product.uuid,
-//             attributes: {
-//                 id:product.uuid,
-//                 name: product.name,
-//                 price: product.price,
-//                 description: product.description,
-//                 features: product.features
-//             }
-//         })
-//     });
-//     return this._super(...arguments);
-//   },
 });
