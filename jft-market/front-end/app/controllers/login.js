@@ -9,14 +9,8 @@ export default Ember.Controller.extend({
 
     actions: {
         userLogin(formData) {
-            console.log(formData);
-            this.get('session').authenticate('authenticator:oauth2', formData.email, formData.password)
-                .then((res) => {
-                    console.log('..///////......', res);
-                })
-                .catch((reason)=>{
-                    console.log(reason, '.........error');
-                });
+            console.log(formData.password);
+            this.get('session').authenticate('authenticator:oauth2', formData);
             // if (formData.email == 'admin' && formData.password == 'admin') {
             //     Ember.set(this.get('application'), 'isLogin', true);
             //     localStorage.setItem("isAdmin", true);
