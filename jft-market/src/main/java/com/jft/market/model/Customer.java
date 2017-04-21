@@ -40,6 +40,6 @@ public class Customer extends TimestampedFieldObject {
 	@OneToMany(mappedBy = "customer", cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE})
 	private Set<PurchaseOrder> purchaseOrders = new HashSet<>();
 
-	@OneToOne(mappedBy = "customer")
-	private OrderCart orderCart;
+	@OneToMany(mappedBy = "customer")
+	private Set<OrderCart> orderCarts = new HashSet<>();
 }

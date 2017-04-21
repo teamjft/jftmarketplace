@@ -1,13 +1,19 @@
 package com.jft.market.model;
 
-import static com.mysema.query.types.PathMetadataFactory.*;
+import static com.mysema.query.types.PathMetadataFactory.forVariable;
 
-import com.mysema.query.types.path.*;
-
-import com.mysema.query.types.PathMetadata;
 import javax.annotation.Generated;
+
 import com.mysema.query.types.Path;
+import com.mysema.query.types.PathMetadata;
+import com.mysema.query.types.path.BooleanPath;
+import com.mysema.query.types.path.DateTimePath;
+import com.mysema.query.types.path.EntityPathBase;
+import com.mysema.query.types.path.EnumPath;
+import com.mysema.query.types.path.NumberPath;
 import com.mysema.query.types.path.PathInits;
+import com.mysema.query.types.path.SetPath;
+import com.mysema.query.types.path.StringPath;
 
 
 /**
@@ -22,9 +28,23 @@ public class QOrderCart extends EntityPathBase<OrderCart> {
 
     public static final QOrderCart orderCart = new QOrderCart("orderCart");
 
+    public final QTimestampedFieldObject _super = new QTimestampedFieldObject(this);
+
+    //inherited
+    public final DateTimePath<java.util.Date> createdOn = _super.createdOn;
+
     public final QCustomer customer;
 
+    //inherited
+    public final BooleanPath deleted = _super.deleted;
+
+    //inherited
+    public final BooleanPath enabled = _super.enabled;
+
     public final NumberPath<Long> Id = createNumber("Id", Long.class);
+
+    //inherited
+    public final DateTimePath<java.util.Date> lastModified = _super.lastModified;
 
     public final SetPath<Product, QProduct> products = this.<Product, QProduct>createSet("products", Product.class, QProduct.class, PathInits.DIRECT2);
 
