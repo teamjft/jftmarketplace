@@ -1,13 +1,18 @@
 package com.jft.market.model;
 
-import static com.mysema.query.types.PathMetadataFactory.*;
+import static com.mysema.query.types.PathMetadataFactory.forVariable;
 
-import com.mysema.query.types.path.*;
-
-import com.mysema.query.types.PathMetadata;
 import javax.annotation.Generated;
+
 import com.mysema.query.types.Path;
+import com.mysema.query.types.PathMetadata;
+import com.mysema.query.types.path.BooleanPath;
+import com.mysema.query.types.path.DateTimePath;
+import com.mysema.query.types.path.EntityPathBase;
+import com.mysema.query.types.path.NumberPath;
 import com.mysema.query.types.path.PathInits;
+import com.mysema.query.types.path.SetPath;
+import com.mysema.query.types.path.StringPath;
 
 
 /**
@@ -40,7 +45,7 @@ public class QCustomer extends EntityPathBase<Customer> {
     //inherited
     public final DateTimePath<java.util.Date> lastModified = _super.lastModified;
 
-    public final QOrderCart orderCart;
+    public final SetPath<OrderCart, QOrderCart> orderCarts = this.<OrderCart, QOrderCart>createSet("orderCarts", OrderCart.class, QOrderCart.class, PathInits.DIRECT2);
 
     public final SetPath<PaymentInstrument, QPaymentInstrument> paymentInstrumentList = this.<PaymentInstrument, QPaymentInstrument>createSet("paymentInstrumentList", PaymentInstrument.class, QPaymentInstrument.class, PathInits.DIRECT2);
 
@@ -68,7 +73,6 @@ public class QCustomer extends EntityPathBase<Customer> {
 
     public QCustomer(Class<? extends Customer> type, PathMetadata<?> metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.orderCart = inits.isInitialized("orderCart") ? new QOrderCart(forProperty("orderCart"), inits.get("orderCart")) : null;
         this.user = inits.isInitialized("user") ? new QUser(forProperty("user"), inits.get("user")) : null;
     }
 

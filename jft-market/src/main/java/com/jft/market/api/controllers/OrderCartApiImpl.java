@@ -24,7 +24,7 @@ public class OrderCartApiImpl implements OrderCartApi {
 
 	@Override
 	public ResponseEntity createEmptyOrderCartForCustomer(@PathVariable("customerUuid") String customerUuid) {
-		OrderCartWS orderCartWS = orderCartService.createEmptyOrderCart(customerUuid);
+		OrderCartWS orderCartWS = orderCartService.createEmptyOrderCartForCustomer(customerUuid);
 		BeanAttribute orderCartBeanAttribute = new BeanAttribute(orderCartWS.getUuid(), orderCartWS, ApiConstants.ORDERCART);
 		return new ResponseEntity(new EmberResponse<>(orderCartBeanAttribute), HttpStatus.OK);
 	}

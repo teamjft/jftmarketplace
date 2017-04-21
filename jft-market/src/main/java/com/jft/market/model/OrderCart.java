@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -26,7 +26,7 @@ import com.jft.market.api.OrderCartStatus;
 @NoArgsConstructor
 @Getter
 @Setter
-public class OrderCart {
+public class OrderCart extends TimestampedFieldObject {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -43,6 +43,6 @@ public class OrderCart {
 	)
 	private Set<Product> products = new HashSet<>();
 
-	@OneToOne
+	@ManyToOne
 	private Customer customer;
 }

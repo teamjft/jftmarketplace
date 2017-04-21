@@ -26,10 +26,10 @@ public abstract class TimestampedFieldObject implements ITimestampedObject {
 	private Date lastModified;
 	@Column(name = "is_deleted")
 	@Type(type = "yes_no")
-	private boolean deleted;
+	private Boolean deleted;
 	@Column(name = "is_enabled")
 	@Type(type = "yes_no")
-	private boolean enabled;
+	private Boolean enabled;
 
 	public TimestampedFieldObject(ITimestampedObject timestampedObject) {
 		super();

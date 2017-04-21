@@ -1,8 +1,11 @@
 package com.jft.market.service;
 
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,25 +37,31 @@ public class OrderCartServiceImpl implements OrderCartService {
 	private ProductService productService;
 
 	@Autowired
-	private EntityManagerFactory entityManagerFactory;
-
-	@Autowired
 	private ProductRepository productRepository;
+
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	@Override
 	@Transactional
-	public OrderCartWS createEmptyOrderCart(String customerUuid) {
+	public OrderCartWS createEmptyOrderCartForCustomer(String customerUuid) {
 		Customer customer = customerService.readCustomerByUuid(customerUuid);
-		Boolean isCustomerHasOrderCart = checkIfCustomerAlreadyHasCart(customer);
-		Preconditions.check(isCustomerHasOrderCart, ExceptionConstants.CUSTOMER_ALREADY_HAS_ORDER_CART);
+		Optional<OrderCart> initializedOrderCart = checkIfCustomerAlreadyHasInitializedOrderCart(customer);
+		Preconditions.check(initializedOrderCart.isPresent(), ExceptionConstants.CUSTOMER_ALREADY_HAS_ORDER_CART);
 		OrderCart orderCart = createAndAssociateOrderCart(customer);
 		return convertEntityToWS(orderCart);
 	}
 
 	@Override
 	@Transactional
-	public Boolean checkIfCustomerAlreadyHasCart(Customer customer) {
-		return customer.getOrderCart() == null ? false : true;
+	public Optional<OrderCart> checkIfCustomerAlreadyHasInitializedOrderCart(Customer customer1) {
+		return customer1.getOrderCarts().stream().filter(orderCart1 -> orderCart1.getStatus().equals(OrderCartStatus.INITIALIZED)).findFirst();
+	}
+
+	@Override
+	@Transactional
+	public Set<OrderCart> findCustomerOrderCarts(String customerUuid) {
+		return null;
 	}
 
 	@Override
@@ -61,8 +70,9 @@ public class OrderCartServiceImpl implements OrderCartService {
 		OrderCart orderCart = new OrderCart();
 		orderCart.setStatus(OrderCartStatus.INITIALIZED);
 		orderCart.setUuid(UUID.randomUUID().toString());
+		//Association
 		orderCart.setCustomer(customer);
-		customer.setOrderCart(orderCart);
+		customer.getOrderCarts().add(orderCart);
 
 		orderCartRepository.save(orderCart);
 		return orderCart;
@@ -82,31 +92,31 @@ public class OrderCartServiceImpl implements OrderCartService {
 	public String createOrderCart(String customerUuid, String productUuid) {
 		log.info("Reading customer");
 		Customer customer = customerService.readCustomerByUuid(customerUuid);
-		log.info("Check if customer already has order cart");
-		boolean isCustomerHasOrderCart = checkIfCustomerAlreadyHasCart(customer);
-		if (!isCustomerHasOrderCart) {
+		log.info("Check if customer has any INITIALIZED order cart");
+		Optional<OrderCart> initializedOrderCart = checkIfCustomerAlreadyHasInitializedOrderCart(customer);
+		if (!initializedOrderCart.isPresent()) {
 			log.info("No existing cart found. Creating new order cart");
-			OrderCartWS orderCartWS = createEmptyOrderCart(customerUuid);
+			OrderCartWS orderCartWS = createEmptyOrderCartForCustomer(customerUuid);
 			log.info("Associating product with order cart");
 			String orderCartUuid = associateProductWithOrderCart(orderCartWS, productUuid);
 			return orderCartUuid;
 		} else {
-			log.info("Order cart exist for the customer. Finding order cart");
-			OrderCart orderCart = orderCartRepository.findByCustomerUuid(customerUuid);
 			log.info("Finding product");
 			Product product = productService.readProductByUuid(productUuid);
 			Preconditions.check(product == null, ExceptionConstants.PRODUCT_NOT_FOUND);
 			log.info("checking if product already into this cart");
-			product.getOrderCarts().forEach(orderCart1 -> {
-				Preconditions.check(orderCart1.getId() == orderCart.getId(), ExceptionConstants.PRODUCT_ALREADY_ADDED_INTO_CART);
-			});
+			Set<Product> products = initializedOrderCart.get().getProducts();
+			if (!products.isEmpty()) {
+				products.forEach(product1 -> {
+					Preconditions.check(product1.getId() == product.getId(), ExceptionConstants.PRODUCT_ALREADY_ADDED_INTO_CART);
+				});
+			}
 			log.info("Product not into cart. Adding this product into cart");
-			orderCart.getProducts().add(product);
-			product.getOrderCarts().add(orderCart);
-
+			initializedOrderCart.get().getProducts().add(product);
+			product.getOrderCarts().add(initializedOrderCart.get());
 			productService.saveProduct(product);
-			orderCartRepository.save(orderCart);
-			return orderCart.getUuid();
+			orderCartRepository.save(initializedOrderCart.get());
+			return initializedOrderCart.get().getUuid();
 		}
 
 	}
@@ -135,14 +145,27 @@ public class OrderCartServiceImpl implements OrderCartService {
 		Preconditions.check(orderCart == null, ExceptionConstants.NO_ORDER_CART_FOUND);
 		Product product = productRepository.findByUuid(productUuid);
 		Preconditions.check(product == null, ExceptionConstants.PRODUCT_NOT_FOUND);
-		product.getOrderCarts().forEach(orderCart1 -> {
-			Preconditions.check(!orderCart1.getUuid().equals(orderCartUuid), ExceptionConstants.PRODUCT_NOT_ASSOCIATED_TO_CART);
-			if (orderCart1.getUuid().equals(orderCartUuid)) {
-				orderCart1.getProducts().remove(product);
-				product.getOrderCarts().remove(orderCart1);
-				orderCartRepository.save(orderCart1);
-				productRepository.save(product);
+		Customer customer = orderCart.getCustomer();
+		Preconditions.check(customer == null, ExceptionConstants.CUSTOMER_NOT_ASSOCIATED_WITH_ORDER_CART);
+		if (OrderCartStatus.ACTIVE_ORDER_CARTS.contains(orderCart.getStatus())) {
+			Set<Product> products = orderCart.getProducts();
+			log.info("Reading order cart products");
+			if (!products.isEmpty()) {
+				orderCart.getProducts().forEach(product1 -> {
+					if (product1.getUuid().equals(product.getUuid())) {
+						log.info("Product present in order cart. Deleting association");
+						orderCart.getProducts().remove(product);
+						product.getOrderCarts().remove(orderCart);
+						orderCartRepository.save(orderCart);
+						productRepository.save(product);
+					} else {
+						log.info("product not present in order cart. Nothing to delete");
+						Preconditions.check(product1.getUuid().equals(product.getUuid()), ExceptionConstants.PRODUCT_NOT_ASSOCIATED_TO_CART);
+					}
+				});
+			} else {
+				Preconditions.check(products.isEmpty(), ExceptionConstants.ORDER_CART_IS_EMPTY);
 			}
-		});
+		}
 	}
 }

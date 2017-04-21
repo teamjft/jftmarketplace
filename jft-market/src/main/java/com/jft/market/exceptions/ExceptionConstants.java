@@ -10,12 +10,14 @@ public class ExceptionConstants {
 	public static final String CUSTOMER_NOT_FOUND = "Customer not found";
 	public static final String CUSTOMER_ALREADY_EXISTS = "Customer already exists";
 	public static final String CUSTOMER_NOT_ENABLED = "Customer is not enabled or is deleted.";
+	public static final String CUSTOMER_NOT_ASSOCIATED_WITH_ORDER_CART = "Customer not associated with order cart.";
 
 
 	public static final String PRODUCT_NOT_FOUND = "Product not found";
 	public static final String PRODUCT_ALREADY_PURCHASED = "Product not found";
 	public static final String PRODUCT_ALREADY_EXIST = "Product already exists.";
 	public static final String PRODUCT_NOT_FOUND_TO_DELETE = "Product not found. Please provide valid product Id to delete.";
+	public static final String ORDER_CART_IS_EMPTY = "Order cart is empty";
 	public static final String PRODUCT_IS_DELETED = "Product is deleted";
 
 	public static final String PAYMENT_INSTRUMENT_NOT_FOUND = "Paymnet Instrument not found";

@@ -1,15 +1,20 @@
 package com.jft.market.service;
 
 
+import java.util.Optional;
+import java.util.Set;
+
 import com.jft.market.api.ws.OrderCartWS;
 import com.jft.market.model.Customer;
 import com.jft.market.model.OrderCart;
 
 public interface OrderCartService {
 
-	public OrderCartWS createEmptyOrderCart(String customerUuid);
+	public OrderCartWS createEmptyOrderCartForCustomer(String customerUuid);
 
-	public Boolean checkIfCustomerAlreadyHasCart(Customer customer);
+	public Optional<OrderCart> checkIfCustomerAlreadyHasInitializedOrderCart(Customer customer);
+
+	public Set<OrderCart> findCustomerOrderCarts(String customerUuid);
 
 	public OrderCart createAndAssociateOrderCart(Customer customer);
 

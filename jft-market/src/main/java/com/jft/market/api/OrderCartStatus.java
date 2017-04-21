@@ -1,6 +1,10 @@
 package com.jft.market.api;
 
 
+import java.util.Set;
+
+import com.google.common.collect.Sets;
+
 public enum OrderCartStatus {
 
 	INITIALIZED,
@@ -23,5 +27,7 @@ public enum OrderCartStatus {
 	public boolean isActive() {
 		return this == ACTIVE;
 	}
+
+	public static final Set<OrderCartStatus> ACTIVE_ORDER_CARTS = Sets.immutableEnumSet(ACTIVE, INITIALIZED);
 
 }

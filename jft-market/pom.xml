@@ -257,8 +257,8 @@
                             <goal>process</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>src/main/java/com/jft/market/qentities</outputDirectory>
-                            <processor>com.mysema.query.apt.jpa.JPAAnnotationng-Processor</processor>
+                            <outputDirectory>target/generated-sources/jav</outputDirectory>
+                            <processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
                         </configuration>
                     </execution>
                 </executions>
