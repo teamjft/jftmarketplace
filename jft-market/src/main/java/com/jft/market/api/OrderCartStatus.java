@@ -10,7 +10,8 @@ public enum OrderCartStatus {
 	INITIALIZED,
 	CANCELLED,
 	SUSPENDED,
-	ACTIVE;
+	ACTIVE,
+	FINISHED;
 
 	public boolean isInitialized() {
 		return this == INITIALIZED;
@@ -28,6 +29,9 @@ public enum OrderCartStatus {
 		return this == ACTIVE;
 	}
 
+	public boolean isFinished() {
+		return this == FINISHED;
+	}
 	public static final Set<OrderCartStatus> ACTIVE_ORDER_CARTS = Sets.immutableEnumSet(ACTIVE, INITIALIZED);
 
 }

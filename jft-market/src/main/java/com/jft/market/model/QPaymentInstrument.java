@@ -35,6 +35,8 @@ public class QPaymentInstrument extends EntityPathBase<PaymentInstrument> {
 
     public final QCustomer customer;
 
+    public final StringPath cvv = createString("cvv");
+
     //inherited
     public final BooleanPath deleted = _super.deleted;
 
@@ -59,6 +61,8 @@ public class QPaymentInstrument extends EntityPathBase<PaymentInstrument> {
     public final StringPath phoneNumber = createString("phoneNumber");
 
     public final StringPath state = createString("state");
+
+    public final EnumPath<com.jft.market.api.PaymnetInstrumentStatus> status = createEnum("status", com.jft.market.api.PaymnetInstrumentStatus.class);
 
     public final StringPath street1 = createString("street1");
 

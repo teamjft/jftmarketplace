@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import com.jft.market.api.CreditCardTypes;
+import com.jft.market.api.PaymnetInstrumentStatus;
 
 @Setter
 @Getter
@@ -23,7 +24,7 @@ public class PaymentInstrumentWS {
 	private String Id;*/
 	private String paymentInstrumentUuid;
 	@NotNull
-	private Long creditCartNumber;
+	private String creditCardNumber;
 	@NotNull
 	private CreditCardTypes type;
 	@NotNull
@@ -52,4 +53,7 @@ public class PaymentInstrumentWS {
 	private String country;
 	@NotNull
 	private String nameOnCard;
+	@NotNull
+	private String cvv;
+	private PaymnetInstrumentStatus status;
 }

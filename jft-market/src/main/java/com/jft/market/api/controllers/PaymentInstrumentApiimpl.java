@@ -35,7 +35,11 @@ public class PaymentInstrumentApiimpl implements PaymentInstrumentApi {
 		if (bindingResult.hasErrors()) {
 			throw new InvalidRequestException(bindingResult);
 		}
-		paymentInstrumentService.createAndSavePaymentInstrument(paymentInstrumentWS);
+		try {
+			paymentInstrumentService.createAndSavePaymentInstrument(paymentInstrumentWS);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		BeanAttribute paymentInstrumentBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.PAYMENT_INSTRUMENT);
 		return new ResponseEntity(new EmberResponse<>(paymentInstrumentBeanAttribute), HttpStatus.OK);
 	}

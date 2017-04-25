@@ -40,9 +40,9 @@ public class QPurchaseOrder extends EntityPathBase<PurchaseOrder> {
     //inherited
     public final DateTimePath<java.util.Date> lastModified = _super.lastModified;
 
-    public final StringPath orderStatus = createString("orderStatus");
+    public final QOrderCart orderCart;
 
-    public final QProduct product;
+    public final StringPath orderStatus = createString("orderStatus");
 
     public final StringPath uuid = createString("uuid");
 
@@ -65,7 +65,7 @@ public class QPurchaseOrder extends EntityPathBase<PurchaseOrder> {
     public QPurchaseOrder(Class<? extends PurchaseOrder> type, PathMetadata<?> metadata, PathInits inits) {
         super(type, metadata, inits);
         this.customer = inits.isInitialized("customer") ? new QCustomer(forProperty("customer"), inits.get("customer")) : null;
-        this.product = inits.isInitialized("product") ? new QProduct(forProperty("product")) : null;
+        this.orderCart = inits.isInitialized("orderCart") ? new QOrderCart(forProperty("orderCart"), inits.get("orderCart")) : null;
     }
 
 }
