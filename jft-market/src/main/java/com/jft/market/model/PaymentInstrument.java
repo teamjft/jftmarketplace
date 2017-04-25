@@ -15,7 +15,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import com.jft.market.api.CreditCardDataEncrypter;
 import com.jft.market.api.CreditCardTypes;
+import com.jft.market.api.PaymnetInstrumentStatus;
 
 @Entity
 @Table(name = "payment_instrument")
@@ -32,11 +34,15 @@ public class PaymentInstrument extends TimestampedFieldObject {
 	private String uuid;
 
 	@Column(name = "credit_card_number")
-	private Long creditCartNumber;
+	private String creditCardNumber;
 
 	@Column(name = "credit_card_type")
 	@Enumerated(EnumType.STRING)
 	private CreditCardTypes type;
+
+	@Column(name = "status")
+	@Enumerated(EnumType.STRING)
+	private PaymnetInstrumentStatus status;
 
 	@Column(name = "name_on_card")
 	private String nameOnCard;
@@ -46,10 +52,6 @@ public class PaymentInstrument extends TimestampedFieldObject {
 
 	@Column(name = "exp_year")
 	private Long expirationYear;
-
-/*	@Column(name = "is_deleted", nullable = false, columnDefinition = "char(1) default 'N'")
-	@Type(type = "yes_no")
-	private boolean deleted = false;*/
 
 	@Column(name = "first_name")
 	private String firstName;
@@ -78,7 +80,30 @@ public class PaymentInstrument extends TimestampedFieldObject {
 	@Column(name = "country")
 	private String country;
 
+	@Column(name = "cvv")
+	private String cvv;
+
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
+
+	public String getCreditCardNumber() throws Exception {
+		CreditCardDataEncrypter creditCardDataEncrypter = new CreditCardDataEncrypter("credit-card-password");
+		return creditCardDataEncrypter.decrypt(this.creditCardNumber);
+	}
+
+	public void setCreditCardNumber(String creditCartNumber) throws Exception {
+		CreditCardDataEncrypter creditCardDataEncrypter = new CreditCardDataEncrypter("credit-card-password");
+		this.creditCardNumber = creditCardDataEncrypter.encrypt(creditCartNumber);
+	}
+
+	public String getCvv() throws Exception {
+		CreditCardDataEncrypter creditCardDataEncrypter = new CreditCardDataEncrypter("credit-card-password");
+		return creditCardDataEncrypter.decrypt(this.cvv);
+	}
+
+	public void setCvv(String cvv) throws Exception {
+		CreditCardDataEncrypter creditCardDataEncrypter = new CreditCardDataEncrypter("credit-card-password");
+		this.cvv = creditCardDataEncrypter.encrypt(cvv);
+	}
 }

@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -45,4 +46,7 @@ public class OrderCart extends TimestampedFieldObject {
 
 	@ManyToOne
 	private Customer customer;
+
+	@OneToOne(mappedBy = "orderCart")
+	private PurchaseOrder purchaseOrder;
 }

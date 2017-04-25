@@ -48,6 +48,8 @@ public class QOrderCart extends EntityPathBase<OrderCart> {
 
     public final SetPath<Product, QProduct> products = this.<Product, QProduct>createSet("products", Product.class, QProduct.class, PathInits.DIRECT2);
 
+    public final QPurchaseOrder purchaseOrder;
+
     public final EnumPath<com.jft.market.api.OrderCartStatus> status = createEnum("status", com.jft.market.api.OrderCartStatus.class);
 
     public final StringPath uuid = createString("uuid");
@@ -71,6 +73,7 @@ public class QOrderCart extends EntityPathBase<OrderCart> {
     public QOrderCart(Class<? extends OrderCart> type, PathMetadata<?> metadata, PathInits inits) {
         super(type, metadata, inits);
         this.customer = inits.isInitialized("customer") ? new QCustomer(forProperty("customer"), inits.get("customer")) : null;
+        this.purchaseOrder = inits.isInitialized("purchaseOrder") ? new QPurchaseOrder(forProperty("purchaseOrder"), inits.get("purchaseOrder")) : null;
     }
 
 }

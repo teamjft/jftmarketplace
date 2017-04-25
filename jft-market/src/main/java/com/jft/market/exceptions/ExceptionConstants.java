@@ -22,7 +22,7 @@ public class ExceptionConstants {
 
 	public static final String PAYMENT_INSTRUMENT_NOT_FOUND = "Paymnet Instrument not found";
 
-	public static final String PATMENT_ERROR = "Payment not succeeded. Please try after sometime";
+	public static final String PAYMENT_ERROR = "Payment not succeeded. Please try after sometime";
 	public static final String PATMENT_GATEWAY_ERROR = "No response from payment gateway";
 
 	public static final String INVALID_REQUEST = "Invalid request";
@@ -49,6 +49,7 @@ public class ExceptionConstants {
 	public static final String NO_ORDER_CART_FOUND = "Order cart not found";
 	public static final String PRODUCT_ALREADY_ADDED_INTO_CART = "Product already added into cart.";
 	public static final String PRODUCT_NOT_ASSOCIATED_TO_CART = "Product not associated to this cart.";
+	public static final String NO_ACTIVE_PAYMNET_INSTRUMENT_FOUND = "No active payment instrument found";
 
 
 }

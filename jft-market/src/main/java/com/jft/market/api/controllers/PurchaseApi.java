@@ -12,12 +12,12 @@ public interface PurchaseApi {
 
 	String PURCHASE = "/v1/purchase";
 
-	@RequestMapping(value = {"/customer/{customerUuid}/product/{productUuid}"},
+	@RequestMapping(value = {"/customer/{customerUuid}/orderCart/{orderCartUuid}"},
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			method = RequestMethod.POST
 	)
 	public
 	@ResponseBody
 	ResponseEntity purchaseProduct(@PathVariable("customerUuid") String customerUuid,
-								   @PathVariable("productUuid") String productUuid);
+								   @PathVariable("orderCartUuid") String orderCartUuid);
 }

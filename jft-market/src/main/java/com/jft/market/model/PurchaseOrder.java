@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -30,7 +31,7 @@ public class PurchaseOrder extends TimestampedFieldObject {
 	@ManyToOne
 	private Customer customer;
 
-	@ManyToOne
-	@JoinColumn(name = "product_id")
-	private Product product;
+	@OneToOne
+	@JoinColumn(name = "order_cart_id")
+	private OrderCart orderCart;
 }

@@ -22,8 +22,8 @@ public class PurchaseApiImpl implements PurchaseApi {
 	private PurchaseService purchaseService;
 
 	@Override
-	public ResponseEntity purchaseProduct(@PathVariable("customerUuid") String customerUuid, @PathVariable("productUuid") String productUuid) {
-		purchaseService.purchaseProduct(customerUuid, productUuid);
+	public ResponseEntity purchaseProduct(@PathVariable("customerUuid") String customerUuid, @PathVariable("orderCartUuid") String orderCartUuid) {
+		purchaseService.purchaseProduct(customerUuid, orderCartUuid);
 		BeanAttribute paymentInstrumentBeanAttribute = new BeanAttribute(ApiConstants.getSucessId(), new SuccessWS(ApiConstants.SUCCESS), ApiConstants.PAYMENT_INSTRUMENT);
 		return new ResponseEntity(new EmberResponse<>(paymentInstrumentBeanAttribute), HttpStatus.OK);
 	}

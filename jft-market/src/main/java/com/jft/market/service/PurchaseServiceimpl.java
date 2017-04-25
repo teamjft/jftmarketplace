@@ -1,6 +1,8 @@
 package com.jft.market.service;
 
-import static com.jft.market.model.QPurchaseOrder.purchaseOrder;
+import static com.jft.market.model.QCustomer.customer;
+import static com.jft.market.model.QOrderCart.orderCart;
+import static com.jft.market.model.QPaymentInstrument.paymentInstrument;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,17 +18,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jft.market.api.OrderCartStatus;
 import com.jft.market.api.OrderStatus;
+import com.jft.market.api.PaymnetInstrumentStatus;
 import com.jft.market.api.ws.PaymentResponseWS;
 import com.jft.market.exceptions.ExceptionConstants;
 import com.jft.market.model.Customer;
+import com.jft.market.model.OrderCart;
 import com.jft.market.model.PaymentInstrument;
-import com.jft.market.model.Product;
 import com.jft.market.model.PurchaseOrder;
 import com.jft.market.repository.CustomerRepository;
-import com.jft.market.repository.OrderRepository;
-import com.jft.market.repository.PaymentInstrumentRepository;
-import com.jft.market.repository.ProductRepository;
+import com.jft.market.repository.OrderCartRepository;
+import com.jft.market.repository.PurchaseOrderRepository;
 import com.jft.market.util.EntityPredicates;
 import com.jft.market.util.Preconditions;
 import com.litle.sdk.generate.SaleResponse;
@@ -42,74 +45,78 @@ public class PurchaseServiceimpl implements PurchaseService {
 	@Autowired
 	private CustomerRepository customerRepository;
 
-	@Autowired
-	private ProductRepository productRepository;
 
 	@Autowired
 	private VantivServiceImpl vantivService;
 
 	@Autowired
-	private PaymentInstrumentRepository paymentInstrumentRepository;
+	private PurchaseOrderRepository purchaseOrderRepository;
 
 	@Autowired
-	private OrderRepository orderRepository;
+	private OrderCartRepository orderCartRepository;
 
 	@PersistenceContext
 	private EntityManager entityManager;
 
 	public final String successResponse = "000";
+	private SaleResponse saleResponse = null;
 
 	@Override
 	@Transactional
-	public PaymentResponseWS purchaseProduct(String customerUuid, String productUuid) {
+	public PaymentResponseWS purchaseProduct(String customerUuid, String orderCartUuid) {
 		Customer customer = getCustomer(customerUuid);
-		Product product = getProduct(productUuid);
-		Preconditions.check(product == null, ExceptionConstants.PRODUCT_NOT_FOUND);
-		PaymentInstrument paymentInstrument = getPaymentInstrument(customerUuid);
-		log.info("Payment initiated for product " + product.getName() + " with uuid " + productUuid);
-		SaleResponse saleResponse = vantivService.createSale(paymentInstrument, product);
-		Preconditions.checkPaymentResponse(!saleResponse.getResponse().equals(successResponse), ExceptionConstants.PATMENT_ERROR);
-		associateCustomerWithOrder(product, customer);
+		OrderCart orderCart = getOrderCart(orderCartUuid);
+		Preconditions.check(customer == null, ExceptionConstants.CUSTOMER_NOT_FOUND);
+		Preconditions.check(orderCart == null, ExceptionConstants.NO_ORDER_CART_FOUND);
+		List<PaymentInstrument> activePaymentInstruments = getActivePaymentInstruments(customer);
+		Preconditions.check(activePaymentInstruments == null, ExceptionConstants.NO_ACTIVE_PAYMNET_INSTRUMENT_FOUND);
+		activePaymentInstruments.forEach(paymentInstrument1 -> {
+			try {
+				saleResponse = vantivService.createSale(paymentInstrument1, orderCart);
+				if (saleResponse.getResponse().equals(successResponse)) {
+					associateOrderCartAndCustomerWithPurchaseOrder(orderCart, customer);
+				} else {
+					Preconditions.checkPaymentResponse(!saleResponse.getResponse().equals(successResponse), ExceptionConstants.PAYMENT_ERROR);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 		return buildPaymentResponse(saleResponse);
 	}
 
 	@Override
 	@Transactional
 	public Customer getCustomer(String customerUuid) {
-		Customer customer = customerRepository.findByUuid(customerUuid);
-		Preconditions.check(customer == null, ExceptionConstants.CUSTOMER_NOT_FOUND);
-		return customer;
-	}
-
-	@Override
-	public Product getProduct(String productUuid) {
-		Product product = productRepository.findByUuid(productUuid);
-		Preconditions.check(product == null, ExceptionConstants.PRODUCT_NOT_FOUND);
-		return product;
+		JPQLQuery query = new JPAQuery(entityManager);
+		Predicate customerPredicate = customer.uuid.eq(customerUuid)
+				.and(EntityPredicates.isTimestampedFieldEnabledAndNotDeleted(customer._super));
+		return query.from(customer).where(customerPredicate).uniqueResult(customer);
 	}
 
 	@Override
 	@Transactional
-	public void associateCustomerWithOrder(Product product, Customer customer) {
-		List<PurchaseOrder> purchaseOrders = getOrdersByProductId(product);
-		if (!purchaseOrders.isEmpty()) {
-			purchaseOrders.forEach(order -> {
-				Preconditions.check(order.getProduct().getId() == product.getId() &&
-								order.getOrderStatus().equals(OrderStatus.ACTIVE) &&
-								order.getCustomer().getId() == customer.getId(),
-						ExceptionConstants.PRODUCT_ALREADY_PURCHASED);
-			});
-			createOrder(customer, product);
-		} else {
-			log.info("Creating first order");
-			createOrder(customer, product);
-		}
+	public OrderCart getOrderCart(String orderCartUuid) {
+		JPQLQuery query = new JPAQuery(entityManager);
+		Predicate orderCartPredicate = orderCart.uuid.eq(orderCartUuid)
+				.and(EntityPredicates.isTimestampedFieldEnabledAndNotDeleted(orderCart._super));
+		return query.from(orderCart).where(orderCartPredicate).uniqueResult(orderCart);
 	}
 
 	@Override
 	@Transactional
-	public PaymentInstrument getPaymentInstrument(String customerUuid) {
-		return paymentInstrumentRepository.findByCustomerUuid(customerUuid).get(0);
+	public void associateOrderCartAndCustomerWithPurchaseOrder(OrderCart orderCart, Customer customer) {
+		createPurchaseOrder(orderCart, customer);
+	}
+
+	@Override
+	@Transactional
+	public List<PaymentInstrument> getActivePaymentInstruments(Customer customer) {
+		JPQLQuery query = new JPAQuery(entityManager);
+		Predicate activePaymnetInstruments = paymentInstrument.customer.eq(customer)
+				.and(paymentInstrument.status.eq(PaymnetInstrumentStatus.ACTIVE))
+				.and(EntityPredicates.isTimestampedFieldEnabledAndNotDeleted(paymentInstrument._super));
+		return query.from(paymentInstrument).where(activePaymnetInstruments).list(paymentInstrument);
 	}
 
 	@Override
@@ -121,6 +128,7 @@ public class PurchaseServiceimpl implements PurchaseService {
 		return paymentResponseWS;
 	}
 
+/*
 	@Override
 	@Transactional
 	public List<PurchaseOrder> getOrdersByProductId(Product product) {
@@ -129,20 +137,27 @@ public class PurchaseServiceimpl implements PurchaseService {
 				and(EntityPredicates.isTimestampedFieldEnabledAndNotDeleted(purchaseOrder._super));
 		return query.from(purchaseOrder).where(predicate).list(purchaseOrder);
 	}
+*/
 
 	@Override
 	@Transactional
-	public void createOrder(Customer customer, Product product) {
+	public void createPurchaseOrder(OrderCart orderCart, Customer customer) {
 		PurchaseOrder purchaseOrder = new PurchaseOrder();
-		purchaseOrder.setOrderStatus(OrderStatus.ACTIVE);
-		//order.setProductId(product.getId());
-		purchaseOrder.setProduct(product);
+		//Associate Order cart with purchase order
+		purchaseOrder.setOrderCart(orderCart);
+		orderCart.setPurchaseOrder(purchaseOrder);
+		orderCart.setStatus(OrderCartStatus.FINISHED);
+		// Associte customer with purchase order
 		customer.getPurchaseOrders().add(purchaseOrder);
 		purchaseOrder.setCustomer(customer);
+		purchaseOrder.setOrderStatus(OrderStatus.ACTIVE);
 		if (StringUtils.isEmpty(purchaseOrder.getUuid())) {
 			purchaseOrder.setUuid(UUID.randomUUID().toString());
 		}
+		orderCartRepository.save(orderCart);
 		customerRepository.save(customer);
+		purchaseOrderRepository.save(purchaseOrder);
+
 	}
 }
 
