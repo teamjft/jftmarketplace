@@ -36,6 +36,7 @@ public class ExceptionConstants {
 	public static final String NO_ROLE_TO_SAVE = "No role to save";
 
 	public static final String CATEGORY_NOT_FOUND = "Category not found";
+	public static final String INVALID_USERNAME_PASSWORD = "Invalid username/password";
 	public static final String CATEGORY_ALREADY_EXIST = "Category already exist";
 	public static final String NO_CATEGORY_FOUND = "No category found";
 	public static final String PLEASE_CREATE_CATEGORY = "No category exist with this name. Please create category first.";

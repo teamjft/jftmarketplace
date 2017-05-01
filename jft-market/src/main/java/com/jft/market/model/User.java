@@ -1,5 +1,6 @@
 package com.jft.market.model;
 
+import java.security.spec.InvalidKeySpecException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,6 +19,8 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import com.jft.market.api.CreditCardDataEncrypter;
 
 @Entity
 @Table(name = "users")
@@ -53,4 +56,19 @@ public class User extends TimestampedFieldObject {
 
 	@OneToOne(mappedBy = "user")
 	private Customer customer;
+
+	public String getPassword() {
+		CreditCardDataEncrypter creditCardDataEncrypter = null;
+		try {
+			creditCardDataEncrypter = new CreditCardDataEncrypter("credit-card-password");
+		} catch (InvalidKeySpecException e) {
+			e.printStackTrace();
+		}
+		return creditCardDataEncrypter.decrypt(this.password);
+	}
+
+	public void setPassword(String password) throws InvalidKeySpecException {
+		CreditCardDataEncrypter creditCardDataEncrypter = new CreditCardDataEncrypter("credit-card-password");
+		this.password = creditCardDataEncrypter.encrypt(password);
+	}
 }
