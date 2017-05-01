@@ -27,7 +27,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 	}
 
 	protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-		String targetUrl = "/dashboard";
+		String targetUrl = "/homepage";
 		redirectStrategy.sendRedirect(request, response, targetUrl);
 	}
 }
