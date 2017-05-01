@@ -7,22 +7,17 @@
     <security:http auto-config="true">
 
         <security:intercept-url pattern="/resources/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/logout" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/api/v1/user/create" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/api/v1/product/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/api/v1/customer/create" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/api/v1/user/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/api/v1/purchase/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/api/v1/category/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/api/v1/paymentInstrument/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/api/v1/ordercart/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/api/v1/paymentInstrument/read/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/loginFailed" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/**" access="ROLE_USER"/>
+        <!-- <security:intercept-url pattern="/logout/" access="isFullyAuthenticated"/>-->
+        <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/><!--
+    <!-   <security:intercept-url pattern="/logout" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/loginFailed" access="IS_AUTHENTICATED_ANONYMOUSLY"/>-->
 
-        <security:form-login login-page="/login" authentication-failure-url="/loginFailed"/>
-        <security:logout logout-success-url="/"/>
+
+        <security:form-login login-page="/login"
+                             authentication-success-handler-ref="customAuthenticationSuccessHandler"
+                             authentication-failure-url="/loginFailed?error"
+        />
+        <security:logout success-handler-ref="customLogoutSuccessHandler"/>
     </security:http>
 
 </beans>

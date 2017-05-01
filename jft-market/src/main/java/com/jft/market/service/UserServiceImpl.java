@@ -2,6 +2,7 @@ package com.jft.market.service;
 
 import static com.jft.market.model.QUser.user;
 
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -34,8 +35,6 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 	@Autowired
 	private RoleRepository roleRepository;
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -56,7 +55,11 @@ public class UserServiceImpl implements UserService {
 		User user = new User();
 		user.setFname(userWS.getFname());
 		user.setLname(userWS.getLname());
-		user.setPassword(passwordEncoder.encode(userWS.getPassword()));
+		try {
+			user.setPassword(userWS.getPassword());
+		} catch (InvalidKeySpecException e) {
+			e.printStackTrace();
+		}
 		user.setEmail(userWS.getEmail());
 		user.setGender(userWS.getGender());
 		user.setPhone(userWS.getPhone());
@@ -93,6 +96,7 @@ public class UserServiceImpl implements UserService {
 		}
 		userRepository.save(user);
 	}
+
 	@Override
 	@Transactional
 	public User readUserByUuid(String useruuid) {
