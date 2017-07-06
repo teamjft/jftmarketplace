@@ -7,7 +7,7 @@
   {{#each model as | product |}}
   <div class="jumbotron">
     <div class="container">
-      <h2>{{product.name}}, &#8377; {{product.price}} Only</h2>
+          <h2>{{product.name}}, &#8377; {{product.price}} Only</h2>
       <p>{{product.description}}</p>
       <p>
         <a class="btn btn-warning btn" href="#" role="button">See Details &raquo;</a> {{#link-to "editproduct" product.id

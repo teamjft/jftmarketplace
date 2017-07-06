@@ -6,11 +6,11 @@ export default Ember.Controller.extend({
 
   session: Ember.inject.service('session'),
 
-  isAdmin: false ,
+  isAdmin: true ,
 
-  isUser: true,
+  isUser: false,
 
-  isLogin: false,
+  isLogin: true,
 
   Constant: Constant,
 

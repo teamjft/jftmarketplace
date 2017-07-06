@@ -22,10 +22,11 @@
             <div class="form-group">
                 <label for='category'>Product Category..</label>
                 <select class="form-control" onchange={{ action "chooseCategory" value="target.value" }}>
-                {{#each model.product.categories as |category|}}
-                    <option value={{category.name}} selected={{eq category.name model.category}}>{{category.name}}</option>
-                {{/each}}
-            </select>
+
+                    <option>Mobile Phone</option>
+                    <option>Bags</option>
+
+                </select>
             </div>
 
             <div class="form-group text-center">

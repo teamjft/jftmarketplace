@@ -12,7 +12,7 @@ export default Ember.Route.extend(ResetScrollPositionMixin, {
       description: "",
       category: [],
       categories: this.get('store').findAll('category')
-    };
+        };
     return post;
   }
 

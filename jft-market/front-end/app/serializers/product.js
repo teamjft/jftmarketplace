@@ -6,7 +6,7 @@ export default ApplicationSerializer.extend({
         let json = this._super(...arguments);
         json.name = json.data.attributes.name;
         json.price = json.data.attributes.price;
-        json.features = "34G";
+        json.features =  "34G";
         json.description = json.data.attributes.description;
         json.categories = json.data.attributes.categories;
         //json.uuid= json.data.attributes.phone;
